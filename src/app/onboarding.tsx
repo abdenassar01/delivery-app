@@ -16,7 +16,7 @@ export default function Onboarding() {
         style={{ height }}>
         <Image
           source={require('@/assets/images/onboarding.png')}
-          className="absolute top-[16%] w-full"
+          className="mt-6 w-full"
           resizeMode="contain"
         />
         <View className="gap-2">

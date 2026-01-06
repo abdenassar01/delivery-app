@@ -1,8 +1,8 @@
-import { defineSchema } from "convex/server";
-import { authTables } from "@convex-dev/auth/server";
+import { defineSchema } from 'convex/server';
+import * as tables from './tables';
 
 const schema = defineSchema({
-  ...authTables,
+  ...tables,
 });
 
 export default schema;

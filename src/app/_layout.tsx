@@ -8,13 +8,22 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
-import { Platform } from 'react-native';
-import { ConvexAuthProvider } from '@convex-dev/auth/react';
 import * as SecureStore from 'expo-secure-store';
 import { Toaster } from '../lib/taost/sonner';
 import { loadSelectedTheme, useThemeConfig } from '@/lib';
 import { SafeAreaListener } from 'react-native-safe-area-context';
 import { Uniwind } from 'uniwind';
+import { ConvexBetterAuthProvider } from '@convex-dev/better-auth/react';
+import { authClient } from '@/lib/auth-client';
+
+const convex = new ConvexReactClient(
+  process.env.EXPO_PUBLIC_CONVEX_URL as string,
+  {
+    expectAuth: true,
+    unsavedChangesWarning: false,
+    verbose: true,
+  },
+);
 
 const secureStorage = {
   getItem: SecureStore.getItemAsync,
@@ -36,10 +45,6 @@ SplashScreen.setOptions({
   fade: true,
 });
 
-const convex = new ConvexReactClient(process.env.EXPO_PUBLIC_CONVEX_URL!, {
-  unsavedChangesWarning: false,
-});
-
 export default function RootLayout() {
   return (
     <Providers>
@@ -58,13 +63,7 @@ function Providers({ children }: { children: React.ReactNode }) {
     <GestureHandlerRootView
       style={styles.container}
       className={theme.dark ? `dark` : undefined}>
-      <ConvexAuthProvider
-        client={convex}
-        storage={
-          Platform.OS === 'android' || Platform.OS === 'ios'
-            ? secureStorage
-            : undefined
-        }>
+      <ConvexBetterAuthProvider client={convex} authClient={authClient}>
         <KeyboardProvider>
           <SafeAreaListener
             onChange={({ insets }) => {
@@ -76,7 +75,7 @@ function Providers({ children }: { children: React.ReactNode }) {
             </BottomSheetModalProvider>
           </SafeAreaListener>
         </KeyboardProvider>
-      </ConvexAuthProvider>
+      </ConvexBetterAuthProvider>
     </GestureHandlerRootView>
   );
 }

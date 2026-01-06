@@ -1,8 +1,6 @@
+import { getAuthConfigProvider } from '@convex-dev/better-auth/auth-config';
+import type { AuthConfig } from 'convex/server';
+
 export default {
-  providers: [
-    {
-      domain: "https://tame-dragon-2.convex.site",
-      applicationID: "convex",
-    },
-  ],
-};
+  providers: [getAuthConfigProvider()],
+} satisfies AuthConfig;
