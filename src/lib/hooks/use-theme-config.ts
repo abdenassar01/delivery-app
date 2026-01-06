@@ -1,23 +1,7 @@
 import colors from 'configs/color';
 
 import type { Theme } from '@react-navigation/native';
-import {
-  DarkTheme as _DarkTheme,
-  DefaultTheme,
-} from '@react-navigation/native';
-import { useUniwind } from 'uniwind';
-
-const DarkTheme: Theme = {
-  ..._DarkTheme,
-  colors: {
-    ..._DarkTheme.colors,
-    primary: colors.primary,
-    background: colors.backgroundDark,
-    text: colors.black,
-    border: colors.gray,
-    card: colors.backgroundSecondaryDark,
-  },
-};
+import { DefaultTheme } from '@react-navigation/native';
 
 const LightTheme: Theme = {
   ...DefaultTheme,
@@ -26,13 +10,12 @@ const LightTheme: Theme = {
     primary: colors.primary,
     background: colors.background,
     card: colors.backgroundSecondary,
+    text: colors.black,
+    border: colors.gray,
+    notification: colors.primary,
   },
 };
 
 export function useThemeConfig() {
-  const { theme, hasAdaptiveThemes } = useUniwind();
-
-  if (hasAdaptiveThemes && theme === 'dark') return DarkTheme;
-
   return LightTheme;
 }

@@ -1,31 +1,27 @@
 import React from 'react';
-import { useMMKVString } from 'react-native-mmkv';
 
 import { storage } from '../storage';
 import { Uniwind, useUniwind } from 'uniwind';
 
 const SELECTED_THEME = 'light';
-export type ColorSchemeType = 'light' | 'dark' | 'system';
+export type ColorSchemeType = 'light';
 
 export const useSelectedTheme = () => {
-  const { theme, hasAdaptiveThemes } = useUniwind();
-  const [_theme, _setTheme] = useMMKVString(SELECTED_THEME, storage);
+  const { theme } = useUniwind();
 
-  const setSelectedTheme = React.useCallback(
-    (t: ColorSchemeType) => {
-      _setTheme(t);
-    },
-    [_setTheme],
-  );
+  const setSelectedTheme = React.useCallback((t: ColorSchemeType) => {
+    Uniwind.setTheme(t);
+  }, []);
 
-  const selectedTheme = (theme ?? 'system') as ColorSchemeType;
+  const selectedTheme = (theme ?? 'light') as ColorSchemeType;
   return { selectedTheme, setSelectedTheme } as const;
 };
 
 export const loadSelectedTheme = () => {
   const theme = storage.getString(SELECTED_THEME);
   if (theme !== undefined) {
-    console.log('theme', theme);
-    Uniwind.setTheme(theme);
+    Uniwind.setTheme(theme as ColorSchemeType);
   }
+  // Always set to light theme
+  Uniwind.setTheme('light');
 };

@@ -151,7 +151,7 @@ export default function Signup() {
 
       <TouchableOpacity
         onPress={() => handleRoleSelect('user')}
-        className="bg-background dark:bg-backgroundDark mb-4 rounded-2xl p-6 shadow-sm">
+        className="bg-background mb-4 rounded-2xl p-6 shadow-sm">
         <View className="flex-row items-center gap-4">
           <View className="bg-primary/20 h-16 w-16 items-center justify-center rounded-full">
             <Text className="text-3xl">👤</Text>
@@ -167,7 +167,7 @@ export default function Signup() {
 
       <TouchableOpacity
         onPress={() => handleRoleSelect('delivery')}
-        className="bg-background dark:bg-backgroundDark rounded-2xl p-6 shadow-sm">
+        className="bg-background rounded-2xl p-6 shadow-sm">
         <View className="flex-row items-center gap-4">
           <View className="bg-primary/20 h-16 w-16 items-center justify-center rounded-full">
             <Text className="text-3xl">🚚</Text>
@@ -215,22 +215,18 @@ export default function Signup() {
         />
       </FormContext>
 
-      <View className="mt-6 flex-row justify-between">
-        <TouchableOpacity
+      <View className="mt-6 flex-row justify-between gap-3">
+        <Button
+          label="Back"
           onPress={handleBackToRoleSelection}
-          className="flex-1 rounded-xl bg-gray-200 px-4 py-3 dark:bg-gray-700">
-          <Text className="text-center font-semibold dark:text-white">
-            Back
-          </Text>
-        </TouchableOpacity>
-        <View className="w-3" />
-        <TouchableOpacity
+          variant="secondary"
+          className="flex-1"
+        />
+        <Button
+          label={selectedRole === 'delivery' ? 'Next' : 'Sign Up'}
           onPress={handleBasicInfoNext}
-          className="bg-primary flex-1 rounded-xl px-4 py-3">
-          <Text className="text-center font-semibold text-white">
-            {selectedRole === 'delivery' ? 'Next' : 'Sign Up'}
-          </Text>
-        </TouchableOpacity>
+          className="flex-1"
+        />
       </View>
     </View>
   );
@@ -263,12 +259,12 @@ export default function Signup() {
         />
 
         <View className="mt-4">
-          <Text className="text-text dark:text-textdark mb-2 font-medium">
+          <Text className="text-text mb-2 font-medium">
             Vehicle Photo
           </Text>
           <TouchableOpacity
             onPress={handlePickVehiclePhoto}
-            className="bg-background-secondary dark:bg-backgroundSecondaryDark flex-row items-center gap-3 rounded-xl p-4">
+            className="bg-background-secondary flex-row items-center gap-3 rounded-xl p-4">
             {vehiclePhoto ? (
               <>
                 <Image
@@ -291,23 +287,20 @@ export default function Signup() {
         </View>
       </FormContext>
 
-      <View className="mt-6 flex-row justify-between">
-        <TouchableOpacity
+      <View className="mt-6 flex-row justify-between gap-3">
+        <Button
+          label="Back"
           onPress={() => setStep('basic-info')}
-          className="flex-1 rounded-xl bg-gray-200 px-4 py-3 dark:bg-gray-700">
-          <Text className="text-center font-semibold dark:text-white">
-            Back
-          </Text>
-        </TouchableOpacity>
-        <View className="w-3" />
-        <TouchableOpacity
+          variant="secondary"
+          className="flex-1"
+        />
+        <Button
+          label="Sign Up"
           onPress={handleSignup}
+          loading={isLoading}
           disabled={isLoading}
-          className={`flex-1 rounded-xl px-4 py-3 ${isLoading ? 'bg-gray-400' : 'bg-primary'}`}>
-          <Text className="text-center font-semibold text-white">
-            {isLoading ? 'Creating...' : 'Sign Up'}
-          </Text>
-        </TouchableOpacity>
+          className="flex-1"
+        />
       </View>
     </View>
   );
@@ -320,7 +313,7 @@ export default function Signup() {
           className={`h-2 rounded-full ${
             index < currentStepNumber
               ? 'bg-primary'
-              : 'bg-background-secondary dark:bg-backgroundSecondaryDark'
+              : 'bg-background-secondary'
           }`}
           style={{ width: index < currentStepNumber ? 32 : 8 }}
         />

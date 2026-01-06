@@ -46,7 +46,7 @@ export function FieldInput({
   return (
     <View style={{ marginBottom: 16 }} className="flex w-full flex-col">
       {label && (
-        <Text className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+        <Text className="mb-1 text-sm font-medium text-gray-700">
           {label}
         </Text>
       )}
@@ -54,9 +54,9 @@ export function FieldInput({
       <View className="relative">
         <TextInput
           className={cn(
-            'h-12 w-full rounded-xl border border-gray-300 bg-white px-4 text-base text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100',
-            hasError && 'border-red-500',
-            isFocused && !hasError && 'border-indigo-500',
+            'h-12 w-full rounded-xl border border-gray-300 bg-white px-3 text-base text-gray-900',
+            hasError && 'ring-2 ring-red-500',
+            isFocused && !hasError && 'ring-primary/50 px-3 ring-2',
             disabled && 'opacity-50',
             className,
           )}

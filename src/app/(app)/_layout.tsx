@@ -1,9 +1,10 @@
 import { ActivityIndicator, Text, View } from '@/components';
 import { useIsFirstTime } from '@/lib';
 import { useConvexAuth } from 'convex/react';
-import { Redirect, SplashScreen } from 'expo-router';
-import { Tabs } from 'expo-router';
+import { Redirect, SplashScreen, Tabs } from 'expo-router';
 import { useCallback, useEffect } from 'react';
+import { TouchableOpacity } from 'react-native';
+import * as Icons from '@/icons';
 
 export default function RootLayout() {
   const { isAuthenticated, isLoading } = useConvexAuth();
@@ -34,9 +35,85 @@ export default function RootLayout() {
   }
 
   return (
-    <Tabs initialRouteName="index" screenOptions={{ headerShown: false }}>
-      <Tabs.Screen name="index" />
-      <Tabs.Screen name="article" />
+    <Tabs
+      initialRouteName="index"
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: '#6366f1',
+        tabBarInactiveTintColor: '#9ca3af',
+        tabBarStyle: {
+          backgroundColor: '#ffffff',
+          borderTopWidth: 1,
+          borderTopColor: '#e5e7eb',
+          height: 60,
+          paddingBottom: 8,
+          paddingTop: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '500',
+        },
+      }}>
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: 'Home',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Icons.Icon
+              icon={
+                focused
+                  ? Icons.Hugeicons.Home02FreeIcons
+                  : Icons.Hugeicons.Home01FreeIcons
+              }
+              size={size}
+              strokeWidth={2.5}
+              style={{ color }}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="orders"
+        options={{
+          title: 'Orders',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Icons.Icon
+              icon={Icons.Hugeicons.ShoppingBagFreeIcons}
+              size={size}
+              strokeWidth={2.5}
+              style={{ color }}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="history"
+        options={{
+          title: 'History',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Icons.Icon
+              icon={Icons.Hugeicons.ClockFreeIcons}
+              size={size}
+              strokeWidth={2.5}
+              style={{ color }}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: 'Settings',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Icons.Icon
+              icon={Icons.Hugeicons.Settings02FreeIcons}
+              size={size}
+              strokeWidth={2.5}
+              style={{ color }}
+            />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

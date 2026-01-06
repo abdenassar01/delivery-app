@@ -4,12 +4,7 @@ import React, { useRef, useState } from 'react';
 import { useField } from '@tanstack/react-form';
 import { useFormContext } from '../form-context';
 import { cn } from '@/lib';
-import {
-  Pressable,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { Pressable, ScrollView, TouchableOpacity, View } from 'react-native';
 import { Text } from '../../ui';
 import * as Icons from '@/icons';
 
@@ -64,9 +59,9 @@ export function FieldSelect<T>({
   const displayValue = selectedItem ? extractLabel(selectedItem) : placeholder;
 
   return (
-    <View className="mb-4 flex w-full flex-col">
+    <View className="flex w-full flex-col">
       {label && (
-        <Text className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+        <Text className="mb-1 text-sm font-medium text-gray-700">
           {label}
         </Text>
       )}
@@ -76,7 +71,7 @@ export function FieldSelect<T>({
           onPress={() => !disabled && setIsOpen(!isOpen)}
           activeOpacity={0.7}
           className={cn(
-            'h-12 w-full flex-row items-center justify-between rounded-xl border border-gray-300 bg-white px-4 dark:border-gray-600 dark:bg-gray-850',
+            'h-12 w-full flex-row items-center justify-between rounded-xl border border-gray-300 bg-white px-4',
             hasError && 'border-red-500',
             isOpen && 'border-indigo-500',
             disabled && 'opacity-50',
@@ -84,7 +79,7 @@ export function FieldSelect<T>({
           )}
           disabled={disabled}>
           <Text
-            className="flex-1 text-base text-gray-900 dark:text-gray-100"
+            className="flex-1 text-base text-gray-900"
             numberOfLines={1}>
             {displayValue}
           </Text>
@@ -103,13 +98,13 @@ export function FieldSelect<T>({
             {/* Backdrop */}
             <Pressable
               onPress={() => setIsOpen(false)}
-              className="absolute -left-10 -right-10 -top-10 -bottom-10 z-10"
+              className="absolute -top-10 -right-10 -bottom-10 -left-10 z-10"
             />
 
             {/* Dropdown */}
             <View
               className={cn(
-                'absolute z-20 mt-1 w-full rounded-xl border border-gray-300 bg-white shadow-xl dark:border-gray-600 dark:bg-gray-850',
+                'absolute z-20 mt-1 w-full rounded-xl border border-gray-300 bg-white shadow-xl',
               )}>
               <ScrollView
                 className="max-h-60"
@@ -126,17 +121,20 @@ export function FieldSelect<T>({
                         key={extractValue(item) ?? index}
                         onPress={() => handleSelect(item)}
                         className={cn(
-                          'flex flex-row items-center justify-between border-b border-gray-100 px-4 py-3 dark:border-gray-700',
+                          'flex flex-row items-center justify-between border-b border-gray-100 px-4 py-3',
                           index === 0 && 'rounded-t-xl',
-                          index === items.length - 1 && 'border-b-0 rounded-b-xl',
-                          isSelected ? 'bg-indigo-50 dark:bg-indigo-900/20' : '',
+                          index === items.length - 1 &&
+                            'rounded-b-xl border-b-0',
+                          isSelected
+                            ? 'bg-indigo-50'
+                            : '',
                         )}>
                         <Text
                           className={cn(
                             'flex-1 text-base',
                             isSelected
-                              ? 'text-indigo-600 dark:text-indigo-400 font-medium'
-                              : 'text-gray-900 dark:text-gray-100',
+                              ? 'font-medium text-indigo-600'
+                              : 'text-gray-900',
                           )}>
                           {extractLabel(item)}
                         </Text>
@@ -145,7 +143,7 @@ export function FieldSelect<T>({
                             icon={Icons.Hugeicons.CheckmarkBadgeFreeIcons}
                             size={18}
                             strokeWidth={2.5}
-                            className="text-indigo-600 dark:text-indigo-400"
+                            className="text-indigo-600"
                           />
                         )}
                       </TouchableOpacity>

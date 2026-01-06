@@ -21,11 +21,10 @@ export default function Onboarding() {
         />
         <View className="gap-2">
           <Text className="text-tertiary text-center text-xl font-bold">
-            Find German Jobs That Fit You
+            You ask, we deliver
           </Text>
           <Text className="text-center text-sm">
-            We help you find the best German jobs that fit your skills and
-            preferences.
+            Order food, groceries, and more with just a few clicks
           </Text>
         </View>
         <View className="mt-5 w-full">
