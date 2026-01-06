@@ -1,0 +1,78 @@
+@import 'tailwindcss';
+@import 'uniwind';
+
+:root {
+  --primary: #ff385c;
+  --secondary: #c96801;
+  --tertiary: #2c7cb2;
+  --error: #cc0202;
+  --warn: #e49000;
+  --success: #4bfc28;
+  --gray: #280c0c;
+  --black: #101010;
+  --white: #ffffff;
+
+  --background: #f5f5f5;
+  --background-secondary: #ffffff;
+  --text: #0a0024;
+}
+
+@theme inline {
+  --color-primary: var(--primary);
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
+  --color-background: var(--background);
+  --color-background-secondary: var(--background-secondary);
+  --color-text: var(--text);
+  --color-error: var(--error);
+  --color-warn: var(--warn);
+  --color-success: var(--success);
+  --color-gray: var(--gray);
+  --color-black: var(--black);
+  --color-white: var(--white);
+  --breakpoint-sm: 10rem;
+}
+
+@theme {
+  --font-normal: 'AtkinsonHyperlegible-Regular';
+  --font-arabic: 'Cairo-Regular';
+  --font-arabic-light: 'Cairo-Light';
+  --font-arabic-semibold: 'Cairo-SemiBold';
+  --font-arabic-medium: 'Cairo-Medium';
+  --font-bold: 'AtkinsonHyperlegible-Bold';
+}
+
+@variant dark {
+  @layer theme {
+    :root {
+      --color-background: #000000;
+      --color-foreground: #ffffff;
+      --color-primary: #3b82f6;
+      --color-card: #1f2937;
+      --color-border: #374151;
+    }
+  }
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+}
+
+@layer utilities {
+  .container {
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+}
+
+@variant light {
+  @layer theme {
+    :root {
+      --color-background: #ffffff;
+      --color-foreground: #000000;
+      --color-primary: #3b82f6;
+      --color-card: #ffffff;
+      --color-border: #e5e7eb;
+    }
+  }
+}
