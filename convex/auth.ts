@@ -1,6 +1,6 @@
 import { betterAuth } from 'better-auth/minimal';
 import { createClient } from '@convex-dev/better-auth';
-import { convex } from '@convex-dev/better-auth/plugins';
+import { convex, crossDomain } from '@convex-dev/better-auth/plugins';
 import authConfig from './auth.config';
 import { components, internal } from './_generated/api';
 import { query } from './_generated/server';
@@ -119,6 +119,7 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
     },
     plugins: [
       convex({ authConfig }),
+      crossDomain({ siteUrl }),
       // captcha({
       //   provider: 'cloudflare-turnstile',
       //   secretKey: process.env.TURNSTILE_SECRET_KEY!,
