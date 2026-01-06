@@ -13,6 +13,7 @@ import type * as auth from "../auth.js";
 import type * as http from "../http.js";
 import type * as tables_index from "../tables/index.js";
 import type * as tables_users from "../tables/users.js";
+import type * as users from "../users.js";
 
 import type {
   ApiFromModules,
@@ -26,6 +27,7 @@ declare const fullApi: ApiFromModules<{
   http: typeof http;
   "tables/index": typeof tables_index;
   "tables/users": typeof tables_users;
+  users: typeof users;
 }>;
 
 /**

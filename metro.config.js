@@ -7,4 +7,6 @@ config.resolver.unstable_enablePackageExports = true;
 
 module.exports = withUniwindConfig(config, {
   cssEntryFile: './src/global.css',
+  dtsFile: './uniwind-types.d.ts',
+  extraThemes: ['ocean', 'sunset', 'forest', 'high-contrast'],
 });

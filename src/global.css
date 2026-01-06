@@ -65,14 +65,58 @@
   }
 }
 
-@variant light {
-  @layer theme {
-    :root {
-      --color-background: #ffffff;
-      --color-foreground: #000000;
-      --color-primary: #3b82f6;
-      --color-card: #ffffff;
-      --color-border: #e5e7eb;
+@layer theme {
+  :root {
+    @variant dark {
+      --color-background: oklch(0.1316 0.0041 17.69);
+      --color-foreground: oklch(0.98 0 0);
+      --color-primary: oklch(0.6 0.2 240);
+      --color-card: oklch(0.2 0.01 240);
+      --color-border: oklch(0.3 0.02 240);
+    }
+
+    @variant light {
+      --color-background: oklch(1 0 0);
+      --color-foreground: oklch(0.2 0 0);
+      --color-primary: oklch(0.5 0.2 240);
+      --color-card: oklch(0.98 0 0);
+      --color-border: oklch(0.9 0.01 240);
+    }
+
+    /* Ocean theme - Cool blues and teals */
+    @variant ocean {
+      --color-background: oklch(0.25 0.05 220);
+      --color-foreground: oklch(0.95 0.02 200);
+      --color-primary: oklch(0.6 0.15 200);
+      --color-card: oklch(0.3 0.06 215);
+      --color-border: oklch(0.4 0.08 210);
+    }
+
+    /* Sunset theme - Warm oranges and purples */
+    @variant sunset {
+      --color-background: oklch(0.3 0.08 30);
+      --color-foreground: oklch(0.95 0.03 60);
+      --color-primary: oklch(0.65 0.18 40);
+      --color-card: oklch(0.35 0.1 25);
+      --color-border: oklch(0.45 0.12 35);
+    }
+
+    /* Forest theme - Natural greens */
+    @variant forest {
+      --color-background: oklch(0.2 0.05 150);
+      --color-foreground: oklch(0.95 0.02 140);
+      --color-primary: oklch(0.55 0.15 145);
+      --color-card: oklch(0.25 0.06 155);
+      --color-border: oklch(0.35 0.08 150);
+    }
+
+    /* High Contrast theme - Accessibility focused */
+    @variant high-contrast {
+      --color-background: oklch(0 0 0);
+      --color-foreground: oklch(1 0 0);
+      --color-primary: oklch(0.7 0.25 60);
+      --color-card: oklch(0.1 0 0);
+      --color-border: oklch(1 0 0);
     }
   }
 }

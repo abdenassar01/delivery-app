@@ -13,6 +13,8 @@ type FieldInputProps = {
   password?: boolean;
   placeholder?: string;
   className?: string;
+  keyboardType?: 'email-address' | 'phone-pad' | 'default';
+  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
 };
 
 export function FieldInput({
@@ -21,6 +23,8 @@ export function FieldInput({
   password,
   className,
   placeholder,
+  keyboardType = 'default',
+  autoCapitalize = 'sentences',
 }: FieldInputProps) {
   const form = useFormContext();
 
@@ -46,6 +50,8 @@ export function FieldInput({
           value={field.state.value}
           onBlur={field.handleBlur}
           placeholder={placeholder || label}
+          keyboardType={keyboardType}
+          autoCapitalize={autoCapitalize}
           onChangeText={text => {
             field.handleChange(text);
           }}
