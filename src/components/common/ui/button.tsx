@@ -13,13 +13,11 @@ export function Button({ label, onPress, className }: ButtonProps) {
   return (
     <TouchableOpacity
       className={cn(
-        'items-center justify-center rounded-xl bg-primary p-2.5',
+        'bg-primary h-10 items-center justify-center rounded-xl',
         className,
       )}
       onPress={onPress}>
-      <Text className="font-medium text-backgroundSecondary dark:text-backgroundSecondaryDark">
-        {label}
-      </Text>
+      <Text className="text-sm font-medium text-white">{label}</Text>
     </TouchableOpacity>
   );
 }

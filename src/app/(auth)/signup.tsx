@@ -141,7 +141,7 @@ export default function Signup() {
   };
 
   const renderRoleSelection = () => (
-    <View className="flex-1">
+    <View className="">
       <Text className="mb-2 text-center text-2xl font-bold">
         Choose your role
       </Text>
@@ -156,7 +156,7 @@ export default function Signup() {
           <View className="bg-primary/20 h-16 w-16 items-center justify-center rounded-full">
             <Text className="text-3xl">👤</Text>
           </View>
-          <View className="flex-1">
+          <View className="">
             <Text className="mb-1 text-lg font-semibold">Client</Text>
             <Text className="text-text-secondary text-sm">
               Order deliveries and track packages
@@ -199,7 +199,6 @@ export default function Signup() {
           label="Full Name"
           name="name"
           placeholder="Enter your full name"
-          className="bg-background dark:bg-backgroundDark"
         />
         <FieldInput
           label="Email"
@@ -207,14 +206,12 @@ export default function Signup() {
           placeholder="Enter your email"
           keyboardType="email-address"
           autoCapitalize="none"
-          className="bg-background dark:bg-backgroundDark mt-4"
         />
         <FieldInput
           label="Password"
           name="password"
           placeholder="Create a password"
           password
-          className="bg-background dark:bg-backgroundDark mt-4"
         />
       </FormContext>
 
@@ -253,19 +250,16 @@ export default function Signup() {
           name="phone"
           placeholder="Enter your phone number"
           keyboardType="phone-pad"
-          className="bg-background dark:bg-backgroundDark"
         />
         <FieldInput
           label="Vehicle Type"
           name="vehicleType"
           placeholder="e.g., Car, Motorcycle, Bicycle"
-          className="bg-background dark:bg-backgroundDark mt-4"
         />
         <FieldInput
           label="License Number"
           name="licenseNumber"
           placeholder="Enter your license number"
-          className="bg-background dark:bg-backgroundDark mt-4"
         />
 
         <View className="mt-4">
@@ -336,8 +330,8 @@ export default function Signup() {
 
   return (
     <RootWrapper className="px-3">
-      <KeyboardAvoidingView behavior="padding" className="flex-1">
-        <ScrollView className="flex-1" contentContainerStyle={{ flexGrow: 1 }}>
+      <KeyboardAvoidingView behavior="padding" className="">
+        <ScrollView className="">
           <HeaderWithGoBack />
           {step !== 'role-selection' && renderProgressIndicator()}
           {step === 'role-selection' && renderRoleSelection()}

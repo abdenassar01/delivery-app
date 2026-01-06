@@ -9,22 +9,26 @@ import { cn } from '@/lib';
 
 type FieldInputProps = {
   name: string;
-  label: string;
-  password?: boolean;
+  label?: string;
   placeholder?: string;
+  password?: boolean;
   className?: string;
   keyboardType?: 'email-address' | 'phone-pad' | 'default';
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
+  disabled?: boolean;
+  helperText?: string;
 };
 
 export function FieldInput({
   name,
   label,
+  placeholder,
   password,
   className,
-  placeholder,
   keyboardType = 'default',
   autoCapitalize = 'sentences',
+  disabled = false,
+  helperText,
 }: FieldInputProps) {
   const form = useFormContext();
 
@@ -34,37 +38,57 @@ export function FieldInput({
   });
 
   const [isPassword, setIsPassword] = useState(password);
+  const [isFocused, setIsFocused] = useState(false);
+
+  const hasError =
+    field.state.meta.isTouched && field.state.meta.errors.length > 0;
 
   return (
-    <View className="flex w-full flex-col">
-      <Text className="mb-1 font-medium text-text dark:text-textdark">
-        {label}
-      </Text>
+    <View style={{ marginBottom: 16 }} className="flex w-full flex-col">
+      {label && (
+        <Text className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+          {label}
+        </Text>
+      )}
+
       <View className="relative">
         <TextInput
           className={cn(
-            'bg-background-secondary focus:not-last:border-tertiary mt-0 w-full rounded-xl p-[11px] font-medium text-text transition-all focus:outline-none dark:text-textdark',
+            'h-12 w-full rounded-xl border border-gray-300 bg-white px-4 text-base text-gray-900 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-100',
+            hasError && 'border-red-500',
+            isFocused && !hasError && 'border-indigo-500',
+            disabled && 'opacity-50',
             className,
           )}
           id={field.name}
-          value={field.state.value}
-          onBlur={field.handleBlur}
-          placeholder={placeholder || label}
+          value={String(field.state.value ?? '')}
+          onBlur={() => {
+            field.handleBlur();
+            setIsFocused(false);
+          }}
+          onFocus={() => setIsFocused(true)}
+          placeholder={placeholder}
+          placeholderTextColor="#9ca3af"
           keyboardType={keyboardType}
           autoCapitalize={autoCapitalize}
           onChangeText={text => {
             field.handleChange(text);
           }}
           secureTextEntry={isPassword}
+          editable={!disabled}
+          selectionColor="#6366f1"
         />
+
         {password && (
           <TouchableOpacity
             onPress={() => setIsPassword(!isPassword)}
-            className="absolute right-4 top-[40%] text-gray-500">
+            style={{ top: 14, right: 16 }}
+            className="absolute"
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
             <Image
-              width={16}
-              height={16}
-              className="h-4 w-4"
+              width={20}
+              height={20}
+              className="h-5 w-5 opacity-60"
               source={
                 isPassword
                   ? require('@/assets/icons/eye.png')
@@ -75,11 +99,17 @@ export function FieldInput({
         )}
       </View>
 
-      {field.state.meta.isTouched ? (
-        <Text className="text-xs text-red-500">
-          {field.state.meta.errors.map(err => err.message).join(', ')}
+      {helperText && !hasError && (
+        <Text className="mt-1.5 text-xs text-gray-500">{helperText}</Text>
+      )}
+
+      {hasError && (
+        <Text className="mt-1.5 text-xs text-red-500">
+          {field.state.meta.errors
+            .map((err: any) => err?.message ?? String(err))
+            .join(', ')}
         </Text>
-      ) : null}
+      )}
     </View>
   );
 }

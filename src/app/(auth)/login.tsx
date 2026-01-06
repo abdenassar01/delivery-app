@@ -1,11 +1,5 @@
 import React, { useState } from 'react';
-import {
-  RootWrapper,
-  Text,
-  View,
-  FieldInput,
-  FormContext,
-} from '@/components';
+import { RootWrapper, Text, View, FieldInput, FormContext } from '@/components';
 import { Link, useRouter } from 'expo-router';
 import { useForm } from '@tanstack/react-form';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
@@ -22,7 +16,7 @@ export default function Login() {
   const { replace } = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
-  const form = useForm<LoginFormData, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown, unknown>({
+  const form = useForm({
     defaultValues: {
       email: '',
       password: '',
@@ -61,8 +55,10 @@ export default function Login() {
       <KeyboardAvoidingView
         behavior="padding"
         className="bg-backgroundSecondary dark:bg-backgroundSecondaryDark mb-3 flex-1 justify-center rounded-2xl p-6">
-        <Text className="mb-6 text-center text-2xl font-bold">Welcome back!</Text>
-        <Text className="mb-8 text-center text-text-secondary">
+        <Text className="mb-6 text-center text-2xl font-bold">
+          Welcome back!
+        </Text>
+        <Text className="text-text-secondary mb-8 text-center">
           Sign in to continue to TDelivery
         </Text>
 
@@ -73,14 +69,12 @@ export default function Login() {
             placeholder="Enter your email"
             keyboardType="email-address"
             autoCapitalize="none"
-            className="bg-background dark:bg-backgroundDark"
           />
           <FieldInput
             label="Password"
             name="password"
             placeholder="Enter your password"
             password
-            className="bg-background dark:bg-backgroundDark mt-4"
           />
         </FormContext>
 
@@ -93,18 +87,18 @@ export default function Login() {
           {isLoading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text className="font-medium text-backgroundSecondary dark:text-backgroundSecondaryDark">
+            <Text className="text-backgroundSecondary dark:text-backgroundSecondaryDark font-medium">
               Sign In
             </Text>
           )}
         </TouchableOpacity>
 
         <View className="mt-4 flex-row justify-center">
-          <Text className="text-sm text-text-secondary">
+          <Text className="text-text-secondary text-sm">
             Don't have an account?{' '}
           </Text>
           <Link asChild href="/signup">
-            <Text className="text-sm font-medium text-primary">Sign up</Text>
+            <Text className="text-primary text-sm font-medium">Sign up</Text>
           </Link>
         </View>
       </KeyboardAvoidingView>

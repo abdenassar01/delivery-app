@@ -2,8 +2,8 @@
 @import 'uniwind';
 
 :root {
-  --primary: #ff385c;
-  --secondary: #c96801;
+  --primary: #00754a;
+  --secondary: #d4e9e2;
   --tertiary: #2c7cb2;
   --error: #cc0202;
   --warn: #e49000;
@@ -50,6 +50,7 @@
       --color-primary: #3b82f6;
       --color-card: #1f2937;
       --color-border: #374151;
+      --color-text: #ffffff;
     }
   }
 }
@@ -73,6 +74,7 @@
       --color-primary: oklch(0.6 0.2 240);
       --color-card: oklch(0.2 0.01 240);
       --color-border: oklch(0.3 0.02 240);
+      --color-text: #ffffff;
     }
 
     @variant light {
@@ -81,6 +83,7 @@
       --color-primary: oklch(0.5 0.2 240);
       --color-card: oklch(0.98 0 0);
       --color-border: oklch(0.9 0.01 240);
+      --color-text: #000000;
     }
 
     /* Ocean theme - Cool blues and teals */
@@ -90,6 +93,7 @@
       --color-primary: oklch(0.6 0.15 200);
       --color-card: oklch(0.3 0.06 215);
       --color-border: oklch(0.4 0.08 210);
+      --color-text: #ffffff;
     }
 
     /* Sunset theme - Warm oranges and purples */
@@ -99,6 +103,7 @@
       --color-primary: oklch(0.65 0.18 40);
       --color-card: oklch(0.35 0.1 25);
       --color-border: oklch(0.45 0.12 35);
+      --color-text: #ffffff;
     }
 
     /* Forest theme - Natural greens */
@@ -108,6 +113,7 @@
       --color-primary: oklch(0.55 0.15 145);
       --color-card: oklch(0.25 0.06 155);
       --color-border: oklch(0.35 0.08 150);
+      --color-text: #ffffff;
     }
 
     /* High Contrast theme - Accessibility focused */
@@ -117,6 +123,7 @@
       --color-primary: oklch(0.7 0.25 60);
       --color-card: oklch(0.1 0 0);
       --color-border: oklch(1 0 0);
+      --color-text: #ffffff;
     }
   }
 }

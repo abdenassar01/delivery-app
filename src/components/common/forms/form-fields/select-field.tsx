@@ -1,98 +1,174 @@
 'use client';
 
-import React, { ButtonHTMLAttributes, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useField } from '@tanstack/react-form';
 import { useFormContext } from '../form-context';
 import { cn } from '@/lib';
-import { Image, TouchableOpacity, View } from 'react-native';
+import {
+  Pressable,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Text } from '../../ui';
+import * as Icons from '@/icons';
 
-type FieldSelectProps<T> = ButtonHTMLAttributes<HTMLButtonElement> & {
+type FieldSelectProps<T> = {
   name: string;
-  label: string;
+  label?: string;
   placeholder?: string;
-  onChangeCallback?: (value: T) => void;
+  disabled?: boolean;
+  helperText?: string;
   items: T[];
   extractLabel: (item: T) => string;
   extractValue: (item: T) => string;
+  onChangeCallback?: (value: T) => void;
+  className?: string;
 };
 
 export function FieldSelect<T>({
   name,
   label,
-  placeholder,
+  placeholder = 'Select an option',
+  disabled = false,
+  helperText,
   items,
   extractLabel,
   extractValue,
-  ...props
+  onChangeCallback,
+  className,
 }: FieldSelectProps<T>) {
   const form = useFormContext();
-  const dropdownRef = useRef(null);
-
-  const [isOpen, setIsOpen] = useState(false);
-  // useOutsideClick(dropdownRef, () => setIsOpen(false));
 
   const field = useField({
     form,
     name,
   });
 
-  return (
-    <View ref={dropdownRef} className="relative flex w-full flex-col">
-      <Text className="font-medium">{label}</Text>
-      <TouchableOpacity
-        onPress={() => setIsOpen(prev => !prev)}
-        className={cn(
-          'bg-background-secondary border-background-secondary mt-0 flex w-full items-center justify-between rounded-xl p-2.5 text-left text-sm font-medium text-text transition-all focus:outline-none dark:text-textdark',
-          props.className,
-        )}>
-        <div className="">
-          {extractLabel(
-            items.find(item => extractValue(item) === field.state.value) ??
-              items[0],
-          ) ||
-            placeholder ||
-            'Select an item'}
-        </div>
-        <Image
-          source={require('@/assets/icons/arrow-down.png')}
-          alt="arrow down"
-          width={26}
-          height={26}
-          className="w-6.5 rounded-lg bg-tertiary/10 p-1"
-        />
-      </TouchableOpacity>
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<T | null>(() => {
+    const value = field.state.value;
+    return items.find(item => extractValue(item) === value) ?? items[0] ?? null;
+  });
 
-      <View
-        className={cn(
-          'bg-background-secondary absolute z-10 max-h-52 w-full overflow-y-scroll rounded-xl transition-all duration-300',
-          isOpen ? 'h-52' : 'h-0 min-h-0',
-          label ? 'top-20' : 'top-16',
-        )}>
-        <View className="">
-          <View className={cn('')}>
-            {React.Children.toArray(
-              items.map(item => (
-                <Text
-                  key={extractValue(item)}
-                  className="relative cursor-pointer p-2 hover:bg-tertiary/10"
-                  onPress={() => {
-                    field.state.value = extractValue(item);
-                    props.onChangeCallback && props.onChangeCallback(item);
-                    setIsOpen(false);
-                  }}>
-                  {extractLabel(item)}
-                </Text>
-              )),
-            )}
-          </View>
-        </View>
-      </View>
-      {field.state.meta.isTouched ? (
-        <Text className="text-xs text-red-500">
-          {field.state.meta.errors.map(err => err.message).join(', ')}
+  const hasError =
+    field.state.meta.isTouched && field.state.meta.errors.length > 0;
+
+  const handleSelect = (item: T) => {
+    setSelectedItem(item);
+    field.handleChange(extractValue(item));
+    onChangeCallback?.(item);
+    setIsOpen(false);
+  };
+
+  const displayValue = selectedItem ? extractLabel(selectedItem) : placeholder;
+
+  return (
+    <View className="mb-4 flex w-full flex-col">
+      {label && (
+        <Text className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">
+          {label}
         </Text>
-      ) : null}
+      )}
+
+      <View className="relative">
+        <TouchableOpacity
+          onPress={() => !disabled && setIsOpen(!isOpen)}
+          activeOpacity={0.7}
+          className={cn(
+            'h-12 w-full flex-row items-center justify-between rounded-xl border border-gray-300 bg-white px-4 dark:border-gray-600 dark:bg-gray-850',
+            hasError && 'border-red-500',
+            isOpen && 'border-indigo-500',
+            disabled && 'opacity-50',
+            className,
+          )}
+          disabled={disabled}>
+          <Text
+            className="flex-1 text-base text-gray-900 dark:text-gray-100"
+            numberOfLines={1}>
+            {displayValue}
+          </Text>
+          <View className="opacity-50">
+            <Icons.Icon
+              icon={Icons.Hugeicons.ArrowDown01FreeIcons}
+              size={16}
+              strokeWidth={2}
+              style={{ transform: [{ rotate: isOpen ? '180deg' : '0deg' }] }}
+            />
+          </View>
+        </TouchableOpacity>
+
+        {isOpen && !disabled && (
+          <>
+            {/* Backdrop */}
+            <Pressable
+              onPress={() => setIsOpen(false)}
+              className="absolute -left-10 -right-10 -top-10 -bottom-10 z-10"
+            />
+
+            {/* Dropdown */}
+            <View
+              className={cn(
+                'absolute z-20 mt-1 w-full rounded-xl border border-gray-300 bg-white shadow-xl dark:border-gray-600 dark:bg-gray-850',
+              )}>
+              <ScrollView
+                className="max-h-60"
+                nestedScrollEnabled
+                showsVerticalScrollIndicator={true}>
+                <View>
+                  {items.map((item, index) => {
+                    const isSelected =
+                      extractValue(item) ===
+                      (selectedItem ? extractValue(selectedItem) : null);
+
+                    return (
+                      <TouchableOpacity
+                        key={extractValue(item) ?? index}
+                        onPress={() => handleSelect(item)}
+                        className={cn(
+                          'flex flex-row items-center justify-between border-b border-gray-100 px-4 py-3 dark:border-gray-700',
+                          index === 0 && 'rounded-t-xl',
+                          index === items.length - 1 && 'border-b-0 rounded-b-xl',
+                          isSelected ? 'bg-indigo-50 dark:bg-indigo-900/20' : '',
+                        )}>
+                        <Text
+                          className={cn(
+                            'flex-1 text-base',
+                            isSelected
+                              ? 'text-indigo-600 dark:text-indigo-400 font-medium'
+                              : 'text-gray-900 dark:text-gray-100',
+                          )}>
+                          {extractLabel(item)}
+                        </Text>
+                        {isSelected && (
+                          <Icons.Icon
+                            icon={Icons.Hugeicons.CheckmarkBadgeFreeIcons}
+                            size={18}
+                            strokeWidth={2.5}
+                            className="text-indigo-600 dark:text-indigo-400"
+                          />
+                        )}
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              </ScrollView>
+            </View>
+          </>
+        )}
+      </View>
+
+      {helperText && !hasError && (
+        <Text className="mt-1.5 text-xs text-gray-500">{helperText}</Text>
+      )}
+
+      {hasError && (
+        <Text className="mt-1.5 text-xs text-red-500">
+          {field.state.meta.errors
+            .map((err: any) => err?.message ?? String(err))
+            .join(', ')}
+        </Text>
+      )}
     </View>
   );
 }
