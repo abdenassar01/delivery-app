@@ -10,7 +10,6 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import * as SecureStore from 'expo-secure-store';
 import { Toaster } from '../lib/taost/sonner';
-import { loadSelectedTheme } from '@/lib';
 import { SafeAreaListener } from 'react-native-safe-area-context';
 import { Uniwind } from 'uniwind';
 import { ConvexBetterAuthProvider } from '@convex-dev/better-auth/react';
@@ -37,7 +36,6 @@ export const unstable_settings = {
   initialRouteName: '(app)',
 };
 
-loadSelectedTheme();
 SplashScreen.preventAutoHideAsync();
 
 SplashScreen.setOptions({
@@ -59,8 +57,7 @@ export default function RootLayout() {
 
 function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <GestureHandlerRootView
-      style={styles.container}>
+    <GestureHandlerRootView style={styles.container}>
       <ConvexBetterAuthProvider client={convex} authClient={authClient}>
         <KeyboardProvider>
           <SafeAreaListener
@@ -69,7 +66,16 @@ function Providers({ children }: { children: React.ReactNode }) {
             }}>
             <BottomSheetModalProvider>
               {children}
-              <Toaster position="bottom-center" />
+              <Toaster
+                position="top-center"
+                richColors
+                style={{
+                  shadowOffset: { width: 0, height: 0 },
+                  shadowOpacity: 0,
+                  shadowColor: 'transparent',
+                  elevation: 0,
+                }}
+              />
             </BottomSheetModalProvider>
           </SafeAreaListener>
         </KeyboardProvider>

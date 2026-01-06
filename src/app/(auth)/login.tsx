@@ -22,7 +22,6 @@ interface LoginFormData {
 
 export default function Login() {
   const { replace } = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm({
     defaultValues: {
@@ -31,7 +30,7 @@ export default function Login() {
     },
     validators: {
       onSubmit: z.object({
-        email: z.email('Invalid email').min(1, 'Email is required'),
+        email: z.string().min(1, 'Email is required').email('Invalid email'),
         password: z.string().min(6, 'Password must be at least 6 characters'),
       }),
     },
