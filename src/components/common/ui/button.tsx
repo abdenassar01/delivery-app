@@ -7,6 +7,7 @@ export interface ButtonProps {
   label?: string;
   onPress?: () => void;
   className?: string;
+  textClassName?: string;
   disabled?: boolean;
   loading?: boolean;
   children?: React.ReactNode;
@@ -49,6 +50,7 @@ export function Button({
   children,
   variant = 'primary',
   size = 'md',
+  textClassName,
 }: ButtonProps) {
   const isDisabled = disabled || loading;
 
@@ -67,7 +69,9 @@ export function Button({
         <>
           <ActivityIndicator
             size="small"
-            color={variant === 'outline' || variant === 'ghost' ? '#6366f1' : '#fff'}
+            color={
+              variant === 'outline' || variant === 'ghost' ? '#6366f1' : '#fff'
+            }
             className="mr-2"
           />
           {label && (
@@ -89,6 +93,7 @@ export function Button({
                 'font-medium',
                 textSizeStyles[size],
                 labelVariantStyles[variant],
+                textClassName,
               )}>
               {label}
             </Text>

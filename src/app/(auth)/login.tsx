@@ -10,15 +10,9 @@ import {
 import { Link, useRouter } from 'expo-router';
 import { useForm } from '@tanstack/react-form';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
-import { Alert } from 'react-native';
 import { authClient } from '@/lib/auth-client';
 import { z } from 'zod';
 import { toast } from 'sonner-native';
-
-interface LoginFormData {
-  email: string;
-  password: string;
-}
 
 export default function Login() {
   const { replace } = useRouter();
@@ -31,7 +25,12 @@ export default function Login() {
     validators: {
       onSubmit: z.object({
         email: z.string().min(1, 'Email is required').email('Invalid email'),
-        password: z.string().min(6, 'Password must be at least 6 characters'),
+        password: z
+          .string('Password is required')
+          .regex(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
+            'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
+          ),
       }),
     },
 

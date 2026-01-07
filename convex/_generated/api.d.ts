@@ -11,6 +11,7 @@
 import type * as ResendOTPPasswordReset from "../ResendOTPPasswordReset.js";
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
+import type * as tables_delivery from "../tables/delivery.js";
 import type * as tables_index from "../tables/index.js";
 import type * as tables_users from "../tables/users.js";
 import type * as users from "../users.js";
@@ -25,6 +26,7 @@ declare const fullApi: ApiFromModules<{
   ResendOTPPasswordReset: typeof ResendOTPPasswordReset;
   auth: typeof auth;
   http: typeof http;
+  "tables/delivery": typeof tables_delivery;
   "tables/index": typeof tables_index;
   "tables/users": typeof tables_users;
   users: typeof users;
