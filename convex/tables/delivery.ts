@@ -6,6 +6,7 @@ export const couriers = defineTable({
   userId: v.id('users'),
   phone: v.string(),
   address: v.optional(v.string()),
+  cinCode: v.optional(v.string()),
   cin: v.optional(v.id('_storage')),
   avatar: v.optional(v.id('_storage')),
   status: v.union(

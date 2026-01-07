@@ -31,16 +31,17 @@ export const updateUserAvatar = mutation({
 
 export const updateUserRole = mutation({
   args: {
+    id: v.id('users'),
     role: v.union(v.literal('user'), v.literal('admin'), v.literal('delivery')),
   },
   handler: async (ctx, args) => {
     const user = await getAuthenticatedUser(ctx);
 
     if (!user) {
-      throw new Error('User not found');
+      throw new Error('Unauthenticated');
     }
 
-    await ctx.db.patch(user._id, {
+    await ctx.db.patch(args.id, {
       role: args.role,
     });
 

@@ -49,6 +49,7 @@ export const createCourier = mutation({
     name: v.string(),
     phone: v.string(),
     address: v.optional(v.string()),
+    cinCode: v.optional(v.string()),
     cin: v.optional(v.id('_storage')),
     avatar: v.optional(v.id('_storage')),
     status: v.union(
@@ -75,11 +76,16 @@ export const createCourier = mutation({
       throw new Error('User not found');
     }
 
+    await ctx.db.patch(user._id, {
+      role: 'delivery',
+    });
+
     const courier = await ctx.db.insert('couriers', {
       name: args.name,
       phone: args.phone,
       userId: user._id,
       address: args.address,
+      cinCode: args.cinCode,
       cin: args.cin,
       avatar: args.avatar,
       status: args.status,
@@ -176,6 +182,52 @@ export const updateAvatar = mutation({
 
     await ctx.db.patch(courier._id, {
       avatar: args.avatar,
+    });
+
+    await ctx.db.patch(courier.userId, {
+      avatar: args.avatar,
+    });
+
+    return { success: true };
+  },
+});
+
+export const updateMyLocation = mutation({
+  args: {
+    latitude: v.number(),
+    longitude: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const courier = await getAuthenticatedCourier(ctx);
+
+    if (!courier) {
+      throw new Error('Courier not found');
+    }
+
+    await ctx.db.patch(courier._id, {
+      currentLocation: {
+        latitude: args.latitude,
+        longitude: args.longitude,
+      },
+    });
+
+    return { success: true };
+  },
+});
+
+export const uploadCin = mutation({
+  args: {
+    cin: v.id('_storage'),
+  },
+  handler: async (ctx, args) => {
+    const courier = await getAuthenticatedCourier(ctx);
+
+    if (!courier) {
+      throw new Error('Courier not found');
+    }
+
+    await ctx.db.patch(courier._id, {
+      cin: args.cin,
     });
 
     return { success: true };

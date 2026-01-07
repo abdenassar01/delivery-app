@@ -19,6 +19,10 @@ import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from 'convex/_generated/api';
 import * as Icons from '@/icons';
+import { useState } from 'react';
+import { Id } from 'convex/_generated/dataModel';
+import { useRouter } from 'expo-router';
+import { toast } from 'sonner-native';
 
 export function SignupStepTwo({
   setStep,
@@ -27,12 +31,42 @@ export function SignupStepTwo({
 }) {
   const { height } = useWindowDimensions();
   const user = useQuery(api.users.getCurrentUser);
-  const setUserAvatar = useMutation(api.users.updateUserAvatar);
+  const createCourier = useMutation(api.couriers.createCourier);
+  const { replace } = useRouter();
+  const [avatar, setAvatar] = useState<Id<'_storage'> | null>(null);
+  const [cin, setCin] = useState<Id<'_storage'> | null>(null);
 
   const form = useForm({
-    defaultValues: {},
+    defaultValues: {
+      phone: '',
+      address: '',
+      cinCode: '',
+      avatar,
+      cin,
+    },
     validators: {
-      onSubmit: z.object({}),
+      onSubmit: z.object({
+        phone: z.string().min(10, 'Phone number must be at least 10 digits'),
+        address: z.string().min(1, 'Address is required'),
+        cinCode: z.string().min(1, 'CIN is required'),
+        avatar: z.any(),
+        cin: z.any(),
+      }),
+    },
+    onSubmit: async ({ value, formApi }) => {
+      formApi.reset();
+      createCourier({
+        name: user?.name,
+        phone: value.phone,
+        address: value.address,
+        status: 'pending',
+        totalDeliveries: 0,
+        rating: 0,
+        avatar,
+        cin,
+      });
+      toast.success('Profile created successfully');
+      replace('/');
     },
   });
 
@@ -61,17 +95,14 @@ export function SignupStepTwo({
             label="Address"
             placeholder="Enter your address"
           />
-          <FieldInput name="city" label="City" placeholder="Enter your city" />
           <FieldInput
-            name="cin"
+            name="cinCode"
             label="CIN (National ID Number)"
             placeholder="Enter your CIN"
           />
           <View className="mb-6 aspect-square w-1/2">
             {user?.email && (
-              <ImageUpload
-                onUploadComplete={id => setUserAvatar({ storageId: id })}
-              />
+              <ImageUpload onUploadComplete={id => setAvatar(id)} />
             )}
           </View>
 
@@ -99,7 +130,7 @@ export function SignupStepTwo({
               <DocumentUpload
                 label="ID Card (CIN)"
                 description="Upload the front side of your national ID"
-                onUploadComplete={id => setIdFront({ storageId: id })}
+                onUploadComplete={id => setCin(id)}
               />
             </View>
           </View>
