@@ -6,7 +6,15 @@ export const users = defineTable({
   email: v.string(),
   role: v.union(v.literal('user'), v.literal('admin'), v.literal('delivery')),
   balance: v.number(),
-  avatar: v.optional(v.id('storage')),
+  avatar: v.optional(v.id('_storage')),
+  userId: v.string(),
   isVerified: v.boolean(),
   isEnabled: v.boolean(),
-});
+})
+  .index('by_userId', ['userId'])
+  .searchIndex('search_name', {
+    searchField: 'name',
+  })
+  .searchIndex('search_email', {
+    searchField: 'email',
+  });

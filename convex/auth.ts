@@ -22,6 +22,7 @@ export const authComponent = createClient<DataModel>(components.betterAuth, {
           email: authUser.email,
           role: 'user',
           balance: 0,
+          userId: authUser._id,
           name: authUser.name,
           isVerified: false,
           isEnabled: true,

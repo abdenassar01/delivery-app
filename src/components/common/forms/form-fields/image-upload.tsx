@@ -11,14 +11,12 @@ import { Id } from 'convex/_generated/dataModel';
 import { toast } from 'sonner-native';
 
 type ImageUploadProps = {
-  email: string;
   onUploadComplete?: (storageId: Id<'_storage'>) => void;
   className?: string;
   label?: string;
 };
 
 export function ImageUpload({
-  email,
   onUploadComplete,
   className,
   label = 'Profile Photo',
@@ -27,7 +25,6 @@ export function ImageUpload({
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
   const generateUploadUrl = useMutation(api.users.generateUploadUrl);
-  const updateUserAvatar = useMutation(api.users.updateUserAvatar);
 
   const handlePickImage = async () => {
     // Request permission
@@ -57,10 +54,8 @@ export function ImageUpload({
     setUploading(true);
 
     try {
-      // Step 1: Get upload URL from Convex
       const uploadUrl = await generateUploadUrl();
 
-      // Step 2: Upload the file to Convex storage
       const response = await fetch(asset.uri);
       const blob = await response.blob();
 
@@ -76,16 +71,10 @@ export function ImageUpload({
         throw new Error('Failed to upload image');
       }
 
-      // Step 3: Get the storage ID from the response
       const { storageId } = await uploadResponse.json();
 
-      // Step 4: Update user record with the storage ID
-      await updateUserAvatar({ storageId, email });
-
-      // Step 5: Get the URL to display the image
-      const fullUrl = `${uploadUrl.split('/_storage')[0]}/${storageId}`;
-      setImageUrl(fullUrl);
-      onUploadComplete?.(storageId as Id<'_storage'>);
+      setImageUrl(asset.uri);
+      onUploadComplete?.(storageId);
     } catch (error) {
       console.error('Upload error:', error);
       toast.error('Failed to upload image. Please try again.');
@@ -104,7 +93,7 @@ export function ImageUpload({
         onPress={handlePickImage}
         disabled={uploading}
         className={cn(
-          'relative h-32 w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50',
+          'relative aspect-square w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50',
           uploading && 'opacity-50',
         )}>
         {uploading ? (

@@ -1,9 +1,10 @@
-import { useWindowDimensions } from 'react-native';
+import { ActivityIndicator, useWindowDimensions } from 'react-native';
 import { Button, ImageUpload, ScrollView, Text, View } from '../../';
 import { cn } from '@/lib';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
-import { useState } from 'react';
-import { authClient } from '@/lib/auth-client';
+import { useMutation, useQuery } from 'convex/react';
+import { api } from 'convex/_generated/api';
+import { useRouter } from 'expo-router';
 
 export function SignupStepTwoUser({
   setStep,
@@ -11,14 +12,15 @@ export function SignupStepTwoUser({
   setStep: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const { height } = useWindowDimensions();
-  const { data } = authClient.useSession();
-  const [avatarUploaded, setAvatarUploaded] = useState(false);
+  const { replace } = useRouter();
+  const user = useQuery(api.users.getCurrentUser);
+  const setUserAvatar = useMutation(api.users.updateUserAvatar);
 
-  const email = data.user.email;
+  if (user === undefined) {
+    return <ActivityIndicator className="mt-5" size={32} />;
+  }
 
-  const handleNext = () => {
-    setStep(2);
-  };
+  const email = user.email;
 
   return (
     <KeyboardAvoidingView
@@ -39,20 +41,15 @@ export function SignupStepTwoUser({
           </Text>
         </View>
 
-        {email && (
-          <ImageUpload
-            email={email}
-            onUploadComplete={() => setAvatarUploaded(true)}
-          />
-        )}
-
-        {!email && (
-          <View className="mt-4 rounded-lg bg-yellow-50 p-4">
-            <Text className="text-sm text-yellow-800">
-              Please complete the previous step first
-            </Text>
+        <View className="items-center justify-center">
+          <View className="aspect-square w-1/2">
+            {email && (
+              <ImageUpload
+                onUploadComplete={id => setUserAvatar({ storageId: id })}
+              />
+            )}
           </View>
-        )}
+        </View>
       </ScrollView>
 
       <View className={cn('flex-row justify-between')}>
@@ -66,7 +63,7 @@ export function SignupStepTwoUser({
         <Button
           label="Submit"
           className="border-primary w-[49%] border"
-          onPress={handleNext}
+          onPress={() => replace('/')}
         />
       </View>
     </KeyboardAvoidingView>

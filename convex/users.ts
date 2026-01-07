@@ -1,5 +1,6 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
+import { getAuthenticatedUser } from './auth/helpers';
 
 // Generate upload URL for file storage
 export const generateUploadUrl = mutation({
@@ -12,11 +13,9 @@ export const generateUploadUrl = mutation({
 export const updateUserAvatar = mutation({
   args: {
     storageId: v.id('_storage'),
-    email: v.string(),
   },
   handler: async (ctx, args) => {
-    const users = await ctx.db.query('users').collect();
-    const user = users.find(u => u.email === args.email);
+    const user = await getAuthenticatedUser(ctx);
 
     if (!user) {
       throw new Error('User not found');
@@ -32,12 +31,10 @@ export const updateUserAvatar = mutation({
 
 export const updateUserRole = mutation({
   args: {
-    email: v.string(),
     role: v.union(v.literal('user'), v.literal('admin'), v.literal('delivery')),
   },
   handler: async (ctx, args) => {
-    const users = await ctx.db.query('users').collect();
-    const user = users.find(u => u.email === args.email);
+    const user = await getAuthenticatedUser(ctx);
 
     if (!user) {
       throw new Error('User not found');
@@ -51,18 +48,20 @@ export const updateUserRole = mutation({
   },
 });
 
+export const getAllUsers = query({
+  args: {
+    limit: v.number(),
+  },
+  handler: async (ctx, args) => {
+    const users = await ctx.db.query('users').collect();
+    return users;
+  },
+});
+
 export const getCurrentUser = query({
   args: {},
   handler: async ctx => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) {
-      return null;
-    }
-
-    const users = await ctx.db.query('users').collect();
-    const user = users.find(u => u.email === identity.email);
-
-    return user;
+    return getAuthenticatedUser(ctx);
   },
 });
 

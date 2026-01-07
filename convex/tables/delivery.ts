@@ -6,7 +6,7 @@ export const couriers = defineTable({
   userId: v.id('users'),
   phone: v.string(),
   address: v.string(),
-  cin: v.id('storage'),
+  cin: v.id('_storage'),
   status: v.union(
     v.literal('pending'),
     v.literal('accepted'),
@@ -14,7 +14,7 @@ export const couriers = defineTable({
   ),
   vehicleType: v.string(),
   vehicleNumber: v.string(),
-  vehicleImage: v.id('storage'),
+  vehicleImage: v.id('_storage'),
   rating: v.optional(v.number()),
   totalDeliveries: v.number(),
   currentLocation: v.optional(
@@ -23,7 +23,7 @@ export const couriers = defineTable({
       longitude: v.number(),
     }),
   ),
-  avatar: v.id('storage'),
+  avatar: v.id('_storage'),
 })
   .index('by_status', ['status'])
   .index('by_rating', ['rating'])
@@ -33,7 +33,7 @@ export const couriers = defineTable({
 
 export const category = defineTable({
   name: v.string(),
-  image: v.id('storage'),
+  image: v.id('_storage'),
 })
   .index('by_name', ['name'])
   .searchIndex('search_name', {
