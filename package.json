@@ -60,6 +60,7 @@
     "better-auth": "1.4.9",
     "convex": "^1.31.2",
     "expo": "^54.0.30",
+    "expo-blur": "^15.0.8",
     "expo-build-properties": "^1.0.10",
     "expo-constants": "~18.0.12",
     "expo-dev-client": "~6.0.20",

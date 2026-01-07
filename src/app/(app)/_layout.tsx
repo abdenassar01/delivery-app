@@ -4,10 +4,14 @@ import { useConvexAuth } from 'convex/react';
 import { Redirect, SplashScreen, Tabs } from 'expo-router';
 import { useCallback, useEffect } from 'react';
 import * as Icons from '@/icons';
+import { useCSSVariable } from 'uniwind';
+import { BlurView } from 'expo-blur';
+import { StyleSheet } from 'react-native';
 
 export default function RootLayout() {
   const { isAuthenticated, isLoading } = useConvexAuth();
   const { isFirstTime } = useIsFirstTime();
+  const primary = useCSSVariable('--color-primary');
 
   const hideSplash = useCallback(async () => {
     await SplashScreen.hideAsync();
@@ -35,24 +39,39 @@ export default function RootLayout() {
 
   return (
     <Tabs
-      initialRouteName="index"
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#6366f1',
-        tabBarInactiveTintColor: '#9ca3af',
+        tabBarShowLabel: false,
         tabBarStyle: {
-          backgroundColor: '#ffffff',
-          borderTopWidth: 1,
-          borderTopColor: '#e5e7eb',
-          height: 60,
-          paddingBottom: 8,
-          paddingTop: 8,
+          margin: 5,
+          position: 'absolute',
+          borderTopWidth: 0,
+          paddingTop: 6,
+          borderRadius: 100,
+          width: '60%',
+          height: 50,
+          backgroundColor: `${primary}10`,
+          marginBottom: 25,
+          alignItems: 'center',
+          justifyContent: 'center',
+          marginLeft: '20%',
         },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: '500',
-        },
-      }}>
+        tabBarBackground: () => (
+          <BlurView
+            intensity={50}
+            tint="light"
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              height: 50,
+              borderRadius: 100,
+              zIndex: 1,
+              backgroundColor: 'transparent',
+              overflow: 'hidden',
+            }}
+          />
+        ),
+      }}
+      initialRouteName="index">
       <Tabs.Screen
         name="index"
         options={{
