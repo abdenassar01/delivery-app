@@ -1,6 +1,5 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import { View } from 'react-native';
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect } from 'react';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -22,25 +21,25 @@ export function ProgressBar({
   header,
   className,
 }: Props) {
-  const width = useSharedValue('0%');
+  const width = useSharedValue(0);
 
-  const style = useAnimatedStyle<any>(() => {
+  const style = useAnimatedStyle(() => {
     return {
-      width: withSpring(width.value, {}),
+      width: `${width.value}%`,
     };
   });
 
   useEffect(() => {
-    width.value = `${(currentStep / steps) * 100}%`;
-  }, [currentStep, header]);
+    width.value = withSpring((currentStep / steps) * 100);
+  }, [currentStep, steps]);
 
   return (
     <View className={cn('my-1', className)}>
-      {header && <Text className="text-main mb-1">{header}</Text>}
+      {header && <Text className="text-primary mb-1">{header}</Text>}
       <View className="bg-background-secondary relative h-2 w-full rounded-full">
         <Animated.View
           style={style}
-          className={cn('bg-main absolute top-0 left-0 h-2 rounded-full')}
+          className={cn('bg-primary absolute top-0 left-0 h-2 rounded-full')}
         />
       </View>
     </View>

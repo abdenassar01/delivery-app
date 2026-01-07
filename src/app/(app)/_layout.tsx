@@ -3,7 +3,6 @@ import { useIsFirstTime } from '@/lib';
 import { useConvexAuth } from 'convex/react';
 import { Redirect, SplashScreen, Tabs } from 'expo-router';
 import { useCallback, useEffect } from 'react';
-import { TouchableOpacity } from 'react-native';
 import * as Icons from '@/icons';
 
 export default function RootLayout() {

@@ -1,8 +1,9 @@
 import z from 'zod';
-import { Button, FormContext, Text, View } from '../../';
+import { Button, FieldInput, FormContext, Text, View } from '../../';
 import { useForm } from '@tanstack/react-form';
 import { useWindowDimensions } from 'react-native';
 import { cn } from '@/lib';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export function SignupStepOne({
   setStep,
@@ -56,15 +57,42 @@ export function SignupStepOne({
   return (
     <FormContext value={form}>
       <View className="mt-2 justify-between" style={{ height: height - 150 }}>
-        <View>
-          <Text>Hello</Text>
-        </View>
+        <ScrollView
+          className=""
+          contentContainerClassName="px-1"
+          showsVerticalScrollIndicator={false}>
+          <FieldInput name="name" label="Name" placeholder="Enter your name" />
+          <FieldInput
+            name="email"
+            label="Email"
+            placeholder="Enter your email"
+            autoCapitalize="none"
+          />
+          <FieldInput
+            name="password"
+            label="Password"
+            placeholder="Enter your password"
+            password
+          />
+          <FieldInput
+            name="phone"
+            label="Phone"
+            placeholder="Enter your phone"
+            keyboardType="phone-pad"
+          />
+          <FieldInput
+            name="role"
+            label="Role"
+            placeholder="Enter your role"
+            autoCapitalize="none"
+          />
+        </ScrollView>
         <View className={cn('flex-row justify-between')}>
           <Button
             label="Previous"
             className="bg-primary/10 border-primary w-[49%] border"
             textClassName="text-primary"
-            onPress={() => {}}
+            onPress={() => setStep(0)}
           />
           <Button
             label="Next"
