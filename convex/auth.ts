@@ -1,6 +1,7 @@
 import { betterAuth } from 'better-auth/minimal';
 import { createClient } from '@convex-dev/better-auth';
 import { convex, crossDomain } from '@convex-dev/better-auth/plugins';
+import { expo } from '@better-auth/expo';
 import authConfig from './auth.config';
 import { components, internal } from './_generated/api';
 import { query } from './_generated/server';
@@ -110,16 +111,11 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
       },
     },
     appName: 'TDelivery',
-    socialProviders: {
-      google: {
-        enabled: true,
-        clientId: process.env.GOOGLE_CLIENT_ID!,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-      },
-    },
     plugins: [
       convex({ authConfig }),
-      crossDomain({ siteUrl }),
+      expo(),
+
+      // crossDomain({ siteUrl }),
       // captcha({
       //   provider: 'cloudflare-turnstile',
       //   secretKey: process.env.TURNSTILE_SECRET_KEY!,

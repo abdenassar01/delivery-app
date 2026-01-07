@@ -35,6 +35,7 @@ export default function Login() {
     },
 
     onSubmit: async ({ value, formApi }) => {
+      console.log('value: ', value);
       await authClient.signIn.email({
         email: value.email,
         password: value.password,
@@ -66,30 +67,33 @@ export default function Login() {
         </Text>
 
         <FormContext value={form}>
-          <FieldInput
-            label="Email"
-            name="email"
-            placeholder="Enter your email"
-            keyboardType="email-address"
-            autoCapitalize="none"
-          />
-          <FieldInput
-            label="Password"
-            name="password"
-            placeholder="Enter your password"
-            password
-          />
-          <form.Subscribe>
-            {({ isSubmitting }) => (
-              <Button
-                label="Sign In"
-                onPress={form.handleSubmit}
-                loading={isSubmitting}
-                disabled={isSubmitting}
-                className="mt-6"
-              />
-            )}
-          </form.Subscribe>
+          <View className="gap-3">
+            <FieldInput
+              label="Email"
+              name="email"
+              placeholder="Enter your email"
+              keyboardType="email-address"
+              autoCapitalize="none"
+            />
+            <FieldInput
+              label="Password"
+              name="password"
+              placeholder="Enter your password"
+              password
+            />
+
+            <form.Subscribe>
+              {({ isSubmitting }) => (
+                <Button
+                  label="Sign In"
+                  onPress={form.handleSubmit}
+                  loading={isSubmitting}
+                  disabled={isSubmitting}
+                  className="mt-3"
+                />
+              )}
+            </form.Subscribe>
+          </View>
         </FormContext>
 
         <View className="mt-4 flex-row justify-center">

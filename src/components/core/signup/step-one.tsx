@@ -4,6 +4,9 @@ import { useForm } from '@tanstack/react-form';
 import { useWindowDimensions } from 'react-native';
 import { cn } from '@/lib';
 import { ScrollView } from 'react-native-gesture-handler';
+import { authClient } from '@/lib/auth-client';
+import { toast } from 'sonner-native';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
 export function SignupStepOne({
   setStep,
@@ -44,15 +47,39 @@ export function SignupStepOne({
             return true;
           },
           {
-            message: 'Passwords do not match',
+            path: ['passwordConfirmation'],
+            error: 'Passwords do not match',
           },
         ),
+    },
+    onSubmit: async ({ value, formApi }) => {
+      console.log('value: ', value);
+      authClient.signUp.email({
+        email: value.email,
+        password: value.password,
+        name: value.name,
+        fetchOptions: {
+          onSuccess: context => {
+            formApi.reset();
+            setStep(2);
+            toast.success('User created successfully');
+          },
+          onError: context => {
+            console.log('context: ', context);
+            toast.error(context.error.message);
+          },
+        },
+      });
     },
   });
 
   return (
     <FormContext value={form}>
-      <View className="mt-2 justify-between" style={{ height: height - 150 }}>
+      <KeyboardAvoidingView
+        behavior="padding"
+        keyboardVerticalOffset={50}
+        className="mt-2 justify-between"
+        style={{ height: height - 150 }}>
         <ScrollView
           className=""
           contentContainerClassName="px-1 gap-3"
@@ -74,6 +101,13 @@ export function SignupStepOne({
             placeholder="Enter your password"
             password
           />
+
+          <FieldInput
+            name="passwordConfirmation"
+            label="Confirm Password"
+            placeholder="Confirm your password"
+            password
+          />
         </ScrollView>
         <View className={cn('flex-row justify-between')}>
           <Button
@@ -82,13 +116,20 @@ export function SignupStepOne({
             textClassName="text-primary"
             onPress={() => setStep(0)}
           />
-          <Button
-            label="Next"
-            className="border-primary w-[49%] border"
-            onPress={() => setStep(2)}
-          />
+
+          <form.Subscribe>
+            {({ isSubmitting }) => (
+              <Button
+                label="Next"
+                onPress={form.handleSubmit}
+                loading={isSubmitting}
+                disabled={isSubmitting}
+                className="w-[49%]"
+              />
+            )}
+          </form.Subscribe>
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </FormContext>
   );
 }

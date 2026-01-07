@@ -52,9 +52,9 @@ export function FieldInput({
       <View className="relative">
         <TextInput
           className={cn(
-            'h-12 w-full rounded-xl border border-gray-300 bg-white px-3 text-base text-gray-900',
-            hasError && 'ring-2 ring-red-500',
-            isFocused && !hasError && 'ring-primary/50 px-4 ring-2',
+            'h-10 w-full rounded-lg bg-white px-2.5 pb-2.5 text-base text-gray-900 ring-2 ring-gray-300',
+            hasError && 'ring-red-500',
+            isFocused && !hasError && 'ring-primary/50 px-2 ring-2',
             disabled && 'opacity-50',
             className,
           )}
@@ -80,7 +80,7 @@ export function FieldInput({
         {password && (
           <TouchableOpacity
             onPress={() => setIsPassword(!isPassword)}
-            style={{ top: 14, right: 16 }}
+            style={{ top: 10, right: 12 }}
             className="absolute"
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
             <Image
@@ -98,11 +98,11 @@ export function FieldInput({
       </View>
 
       {helperText && !hasError && (
-        <Text className="mt-1.5 text-xs text-gray-500">{helperText}</Text>
+        <Text className="mt-0.5 text-xs text-gray-500">{helperText}</Text>
       )}
 
       {hasError && (
-        <Text className="mt-1.5 text-xs text-red-500">
+        <Text className="mt-0.5 text-xs text-red-500">
           {field.state.meta.errors
             .map((err: any) => err?.message ?? String(err))
             .join(', ')}

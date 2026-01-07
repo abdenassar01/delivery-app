@@ -3,6 +3,7 @@ import { Button, FormContext, Text, View } from '../../';
 import { useWindowDimensions } from 'react-native';
 import { useForm } from '@tanstack/react-form';
 import z from 'zod';
+import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
 
 export function SignupStepTwo({
   setStep,
@@ -20,7 +21,11 @@ export function SignupStepTwo({
 
   return (
     <FormContext value={form}>
-      <View className="mt-2 justify-between" style={{ height: height - 150 }}>
+      <KeyboardAvoidingView
+        behavior="padding"
+        keyboardVerticalOffset={50}
+        className="mt-2 justify-between"
+        style={{ height: height - 150 }}>
         <View>
           <Text>Hello</Text>
         </View>
@@ -39,7 +44,7 @@ export function SignupStepTwo({
             onPress={() => setStep(2)}
           />
         </View>
-      </View>
+      </KeyboardAvoidingView>
     </FormContext>
   );
 }
