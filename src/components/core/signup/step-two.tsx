@@ -53,12 +53,16 @@ export function SignupStepTwo({
         cin: z.any(),
       }),
     },
+    onSubmitInvalid: ({ formApi, meta }) => {
+      console.log('Invalid: ', JSON.stringify(meta));
+    },
     onSubmit: async ({ value, formApi }) => {
       formApi.reset();
       createCourier({
         name: user?.name,
         phone: value.phone,
         address: value.address,
+        cinCode: value.cinCode,
         status: 'pending',
         totalDeliveries: 0,
         rating: 0,
@@ -173,7 +177,7 @@ export function SignupStepTwo({
           <Button
             label="Submit"
             className="w-[49%]"
-            onPress={() => setStep(2)}
+            onPress={form.handleSubmit}
           />
         </View>
       </KeyboardAvoidingView>
