@@ -102,9 +102,9 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
     },
     emailAndPassword: {
       enabled: true,
-      requireEmailVerification: true,
+      requireEmailVerification: false,
       sendResetPasswordToken: true,
-      sendVerificationEmail: true,
+      sendVerificationEmail: false,
       tokenExpiresIn: {
         emailVerification: 24 * 60 * 60,
         resetPassword: 60 * 60,

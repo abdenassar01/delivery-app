@@ -6,6 +6,7 @@ export const users = defineTable({
   email: v.string(),
   role: v.union(v.literal('user'), v.literal('admin'), v.literal('delivery')),
   balance: v.number(),
+  avatar: v.optional(v.id('storage')),
   isVerified: v.boolean(),
   isEnabled: v.boolean(),
 });

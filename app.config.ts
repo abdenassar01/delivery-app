@@ -58,6 +58,19 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       },
     ],
     [
+      'expo-image-picker',
+      {
+        photosPermission:
+          'The app accesses your photos to let you share them with your friends.',
+      },
+    ],
+    [
+      'expo-document-picker',
+      {
+        iCloudContainerEnvironment: 'Production',
+      },
+    ],
+    [
       'expo-font',
       {
         fonts: [
