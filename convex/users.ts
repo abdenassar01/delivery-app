@@ -1,6 +1,6 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
-import { getAuthenticatedUser } from './auth/helpers';
+import { getAuthenticatedUser } from './helpers/auth';
 
 // Generate upload URL for file storage
 export const generateUploadUrl = mutation({

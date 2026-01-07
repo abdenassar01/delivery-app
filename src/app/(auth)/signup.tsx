@@ -45,7 +45,7 @@ export default function Signup() {
       <KeyboardAvoidingView behavior="padding" className="">
         <ScrollView className="">
           <HeaderWithGoBack />
-          <ProgressBar className="mt-3" steps={4} currentStep={step} />
+          <ProgressBar className="mt-3" steps={3} currentStep={step} />
           {getStepComponent()}
         </ScrollView>
       </KeyboardAvoidingView>

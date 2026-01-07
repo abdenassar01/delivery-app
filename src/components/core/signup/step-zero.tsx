@@ -49,7 +49,10 @@ export function SignupStepZero({
           ))}
         </View>
       </View>
-      <View className={cn('flex-row justify-end')}>
+      <View
+        className={cn(
+          'bg-background border-primary/10 flex-row justify-between rounded-2xl border p-1',
+        )}>
         <Button
           label="Next"
           className="border-primary w-[49%] border"

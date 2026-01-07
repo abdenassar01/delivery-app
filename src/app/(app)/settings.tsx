@@ -10,10 +10,8 @@ import { api } from 'convex/_generated/api';
 
 export default function SettingsScreen() {
   const router = useRouter();
-  const { data: session } = authClient.useSession();
-  const currentUser = useQuery(api.users.getCurrentUser);
+  const user = useQuery(api.users.getCurrentUser);
 
-  const user = currentUser ?? session?.user;
   const userName = user?.name || 'User';
   const userEmail = user?.email || '';
   const userAvatar = user?.avatar;

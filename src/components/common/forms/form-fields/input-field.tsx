@@ -52,9 +52,9 @@ export function FieldInput({
       <View className="relative">
         <TextInput
           className={cn(
-            'h-10 w-full rounded-lg bg-white px-2.5 pb-2.5 text-base text-gray-900 ring-2 ring-gray-300',
-            hasError && 'ring-red-500',
-            isFocused && !hasError && 'ring-primary/50 px-2 ring-2',
+            'bg-background-secondary border-primary/10 w-full rounded-xl border p-2 text-base text-gray-900',
+            hasError && 'border-red-500',
+            isFocused && !hasError && 'border-primary/20 px-2',
             disabled && 'opacity-50',
             className,
           )}

@@ -109,7 +109,10 @@ export function SignupStepOne({
             password
           />
         </ScrollView>
-        <View className={cn('flex-row justify-between')}>
+        <View
+          className={cn(
+            'bg-background border-primary/10 flex-row justify-between rounded-2xl border p-1',
+          )}>
           <Button
             label="Previous"
             className="bg-primary/10 border-primary w-[49%] border"

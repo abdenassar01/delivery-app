@@ -9,6 +9,7 @@ import { cn } from '@/lib';
 import { api } from 'convex/_generated/api';
 import { Id } from 'convex/_generated/dataModel';
 import { toast } from 'sonner-native';
+import * as Icons from '@/icons';
 
 type ImageUploadProps = {
   onUploadComplete?: (storageId: Id<'_storage'>) => void;
@@ -86,14 +87,14 @@ export function ImageUpload({
   return (
     <View className={cn('flex w-full flex-col', className)}>
       {label && (
-        <Text className="mb-2 text-sm font-medium text-gray-700">{label}</Text>
+        <Text className="text-sm font-medium text-gray-700">{label}</Text>
       )}
 
       <Pressable
         onPress={handlePickImage}
         disabled={uploading}
         className={cn(
-          'relative aspect-square w-full flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50',
+          'bg-background-secondary border-primary/10 relative aspect-square w-full flex-col items-center justify-center rounded-2xl border',
           uploading && 'opacity-50',
         )}>
         {uploading ? (
@@ -105,19 +106,24 @@ export function ImageUpload({
           <>
             <Image
               source={{ uri: imageUrl }}
-              className="h-full w-full rounded-lg object-cover"
+              className="h-full w-full rounded-xl object-cover"
               resizeMode="cover"
             />
-            <View className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/30 opacity-0">
+            <View className="absolute inset-0 z-20 flex items-center justify-center rounded-xl bg-white/30 opacity-0">
               <Text className="text-sm font-medium text-white">Change</Text>
             </View>
           </>
         ) : (
           <>
             <View className="mb-2 h-12 w-12 items-center justify-center rounded-full bg-gray-200">
-              <Text className="text-2xl text-gray-500">+</Text>
+              <Icons.Icon
+                icon={Icons.Hugeicons.ImageUploadFreeIcons}
+                size={24}
+                strokeWidth={1.5}
+                className="text-gray-500"
+              />
             </View>
-            <Text className="text-sm text-gray-500">
+            <Text className="text-center text-sm text-gray-500">
               Tap to upload profile photo
             </Text>
           </>

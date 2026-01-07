@@ -1,9 +1,24 @@
 import { cn } from '@/lib';
-import { Button, FormContext, Text, View } from '../../';
-import { useWindowDimensions } from 'react-native';
+import {
+  ActivityIndicator,
+  ScrollView,
+  useWindowDimensions,
+  View,
+} from 'react-native';
+import {
+  Button,
+  DocumentUpload,
+  FieldInput,
+  FormContext,
+  ImageUpload,
+  Text,
+} from '../../';
 import { useForm } from '@tanstack/react-form';
 import z from 'zod';
 import { KeyboardAvoidingView } from 'react-native-keyboard-controller';
+import { useMutation, useQuery } from 'convex/react';
+import { api } from 'convex/_generated/api';
+import * as Icons from '@/icons';
 
 export function SignupStepTwo({
   setStep,
@@ -11,6 +26,8 @@ export function SignupStepTwo({
   setStep: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const { height } = useWindowDimensions();
+  const user = useQuery(api.users.getCurrentUser);
+  const setUserAvatar = useMutation(api.users.updateUserAvatar);
 
   const form = useForm({
     defaultValues: {},
@@ -19,6 +36,10 @@ export function SignupStepTwo({
     },
   });
 
+  if (user === undefined) {
+    return <ActivityIndicator size={32} className="mt-5" />;
+  }
+
   return (
     <FormContext value={form}>
       <KeyboardAvoidingView
@@ -26,10 +47,90 @@ export function SignupStepTwo({
         keyboardVerticalOffset={50}
         className="mt-2 justify-between"
         style={{ height: height - 150 }}>
-        <View>
-          <Text>Hello</Text>
-        </View>
-        <View className={cn('flex-row justify-between')}>
+        <ScrollView
+          contentContainerClassName="gap-3 p-1"
+          showsVerticalScrollIndicator={false}>
+          <FieldInput
+            name="phone"
+            label="Phone Number"
+            placeholder="Enter your phone number"
+            keyboardType="phone-pad"
+          />
+          <FieldInput
+            name="address"
+            label="Address"
+            placeholder="Enter your address"
+          />
+          <FieldInput name="city" label="City" placeholder="Enter your city" />
+          <FieldInput
+            name="cin"
+            label="CIN (National ID Number)"
+            placeholder="Enter your CIN"
+          />
+          <View className="mb-6 aspect-square w-1/2">
+            {user?.email && (
+              <ImageUpload
+                onUploadComplete={id => setUserAvatar({ storageId: id })}
+              />
+            )}
+          </View>
+
+          <View>
+            <View className="mb-3 flex-row items-center gap-2">
+              <View className="h-8 w-8 items-center justify-center rounded-full bg-indigo-100">
+                <Icons.Icon
+                  icon={Icons.Hugeicons.IdFreeIcons}
+                  size={18}
+                  strokeWidth={2}
+                  className="text-indigo-600"
+                />
+              </View>
+              <View>
+                <Text className="text-sm font-semibold text-gray-900">
+                  Identification Documents
+                </Text>
+                <Text className="text-xs text-gray-500">
+                  Upload your ID card (front and back)
+                </Text>
+              </View>
+            </View>
+
+            <View className="gap-3">
+              <DocumentUpload
+                label="ID Card (CIN)"
+                description="Upload the front side of your national ID"
+                onUploadComplete={id => setIdFront({ storageId: id })}
+              />
+            </View>
+          </View>
+
+          <View className="mb-2 rounded-xl border border-amber-200 bg-amber-50 p-4">
+            <View className="flex-row gap-3">
+              <View className="h-6 w-6 shrink-0 items-center justify-center rounded-full bg-amber-100">
+                <Icons.Icon
+                  icon={Icons.Hugeicons.InformationCircleFreeIcons}
+                  size={14}
+                  strokeWidth={2}
+                  className="text-amber-600"
+                />
+              </View>
+              <View className="flex-1">
+                <Text className="text-sm font-semibold text-amber-900">
+                  Verification Required
+                </Text>
+                <Text className="mt-1 text-xs text-amber-800">
+                  Your documents will be verified before you can start accepting
+                  deliveries. This usually takes 1-2 business days.
+                </Text>
+              </View>
+            </View>
+          </View>
+        </ScrollView>
+
+        <View
+          className={cn(
+            'bg-background border-primary/10 flex-row justify-between rounded-2xl border p-1',
+          )}>
           <Button
             label="Previous"
             className="bg-primary/10 border-primary w-[49%] border"
@@ -39,8 +140,8 @@ export function SignupStepTwo({
             }}
           />
           <Button
-            label="Next"
-            className="border-primary w-[49%] border"
+            label="Submit"
+            className="w-[49%]"
             onPress={() => setStep(2)}
           />
         </View>

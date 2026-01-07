@@ -39,12 +39,11 @@ export default function Login() {
       await authClient.signIn.email({
         email: value.email,
         password: value.password,
-        callbackURL: '/',
         fetchOptions: {
           onSuccess: () => {
             formApi.reset();
             toast.success('Login successful');
-            replace('/');
+            replace('/(app)');
           },
           onError: error => {
             toast.error(error.error.message || 'Login failed');
