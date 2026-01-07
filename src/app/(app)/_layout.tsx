@@ -1,17 +1,42 @@
-import { ActivityIndicator, Text, View } from '@/components';
-import { useIsFirstTime } from '@/lib';
+import { ActivityIndicator, View } from '@/components';
+import { cn, useIsFirstTime } from '@/lib';
 import { useConvexAuth } from 'convex/react';
-import { Redirect, SplashScreen, Tabs } from 'expo-router';
+import { Redirect, SplashScreen, Tabs, useRouter } from 'expo-router';
 import { useCallback, useEffect } from 'react';
 import * as Icons from '@/icons';
 import { useCSSVariable } from 'uniwind';
 import { BlurView } from 'expo-blur';
-import { StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
+
+const tabs = [
+  {
+    name: 'index',
+    label: 'Home',
+    icon: Icons.Hugeicons.Home01FreeIcons,
+  },
+  {
+    name: 'orders',
+    label: 'Orders',
+    icon: Icons.Hugeicons.ShoppingBagFreeIcons,
+  },
+  {
+    name: 'history',
+    label: 'History',
+    icon: Icons.Hugeicons.ClockFreeIcons,
+  },
+  {
+    name: 'settings',
+    label: 'Settings',
+    icon: Icons.Hugeicons.Settings02FreeIcons,
+  },
+];
 
 export default function RootLayout() {
   const { isAuthenticated, isLoading } = useConvexAuth();
   const { isFirstTime } = useIsFirstTime();
   const primary = useCSSVariable('--color-primary');
+
+  const { push } = useRouter();
 
   const hideSplash = useCallback(async () => {
     await SplashScreen.hideAsync();
@@ -72,66 +97,28 @@ export default function RootLayout() {
         ),
       }}
       initialRouteName="index">
-      <Tabs.Screen
-        name="index"
-        options={{
-          title: 'Home',
-          tabBarIcon: ({ color, size, focused }) => (
-            <Icons.Icon
-              icon={
-                focused
-                  ? Icons.Hugeicons.Home02FreeIcons
-                  : Icons.Hugeicons.Home01FreeIcons
-              }
-              size={size}
-              strokeWidth={2.5}
-              style={{ color }}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="orders"
-        options={{
-          title: 'Orders',
-          tabBarIcon: ({ color, size, focused }) => (
-            <Icons.Icon
-              icon={Icons.Hugeicons.ShoppingBagFreeIcons}
-              size={size}
-              strokeWidth={2.5}
-              style={{ color }}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="history"
-        options={{
-          title: 'History',
-          tabBarIcon: ({ color, size, focused }) => (
-            <Icons.Icon
-              icon={Icons.Hugeicons.ClockFreeIcons}
-              size={size}
-              strokeWidth={2.5}
-              style={{ color }}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="settings"
-        options={{
-          title: 'Settings',
-          tabBarIcon: ({ color, size, focused }) => (
-            <Icons.Icon
-              icon={Icons.Hugeicons.Settings02FreeIcons}
-              size={size}
-              strokeWidth={2.5}
-              style={{ color }}
-            />
-          ),
-        }}
-      />
+      {tabs.map(tab => (
+        <Tabs.Screen
+          key={tab.name}
+          name={tab.name}
+          options={{
+            title: tab.label,
+            tabBarIcon: ({ color, size, focused }) => (
+              <Pressable
+                // @ts-ignore
+                onPress={() => push(tab.name)}
+                className={cn('rounded-full p-2', focused && 'bg-primary/20')}>
+                <Icons.Icon
+                  icon={tab.icon}
+                  size={24}
+                  strokeWidth={1.5}
+                  color={focused ? primary : '#191B1F'}
+                />
+              </Pressable>
+            ),
+          }}
+        />
+      ))}
     </Tabs>
   );
 }
