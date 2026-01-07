@@ -44,11 +44,9 @@ export function FieldInput({
     field.state.meta.isTouched && field.state.meta.errors.length > 0;
 
   return (
-    <View style={{ marginBottom: 16 }} className="flex w-full flex-col">
+    <View className="flex w-full flex-col">
       {label && (
-        <Text className="mb-1 text-sm font-medium text-gray-700">
-          {label}
-        </Text>
+        <Text className="mb-1 text-sm font-medium text-gray-700">{label}</Text>
       )}
 
       <View className="relative">
@@ -56,7 +54,7 @@ export function FieldInput({
           className={cn(
             'h-12 w-full rounded-xl border border-gray-300 bg-white px-3 text-base text-gray-900',
             hasError && 'ring-2 ring-red-500',
-            isFocused && !hasError && 'ring-primary/50 px-3 ring-2',
+            isFocused && !hasError && 'ring-primary/50 px-4 ring-2',
             disabled && 'opacity-50',
             className,
           )}

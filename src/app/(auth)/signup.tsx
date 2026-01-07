@@ -4,6 +4,7 @@ import {
   HeaderWithGoBack,
   ProgressBar,
   RootWrapper,
+  SignupStepTwoUser,
   SignupStepZero,
   Text,
 } from '@/components';
@@ -31,6 +32,9 @@ export default function Signup() {
       case 1:
         return <SignupStepOne setStep={setStep} />;
       case 2:
+        if (selectedRole === 'user') {
+          return <SignupStepTwoUser setStep={setStep} />;
+        }
         return <SignupStepTwo setStep={setStep} />;
       default:
         return null;

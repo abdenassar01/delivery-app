@@ -38,7 +38,7 @@ export function SignupStepZero({
               key={`role-item-${tab.value}`}
               onPress={() => setSelectedRole(tab.value)}
               className={cn(
-                'bg-primary/10 border-primary/20 w-full items-center gap-2 rounded-2xl border-2 p-2',
+                'bg-primary/10 border-primary/20 w-[49%] items-center gap-2 rounded-2xl border-2 p-2',
                 selectedRole === tab.value && 'border-primary',
               )}>
               <Image className="h-32 w-32 rounded-xl" source={tab.image} />
@@ -53,7 +53,7 @@ export function SignupStepZero({
         <Button
           label="Next"
           className="border-primary w-[49%] border"
-          onPress={() => setStep(2)}
+          onPress={() => setStep(1)}
         />
       </View>
     </View>

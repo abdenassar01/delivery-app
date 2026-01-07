@@ -17,8 +17,6 @@ export function SignupStepOne({
       name: '',
       email: '',
       password: '',
-      phone: '',
-      role: 'client',
     },
     validators: {
       onSubmit: z
@@ -37,8 +35,6 @@ export function SignupStepOne({
               /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
               'Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character',
             ),
-          phone: z.string().min(10),
-          role: z.enum(['client', 'delivery']),
         })
         .refine(
           data => {
@@ -59,9 +55,13 @@ export function SignupStepOne({
       <View className="mt-2 justify-between" style={{ height: height - 150 }}>
         <ScrollView
           className=""
-          contentContainerClassName="px-1"
+          contentContainerClassName="px-1 gap-3"
           showsVerticalScrollIndicator={false}>
-          <FieldInput name="name" label="Name" placeholder="Enter your name" />
+          <FieldInput
+            name="name"
+            label="Full name"
+            placeholder="Enter your full name"
+          />
           <FieldInput
             name="email"
             label="Email"
@@ -73,18 +73,6 @@ export function SignupStepOne({
             label="Password"
             placeholder="Enter your password"
             password
-          />
-          <FieldInput
-            name="phone"
-            label="Phone"
-            placeholder="Enter your phone"
-            keyboardType="phone-pad"
-          />
-          <FieldInput
-            name="role"
-            label="Role"
-            placeholder="Enter your role"
-            autoCapitalize="none"
           />
         </ScrollView>
         <View className={cn('flex-row justify-between')}>
