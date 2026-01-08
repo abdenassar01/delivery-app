@@ -8,35 +8,38 @@ import { useCSSVariable } from 'uniwind';
 import { BlurView } from 'expo-blur';
 import { Pressable, StyleSheet } from 'react-native';
 
-const tabs = [
-  {
-    name: 'index',
-    label: 'Home',
-    icon: Icons.Hugeicons.Home01FreeIcons,
-  },
-  {
-    name: 'orders',
-    label: 'Orders',
-    icon: Icons.Hugeicons.ShoppingBagFreeIcons,
-  },
-  {
-    name: 'history',
-    label: 'History',
-    icon: Icons.Hugeicons.ClockFreeIcons,
-  },
-  {
-    name: 'settings',
-    label: 'Settings',
-    icon: Icons.Hugeicons.Settings02FreeIcons,
-  },
-];
-
 export default function RootLayout() {
   const { isAuthenticated, isLoading } = useConvexAuth();
   const { isFirstTime } = useIsFirstTime();
   const primary = useCSSVariable('--color-primary');
-
   const { push } = useRouter();
+
+  const tabs = [
+    {
+      navigate: () => push('/'),
+      name: 'index',
+      label: 'Home',
+      icon: Icons.Hugeicons.Home01FreeIcons,
+    },
+    {
+      navigate: () => push('/orders'),
+      name: 'orders',
+      label: 'Orders',
+      icon: Icons.Hugeicons.ShoppingBagFreeIcons,
+    },
+    {
+      navigate: () => push('/history'),
+      name: 'history',
+      label: 'History',
+      icon: Icons.Hugeicons.ClockFreeIcons,
+    },
+    {
+      navigate: () => push('/settings'),
+      name: 'settings',
+      label: 'Settings',
+      icon: Icons.Hugeicons.Settings02FreeIcons,
+    },
+  ];
 
   const hideSplash = useCallback(async () => {
     await SplashScreen.hideAsync();
@@ -105,8 +108,7 @@ export default function RootLayout() {
             title: tab.label,
             tabBarIcon: ({ color, size, focused }) => (
               <Pressable
-                // @ts-ignore
-                onPress={() => push(tab.name)}
+                onPress={tab.navigate}
                 className={cn('rounded-full p-2', focused && 'bg-primary/20')}>
                 <Icons.Icon
                   icon={tab.icon}

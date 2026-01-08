@@ -15,8 +15,10 @@ import type * as delivery from "../delivery.js";
 import type * as helpers_auth from "../helpers/auth.js";
 import type * as helpers_couriers from "../helpers/couriers.js";
 import type * as http from "../http.js";
+import type * as notifications from "../notifications.js";
 import type * as tables_delivery from "../tables/delivery.js";
 import type * as tables_index from "../tables/index.js";
+import type * as tables_notifications from "../tables/notifications.js";
 import type * as tables_users from "../tables/users.js";
 import type * as users from "../users.js";
 
@@ -34,8 +36,10 @@ declare const fullApi: ApiFromModules<{
   "helpers/auth": typeof helpers_auth;
   "helpers/couriers": typeof helpers_couriers;
   http: typeof http;
+  notifications: typeof notifications;
   "tables/delivery": typeof tables_delivery;
   "tables/index": typeof tables_index;
+  "tables/notifications": typeof tables_notifications;
   "tables/users": typeof tables_users;
   users: typeof users;
 }>;

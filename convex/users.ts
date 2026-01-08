@@ -62,7 +62,22 @@ export const getAllUsers = query({
 export const getCurrentUser = query({
   args: {},
   handler: async ctx => {
-    return getAuthenticatedUser(ctx);
+    const user = await getAuthenticatedUser(ctx);
+
+    if (!user) {
+      throw new Error('Unauthenticated');
+    }
+
+    let avatarUrl = '';
+
+    if (user.avatar) {
+      avatarUrl = (await ctx.storage.getUrl(user.avatar)) || '';
+    }
+
+    return {
+      ...user,
+      avatarUrl,
+    };
   },
 });
 

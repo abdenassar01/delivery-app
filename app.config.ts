@@ -12,7 +12,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   slug: 'tanger-deliver',
   version: Env.VERSION.toString(),
   orientation: 'portrait',
-  icon: './assets/icon.png',
+  icon: './assets/icon-light.png',
   userInterfaceStyle: 'automatic',
   newArchEnabled: true,
   updates: {
@@ -25,7 +25,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     infoPlist: {},
     icon: {
       dark: './assets/icon-dark.png',
-      light: './assets/icon.png',
+      light: './assets/icon-light.png',
       tinted: './assets/icon-tinted.png',
     },
   },

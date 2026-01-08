@@ -5,7 +5,7 @@ import { HeaderWithGoBack } from './header-with-go-back';
 function Header() {
   return (
     <View className="flex-row items-center">
-      <Image source={require('assets/icon.png')} className="h-12 w-12" />
+      <Image source={require('assets/icon-light.png')} className="h-12 w-12" />
     </View>
   );
 }

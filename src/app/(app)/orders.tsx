@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
-import { RefreshControl, ScrollView, TouchableOpacity, View } from 'react-native';
+import {
+  RefreshControl,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { TextInput } from 'react-native';
-import { Text, Input } from '@/components';
+import { Text } from '@/components';
 import * as Icons from '@/icons';
 import { cn } from '@/lib';
 
@@ -15,8 +20,16 @@ export default function OrdersScreen() {
   const filters: { key: OrderStatus; label: string; icon: any }[] = [
     { key: 'all', label: 'All', icon: Icons.Hugeicons.SquareFreeIcons },
     { key: 'pending', label: 'Pending', icon: Icons.Hugeicons.Time01FreeIcons },
-    { key: 'in-transit', label: 'In Transit', icon: Icons.Hugeicons.TruckDeliveryFreeIcons },
-    { key: 'delivered', label: 'Delivered', icon: Icons.Hugeicons.CheckmarkBadgeFreeIcons },
+    {
+      key: 'in-transit',
+      label: 'In Transit',
+      icon: Icons.Hugeicons.TruckDeliveryFreeIcons,
+    },
+    {
+      key: 'delivered',
+      label: 'Delivered',
+      icon: Icons.Hugeicons.CheckmarkBadgeFreeIcons,
+    },
   ];
 
   const orders = [
@@ -89,7 +102,8 @@ export default function OrdersScreen() {
   };
 
   const filteredOrders = orders.filter(order => {
-    const matchesFilter = selectedFilter === 'all' || order.status === selectedFilter;
+    const matchesFilter =
+      selectedFilter === 'all' || order.status === selectedFilter;
     const matchesSearch =
       searchQuery === '' ||
       order.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -106,17 +120,18 @@ export default function OrdersScreen() {
   return (
     <View className="flex-1 bg-gray-50">
       {/* Header */}
-      <View className="bg-white px-5 pb-4 pt-12 shadow-sm">
+      <View className="bg-white px-5 pt-12 pb-4 shadow-sm">
         <View className="flex-row items-center justify-between">
           <View>
             <Text className="text-2xl font-bold text-gray-900">Orders</Text>
             <Text className="text-sm text-gray-500">
-              {filteredOrders.length} {filteredOrders.length === 1 ? 'order' : 'orders'} found
+              {filteredOrders.length}{' '}
+              {filteredOrders.length === 1 ? 'order' : 'orders'} found
             </Text>
           </View>
           <TouchableOpacity className="h-10 w-10 items-center justify-center rounded-full bg-indigo-50">
             <Icons.Icon
-              icon={Icons.Hugeicons.FilterNewFreeIcons}
+              icon={Icons.Hugeicons.FilterEditFreeIcons}
               size={20}
               strokeWidth={2}
               className="text-indigo-600"
@@ -131,7 +146,7 @@ export default function OrdersScreen() {
               icon={Icons.Hugeicons.Search01FreeIcons}
               size={20}
               strokeWidth={2}
-              className="text-gray-400 mr-3"
+              className="mr-3 text-gray-400"
             />
             <TextInput
               className="flex-1 text-base text-gray-900"
@@ -155,15 +170,15 @@ export default function OrdersScreen() {
       </View>
 
       {/* Filter Tabs */}
-      <View className="bg-white border-b border-gray-100 px-5 py-3">
+      <View className="border-b border-gray-100 bg-white px-5 py-3">
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View className="flex-row gap-2">
-            {filters.map((filter) => (
+            {filters.map(filter => (
               <TouchableOpacity
                 key={filter.key}
                 onPress={() => setSelectedFilter(filter.key)}
                 className={cn(
-                  'flex-row items-center rounded-full px-4 py-2 border-2',
+                  'flex-row items-center rounded-full border-2 px-4 py-2',
                   selectedFilter === filter.key
                     ? 'border-indigo-600 bg-indigo-600'
                     : 'border-gray-200 bg-white',
@@ -173,14 +188,18 @@ export default function OrdersScreen() {
                   size={16}
                   strokeWidth={2.5}
                   className={cn(
-                    selectedFilter === filter.key ? 'text-white' : 'text-gray-500',
+                    selectedFilter === filter.key
+                      ? 'text-white'
+                      : 'text-gray-500',
                     selectedFilter !== filter.key && 'mr-1.5',
                   )}
                 />
                 <Text
                   className={cn(
                     'text-sm font-bold',
-                    selectedFilter === filter.key ? 'text-white' : 'text-gray-700',
+                    selectedFilter === filter.key
+                      ? 'text-white'
+                      : 'text-gray-700',
                   )}>
                   {filter.label}
                 </Text>
@@ -195,7 +214,11 @@ export default function OrdersScreen() {
         className="flex-1 px-5 pt-4"
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#6366f1" />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#6366f1"
+          />
         }>
         {filteredOrders.length === 0 ? (
           <View className="mt-20 items-center justify-center">
@@ -211,14 +234,16 @@ export default function OrdersScreen() {
               No orders found
             </Text>
             <Text className="text-center text-gray-500">
-              {searchQuery ? 'Try a different search term' : 'No orders match this filter'}
+              {searchQuery
+                ? 'Try a different search term'
+                : 'No orders match this filter'}
             </Text>
           </View>
         ) : (
-          filteredOrders.map((order) => (
+          filteredOrders.map(order => (
             <TouchableOpacity
               key={order.id}
-              className="mb-4 bg-white rounded-2xl p-4 shadow-sm border border-gray-100"
+              className="mb-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm"
               activeOpacity={0.7}>
               {/* Order Header */}
               <View className="mb-3 flex-row items-center justify-between">
@@ -268,7 +293,9 @@ export default function OrdersScreen() {
                     className="text-gray-500"
                   />
                 </View>
-                <Text className="flex-1 font-medium text-gray-800">{order.customer}</Text>
+                <Text className="flex-1 font-medium text-gray-800">
+                  {order.customer}
+                </Text>
               </View>
 
               {/* Address */}
@@ -279,7 +306,9 @@ export default function OrdersScreen() {
                   strokeWidth={2}
                   className="text-gray-400"
                 />
-                <Text className="flex-1 text-sm text-gray-600">{order.address}</Text>
+                <Text className="flex-1 text-sm text-gray-600">
+                  {order.address}
+                </Text>
               </View>
 
               {/* Order Details */}
@@ -292,19 +321,25 @@ export default function OrdersScreen() {
                       strokeWidth={2}
                       className="text-gray-400"
                     />
-                    <Text className="text-sm text-gray-500">{order.items} items</Text>
+                    <Text className="text-sm text-gray-500">
+                      {order.items} items
+                    </Text>
                   </View>
                   <View className="flex-row items-center gap-1.5">
                     <Icons.Icon
-                      icon={Icons.Hugeicons.Routing01FreeIcons}
+                      icon={Icons.Hugeicons.Route01FreeIcons}
                       size={16}
                       strokeWidth={2}
                       className="text-gray-400"
                     />
-                    <Text className="text-sm text-gray-500">{order.distance}</Text>
+                    <Text className="text-sm text-gray-500">
+                      {order.distance}
+                    </Text>
                   </View>
                 </View>
-                <Text className="text-xl font-bold text-indigo-600">{order.amount}</Text>
+                <Text className="text-xl font-bold text-indigo-600">
+                  {order.amount}
+                </Text>
               </View>
 
               {/* Action Buttons */}
@@ -314,9 +349,11 @@ export default function OrdersScreen() {
                     icon={Icons.Hugeicons.EyeFreeIcons}
                     size={18}
                     strokeWidth={2}
-                    className="text-white mr-2"
+                    className="mr-2 text-white"
                   />
-                  <Text className="text-center text-sm font-bold text-white">Details</Text>
+                  <Text className="text-center text-sm font-bold text-white">
+                    Details
+                  </Text>
                 </TouchableOpacity>
                 {order.status !== 'delivered' && (
                   <TouchableOpacity className="flex-row items-center justify-center rounded-xl border-2 border-indigo-200 px-4 py-3">
@@ -324,9 +361,11 @@ export default function OrdersScreen() {
                       icon={Icons.Hugeicons.NavigationFreeIcons}
                       size={18}
                       strokeWidth={2}
-                      className="text-indigo-600 mr-2"
+                      className="mr-2 text-indigo-600"
                     />
-                    <Text className="text-center text-sm font-bold text-indigo-600">Navigate</Text>
+                    <Text className="text-center text-sm font-bold text-indigo-600">
+                      Navigate
+                    </Text>
                   </TouchableOpacity>
                 )}
               </View>

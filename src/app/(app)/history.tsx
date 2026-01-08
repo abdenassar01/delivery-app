@@ -1,5 +1,10 @@
 import React, { useState } from 'react';
-import { RefreshControl, ScrollView, TouchableOpacity, View } from 'react-native';
+import {
+  RefreshControl,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { Text } from '@/components';
 import * as Icons from '@/icons';
 import { cn } from '@/lib';
@@ -7,7 +12,8 @@ import { cn } from '@/lib';
 type TimeFilter = 'all' | 'week' | 'month' | 'year';
 
 export default function HistoryScreen() {
-  const [selectedTimeFilter, setSelectedTimeFilter] = useState<TimeFilter>('all');
+  const [selectedTimeFilter, setSelectedTimeFilter] =
+    useState<TimeFilter>('all');
   const [refreshing, setRefreshing] = useState(false);
 
   const timeFilters: { key: TimeFilter; label: string }[] = [
@@ -94,7 +100,7 @@ export default function HistoryScreen() {
   const renderStars = (rating: number) => {
     return (
       <View className="flex-row">
-        {[1, 2, 3, 4, 5].map((star) => (
+        {[1, 2, 3, 4, 5].map(star => (
           <Icons.Icon
             key={star}
             icon={Icons.Hugeicons.StarFreeIcons}
@@ -115,16 +121,18 @@ export default function HistoryScreen() {
   return (
     <View className="flex-1 bg-gray-50">
       {/* Header */}
-      <View className="bg-gradient-to-r from-green-600 to-emerald-500 px-5 pb-8 pt-12">
+      <View className="bg-gradient-to-r from-green-600 to-emerald-500 px-5 pt-12 pb-8">
         <Text className="text-2xl font-bold text-white">History</Text>
-        <Text className="text-sm text-green-100">Your delivery history & earnings</Text>
+        <Text className="text-sm text-green-100">
+          Your delivery history & earnings
+        </Text>
       </View>
 
       {/* Summary Cards - Overlapping */}
       <View style={{ marginTop: -24 }} className="px-5">
         <View className="flex-row gap-3">
-          <View className="bg-white flex-1 rounded-2xl p-4 shadow-lg border border-gray-100">
-            <View className="flex-row items-center justify-between mb-2">
+          <View className="flex-1 rounded-2xl border border-gray-100 bg-white p-4 shadow-lg">
+            <View className="mb-2 flex-row items-center justify-between">
               <View className="h-10 w-10 items-center justify-center rounded-full bg-green-100">
                 <Icons.Icon
                   icon={Icons.Hugeicons.DollarCircleFreeIcons}
@@ -133,22 +141,26 @@ export default function HistoryScreen() {
                   className="text-green-600"
                 />
               </View>
-              <View className="flex-row items-center bg-green-50 rounded-full px-2 py-1">
+              <View className="flex-row items-center rounded-full bg-green-50 px-2 py-1">
                 <Icons.Icon
                   icon={Icons.Hugeicons.ArrowUp01FreeIcons}
                   size={12}
                   strokeWidth={2.5}
-                  className="text-green-600 mr-1"
+                  className="mr-1 text-green-600"
                 />
                 <Text className="text-xs font-bold text-green-600">12%</Text>
               </View>
             </View>
-            <Text className="text-gray-500 text-xs font-medium">TOTAL EARNINGS</Text>
-            <Text className="mt-1 text-2xl font-bold text-gray-900">$4,802.69</Text>
+            <Text className="text-xs font-medium text-gray-500">
+              TOTAL EARNINGS
+            </Text>
+            <Text className="mt-1 text-2xl font-bold text-gray-900">
+              $4,802.69
+            </Text>
           </View>
 
-          <View className="bg-white flex-1 rounded-2xl p-4 shadow-lg border border-gray-100">
-            <View className="flex-row items-center justify-between mb-2">
+          <View className="flex-1 rounded-2xl border border-gray-100 bg-white p-4 shadow-lg">
+            <View className="mb-2 flex-row items-center justify-between">
               <View className="h-10 w-10 items-center justify-center rounded-full bg-indigo-100">
                 <Icons.Icon
                   icon={Icons.Hugeicons.ShoppingBagFreeIcons}
@@ -157,17 +169,19 @@ export default function HistoryScreen() {
                   className="text-indigo-600"
                 />
               </View>
-              <View className="flex-row items-center bg-blue-50 rounded-full px-2 py-1">
+              <View className="flex-row items-center rounded-full bg-blue-50 px-2 py-1">
                 <Icons.Icon
                   icon={Icons.Hugeicons.ArrowUp01FreeIcons}
                   size={12}
                   strokeWidth={2.5}
-                  className="text-blue-600 mr-1"
+                  className="mr-1 text-blue-600"
                 />
                 <Text className="text-xs font-bold text-blue-600">8%</Text>
               </View>
             </View>
-            <Text className="text-gray-500 text-xs font-medium">DELIVERIES</Text>
+            <Text className="text-xs font-medium text-gray-500">
+              DELIVERIES
+            </Text>
             <Text className="mt-1 text-2xl font-bold text-gray-900">176</Text>
           </View>
         </View>
@@ -177,7 +191,7 @@ export default function HistoryScreen() {
       <View className="mt-4 px-5">
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View className="flex-row gap-2">
-            {timeFilters.map((filter) => (
+            {timeFilters.map(filter => (
               <TouchableOpacity
                 key={filter.key}
                 onPress={() => setSelectedTimeFilter(filter.key)}
@@ -190,7 +204,9 @@ export default function HistoryScreen() {
                 <Text
                   className={cn(
                     'text-sm font-bold',
-                    selectedTimeFilter === filter.key ? 'text-white' : 'text-gray-700',
+                    selectedTimeFilter === filter.key
+                      ? 'text-white'
+                      : 'text-gray-700',
                   )}>
                   {filter.label}
                 </Text>
@@ -204,30 +220,40 @@ export default function HistoryScreen() {
         className="flex-1 px-5"
         showsVerticalScrollIndicator={false}
         refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor="#6366f1" />
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor="#6366f1"
+          />
         }>
         {/* Monthly Summary */}
         <View className="mt-4">
           <View className="mb-3 flex-row items-center justify-between">
-            <Text className="text-lg font-bold text-gray-900">Monthly Summary</Text>
+            <Text className="text-lg font-bold text-gray-900">
+              Monthly Summary
+            </Text>
             <TouchableOpacity className="flex-row items-center">
-              <Text className="text-sm font-medium text-green-600">View all</Text>
+              <Text className="text-sm font-medium text-green-600">
+                View all
+              </Text>
               <Icons.Icon
                 icon={Icons.Hugeicons.ArrowRight01FreeIcons}
                 size={14}
                 strokeWidth={2}
-                className="text-green-600 ml-1"
+                className="ml-1 text-green-600"
               />
             </TouchableOpacity>
           </View>
           {historyData.map((month, index) => (
             <TouchableOpacity
               key={index}
-              className="mb-3 bg-white rounded-2xl p-4 shadow-sm border border-gray-100"
+              className="mb-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm"
               activeOpacity={0.7}>
               <View className="mb-3 flex-row items-center justify-between">
                 <View>
-                  <Text className="text-lg font-bold text-gray-900">{month.period}</Text>
+                  <Text className="text-lg font-bold text-gray-900">
+                    {month.period}
+                  </Text>
                   <View className="mt-1 flex-row items-center gap-1">
                     <Icons.Icon
                       icon={
@@ -237,31 +263,45 @@ export default function HistoryScreen() {
                       }
                       size={14}
                       strokeWidth={2.5}
-                      className={month.trend === 'up' ? 'text-green-500' : 'text-red-500'}
+                      className={
+                        month.trend === 'up' ? 'text-green-500' : 'text-red-500'
+                      }
                     />
                     <Text
                       className={cn(
                         'text-xs font-bold',
-                        month.trend === 'up' ? 'text-green-600' : 'text-red-600',
+                        month.trend === 'up'
+                          ? 'text-green-600'
+                          : 'text-red-600',
                       )}>
                       {month.percentChange}
                     </Text>
-                    <Text className="text-xs text-gray-400 ml-1">vs last month</Text>
+                    <Text className="ml-1 text-xs text-gray-400">
+                      vs last month
+                    </Text>
                   </View>
                 </View>
                 <View className="items-end">
                   {renderStars(month.rating)}
-                  <Text className="mt-1 text-xs text-gray-500">{month.rating}/5.0</Text>
+                  <Text className="mt-1 text-xs text-gray-500">
+                    {month.rating}/5.0
+                  </Text>
                 </View>
               </View>
 
               <View className="flex-row justify-between border-t border-gray-100 pt-3">
                 <View className="flex-1">
-                  <Text className="text-gray-500 text-xs font-medium">DELIVERIES</Text>
-                  <Text className="mt-1 text-xl font-bold text-gray-900">{month.deliveries}</Text>
+                  <Text className="text-xs font-medium text-gray-500">
+                    DELIVERIES
+                  </Text>
+                  <Text className="mt-1 text-xl font-bold text-gray-900">
+                    {month.deliveries}
+                  </Text>
                 </View>
                 <View className="flex-1 items-end">
-                  <Text className="text-gray-500 text-xs font-medium">EARNINGS</Text>
+                  <Text className="text-xs font-medium text-gray-500">
+                    EARNINGS
+                  </Text>
                   <Text className="mt-1 text-xl font-bold text-green-600">
                     ${month.earnings.toFixed(2)}
                   </Text>
@@ -272,34 +312,46 @@ export default function HistoryScreen() {
         </View>
 
         {/* Recent Deliveries */}
-        <View className="mb-24 mt-6">
+        <View className="mt-6 mb-24">
           <View className="mb-3 flex-row items-center justify-between">
-            <Text className="text-lg font-bold text-gray-900">Recent Deliveries</Text>
+            <Text className="text-lg font-bold text-gray-900">
+              Recent Deliveries
+            </Text>
             <TouchableOpacity className="flex-row items-center">
-              <Text className="text-sm font-medium text-green-600">See all</Text>
+              <Text className="text-sm font-medium text-green-600">
+                See all
+              </Text>
               <Icons.Icon
                 icon={Icons.Hugeicons.ArrowRight01FreeIcons}
                 size={14}
                 strokeWidth={2}
-                className="text-green-600 ml-1"
+                className="ml-1 text-green-600"
               />
             </TouchableOpacity>
           </View>
-          {recentDeliveries.map((delivery) => (
+          {recentDeliveries.map(delivery => (
             <TouchableOpacity
               key={delivery.id}
-              className="mb-3 bg-white rounded-2xl p-4 shadow-sm border border-gray-100"
+              className="mb-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm"
               activeOpacity={0.7}>
               <View className="mb-3 flex-row items-center justify-between">
                 <View className="flex-1">
                   <View className="flex-row items-center gap-2">
-                    <Text className="font-bold text-gray-900">{delivery.id}</Text>
+                    <Text className="font-bold text-gray-900">
+                      {delivery.id}
+                    </Text>
                     <View className="h-1.5 w-1.5 rounded-full bg-green-500" />
-                    <Text className="text-sm text-gray-500">{delivery.time}</Text>
+                    <Text className="text-sm text-gray-500">
+                      {delivery.time}
+                    </Text>
                   </View>
-                  <Text className="mt-0.5 text-xs text-gray-400">{delivery.date}</Text>
+                  <Text className="mt-0.5 text-xs text-gray-400">
+                    {delivery.date}
+                  </Text>
                 </View>
-                <Text className="text-lg font-bold text-green-600">{delivery.amount}</Text>
+                <Text className="text-lg font-bold text-green-600">
+                  {delivery.amount}
+                </Text>
               </View>
 
               <View className="mb-2 flex-row items-center gap-2">
@@ -311,7 +363,9 @@ export default function HistoryScreen() {
                     className="text-gray-500"
                   />
                 </View>
-                <Text className="flex-1 text-sm font-medium text-gray-700">{delivery.customer}</Text>
+                <Text className="flex-1 text-sm font-medium text-gray-700">
+                  {delivery.customer}
+                </Text>
               </View>
 
               <View className="mb-2 flex-row items-center gap-2">
@@ -321,7 +375,9 @@ export default function HistoryScreen() {
                   strokeWidth={2}
                   className="text-gray-400"
                 />
-                <Text className="flex-1 text-sm text-gray-600" numberOfLines={1}>
+                <Text
+                  className="flex-1 text-sm text-gray-600"
+                  numberOfLines={1}>
                   {delivery.from}
                 </Text>
                 <Icons.Icon
@@ -330,7 +386,9 @@ export default function HistoryScreen() {
                   strokeWidth={2}
                   className="text-gray-400"
                 />
-                <Text className="flex-1 text-sm text-gray-600" numberOfLines={1}>
+                <Text
+                  className="flex-1 text-sm text-gray-600"
+                  numberOfLines={1}>
                   {delivery.to}
                 </Text>
               </View>
@@ -338,12 +396,14 @@ export default function HistoryScreen() {
               <View className="mb-3 flex-row items-center gap-3">
                 <View className="flex-row items-center gap-1">
                   <Icons.Icon
-                    icon={Icons.Hugeicons.Routing01FreeIcons}
+                    icon={Icons.Hugeicons.Route01FreeIcons}
                     size={14}
                     strokeWidth={2}
                     className="text-gray-400"
                   />
-                  <Text className="text-xs text-gray-500">{delivery.distance}</Text>
+                  <Text className="text-xs text-gray-500">
+                    {delivery.distance}
+                  </Text>
                 </View>
                 <View className="flex-row items-center gap-1">
                   <Icons.Icon
@@ -352,7 +412,9 @@ export default function HistoryScreen() {
                     strokeWidth={2}
                     className="text-gray-400"
                   />
-                  <Text className="text-xs text-gray-500">{delivery.duration}</Text>
+                  <Text className="text-xs text-gray-500">
+                    {delivery.duration}
+                  </Text>
                 </View>
               </View>
 
@@ -367,7 +429,9 @@ export default function HistoryScreen() {
                   </View>
                 </View>
                 <TouchableOpacity className="rounded-lg bg-green-50 px-3 py-2">
-                  <Text className="text-xs font-bold text-green-700">View Details</Text>
+                  <Text className="text-xs font-bold text-green-700">
+                    View Details
+                  </Text>
                 </TouchableOpacity>
               </View>
             </TouchableOpacity>
