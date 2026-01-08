@@ -214,7 +214,7 @@ export function FieldLocationSelector({
             </View>
             <View className="absolute bottom-3 w-full flex-row justify-between px-2">
               <TouchableOpacity
-                className="bg-primary/10 border-primary size-8 items-center justify-center rounded-full border"
+                className="bg-background-secondary size-8 items-center justify-center rounded-full"
                 onPress={goToMyLocation}>
                 <Icons.Icon
                   icon={Icons.Hugeicons.Location03FreeIcons}

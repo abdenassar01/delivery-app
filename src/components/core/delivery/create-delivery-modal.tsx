@@ -16,18 +16,9 @@ import {
   FieldInput,
 } from '@/components';
 import { useCSSVariable } from 'uniwind';
-
-type LocationValue = {
-  address: string;
-  latitude: number;
-  longitude: number;
-};
-
-type FormValues = {
-  item: string;
-  pickupLocation: LocationValue | undefined;
-  deliveryLocation: LocationValue | undefined;
-};
+import { cn } from '@/lib';
+import z from 'zod';
+import { phoneNumber } from 'better-auth/plugins';
 
 type CreateDeliveryModalProps = {
   userId?: Id<'users'>;
@@ -45,9 +36,34 @@ export function CreateDeliveryModal({
   const form = useForm({
     defaultValues: {
       item: '',
-      pickupLocation: undefined,
-      deliveryLocation: undefined,
-    } as FormValues,
+      phoneNumber: '',
+      pickupLocation: {
+        address: '',
+        latitude: 0,
+        longitude: 0,
+      },
+      deliveryLocation: {
+        address: '',
+        latitude: 0,
+        longitude: 0,
+      },
+    },
+    validators: {
+      onChange: z.object({
+        item: z.string().min(1, 'Item is required'),
+        phoneNumber: z.string().min(1, 'Please enter a valid phone number'),
+        pickupLocation: z.object({
+          address: z.string(),
+          latitude: z.number(),
+          longitude: z.number(),
+        }),
+        deliveryLocation: z.object({
+          address: z.string(),
+          latitude: z.number(),
+          longitude: z.number(),
+        }),
+      }),
+    },
     onSubmit: async ({ value }) => {
       if (!userId) {
         console.error('User not authenticated');
@@ -82,7 +98,7 @@ export function CreateDeliveryModal({
     <>
       <TouchableOpacity
         onPress={present}
-        className="bg-primary/10 border-primary absolute right-4 bottom-2 rounded-2xl border px-4 py-2">
+        className="bg-primary/10 border-primary absolute right-4 bottom-4 rounded-2xl border px-4 py-2">
         <View className="flex-row items-center justify-center">
           <MaterialIcons name="add-circle" size={20} color={primary} />
           <Text className="text-primary ml-2 text-sm font-medium">
@@ -91,7 +107,7 @@ export function CreateDeliveryModal({
         </View>
       </TouchableOpacity>
 
-      <Modal ref={ref} snapPoints={['50%']} detached>
+      <Modal ref={ref} snapPoints={['50%', '70%']} detached>
         <View className="p-4">
           <Text className="mb-2 text-base font-medium">Request Delivery</Text>
           <TouchableOpacity
@@ -110,14 +126,17 @@ export function CreateDeliveryModal({
               <form.Subscribe
                 selector={state => [state.isSubmitting, state.canSubmit]}
                 children={([isSubmitting, canSubmit]) => (
-                  <View className="gap-4">
+                  <View className="gap-3">
                     <FieldInput
                       name="item"
                       label="Item to Deliver"
                       placeholder="e.g., Documents, Package, Food"
                     />
-
-                    {/* Pickup Location */}
+                    <FieldInput
+                      name="phone"
+                      label="Phone Number"
+                      placeholder="Enter phone number"
+                    />
                     <form.Field
                       name="pickupLocation"
                       children={field => (
@@ -129,7 +148,6 @@ export function CreateDeliveryModal({
                       )}
                     />
 
-                    {/* Delivery Location */}
                     <form.Field
                       name="deliveryLocation"
                       validators={{
@@ -149,31 +167,32 @@ export function CreateDeliveryModal({
                     <TouchableOpacity
                       onPress={form.handleSubmit}
                       disabled={!canSubmit || isSubmitting}
-                      className={`rounded-xl px-4 py-3 ${
+                      className={cn(
+                        'border-primary/10 rounded-xl border px-4 py-3',
                         !canSubmit || isSubmitting
                           ? 'bg-gray-300'
-                          : 'bg-primary'
-                      }`}>
+                          : 'bg-primary/10',
+                      )}>
                       <View className="flex-row items-center justify-center">
                         {isSubmitting ? (
                           <>
-                            <MaterialIcons
-                              name="hourglass-empty"
+                            <Icons.Icon
+                              icon={Icons.Hugeicons.RefreshFreeIcons}
                               size={20}
-                              color="white"
+                              color={primary}
                             />
-                            <Text className="ml-2 text-sm font-bold text-white">
+                            <Text className="text-primary ml-2 text-sm font-bold">
                               Creating...
                             </Text>
                           </>
                         ) : (
                           <>
-                            <MaterialIcons
-                              name="check-circle"
+                            <Icons.Icon
+                              icon={Icons.Hugeicons.Sent02FreeIcons}
                               size={20}
-                              color="white"
+                              color={primary}
                             />
-                            <Text className="ml-2 text-sm font-bold text-white">
+                            <Text className="text-primary ml-2 text-sm font-bold">
                               Submit Request
                             </Text>
                           </>

@@ -43,16 +43,16 @@ export function UserHomeScreen({ user }: UserHomeScreenProps) {
       <HomeTopSection />
       <View className="mt-3 px-4">
         <Text className="text-lg font-medium">Quick Actions</Text>
-        <View className="flex-row gap-3">
+        <View className="mt-2 flex-row gap-2">
           <TouchableOpacity
             onPress={() => router.push('/app/history' as any)}
             className="border-secondary/10 bg-background-secondary flex-1 rounded-2xl border p-4">
-            <View className="bg-secondary/10 h-10 w-10 items-center justify-center rounded-full">
+            <View className="bg-secondary/10 h-10 w-10 items-center justify-center rounded-xl">
               <Icons.Icon
                 icon={Icons.Hugeicons.RotateLeftFreeIcons}
                 size={20}
                 strokeWidth={2}
-                color={primary}
+                color={secondary}
               />
             </View>
             <Text className="mt-2 text-sm font-semibold text-gray-900">
@@ -63,12 +63,12 @@ export function UserHomeScreen({ user }: UserHomeScreenProps) {
           <TouchableOpacity
             onPress={() => router.push('/app/profile' as any)}
             className="border-secondary/10 bg-background-secondary flex-1 rounded-2xl border p-4">
-            <View className="bg-secondary/10 h-10 w-10 items-center justify-center rounded-full">
+            <View className="bg-secondary/10 h-10 w-10 items-center justify-center rounded-xl">
               <Icons.Icon
                 icon={Icons.Hugeicons.UserFreeIcons}
                 size={20}
                 strokeWidth={2}
-                color={primary}
+                color={secondary}
               />
             </View>
             <Text className="mt-2 text-sm font-semibold text-gray-900">

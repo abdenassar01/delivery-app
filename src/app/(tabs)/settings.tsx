@@ -9,32 +9,23 @@ import { authClient } from '@/lib/auth-client';
 
 const tabs: {
   title: string;
-  icon: keyof typeof Icons.Hugeicons;
+  icon: any;
   href: string;
 }[] = [
   {
     title: 'Profile',
-    icon: 'UserFreeIcons',
+    icon: Icons.Hugeicons.UserFreeIcons,
     href: '/app/profile',
   },
   {
     title: 'Notifications',
-    icon: 'NotificationFreeIcons',
+    icon: Icons.Hugeicons.NotificationFreeIcons,
     href: '/app/notifications',
   },
-  {
-    title: 'Chats',
-    icon: 'ChatMultipleFreeIcons',
-    href: '/inbox',
-  },
-  {
-    title: 'Feedback',
-    icon: 'ThumbUpFreeIcons',
-    href: '/app/feedback',
-  },
+
   {
     title: 'Contact Us',
-    icon: 'SendMessageFreeIcons',
+    icon: Icons.Hugeicons.Message02FreeIcons,
     href: '/app/contact',
   },
 ];
@@ -56,7 +47,7 @@ export default function Settings() {
       {/* Settings Items */}
       <View className="border-secondary/10 bg-background-secondary mt-3 rounded-2xl border p-4">
         <View className="space-y-4">
-          {tabs.map((item) => (
+          {tabs.map(item => (
             <Link key={item.title} href={item.href as any} asChild>
               <TouchableOpacity className="flex-row items-center gap-3">
                 <View className="bg-secondary/10 h-10 w-10 items-center justify-center rounded-full">
@@ -94,7 +85,7 @@ export default function Settings() {
           }
           className="border-error/20 bg-error/10 flex-row items-center justify-center gap-2 rounded-2xl border p-4">
           <Icons.Icon
-            icon={Icons.Hugeicons.SignOutFreeIcons}
+            icon={Icons.Hugeicons.Logout01FreeIcons}
             size={20}
             strokeWidth={2}
             color="#cc0202"

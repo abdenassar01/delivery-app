@@ -189,7 +189,7 @@ export function AdminHomeScreen({ user }: AdminHomeScreenProps) {
           <Text className="mb-2 text-lg font-medium">Quick Actions</Text>
           <View className="flex-row gap-3">
             <TouchableOpacity
-              onPress={() => router.push('/admin/users' as any)}
+              onPress={() => router.push('/app/admin/users' as any)}
               className="border-secondary/10 bg-background-secondary flex-1 rounded-2xl border p-4">
               <View className="bg-primary/10 h-10 w-10 items-center justify-center rounded-full">
                 <Icons.Icon
