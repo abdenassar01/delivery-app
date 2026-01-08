@@ -1,17 +1,20 @@
 import { TouchableOpacity, View, Image } from 'react-native';
 import React from 'react';
 import * as Icons from '@/icons';
-import { useQuery } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import { api } from 'convex/_generated/api';
 import { Header, RootWrapper, Text } from '@/components';
 import { useCSSVariable } from 'uniwind';
 import { Link } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
+import { toast } from 'sonner';
 
 export default function ProfileScreen() {
   const primary = useCSSVariable('--color-primary') as string;
   const secondary = useCSSVariable('--color-secondary') as string;
   const user = useQuery(api.users.getCurrentUser);
+  const updateUserAvatar = useMutation(api.users.updateUserAvatar);
+  const generateUploadUrl = useMutation(api.users.generateUploadUrl);
 
   const handleImageUpload = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -21,9 +24,39 @@ export default function ProfileScreen() {
       quality: 0.8,
     });
 
-    if (!result.canceled) {
-      // TODO: Implement avatar upload
-      console.log('Image selected:', result.assets[0].uri);
+    if (result.canceled) {
+      return;
+    }
+
+    const asset = result.assets[0];
+    if (!asset || !asset.uri) {
+      return;
+    }
+
+    try {
+      const uploadUrl = await generateUploadUrl();
+
+      const response = await fetch(asset.uri);
+      const blob = await response.blob();
+
+      const uploadResponse = await fetch(uploadUrl, {
+        method: 'POST',
+        body: blob,
+        headers: {
+          'Content-Type': asset.mimeType || 'image/jpeg',
+        },
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error('Failed to upload image');
+      }
+
+      const { storageId } = await uploadResponse.json();
+      await updateUserAvatar({ storageId });
+      toast.success('Profile picture updated successfully!');
+    } catch (error) {
+      toast.error('Failed to upload image. Please try again.');
+      console.error('Error uploading image:', error);
     }
   };
 
