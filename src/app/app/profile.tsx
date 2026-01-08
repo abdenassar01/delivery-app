@@ -8,33 +8,6 @@ import { useCSSVariable } from 'uniwind';
 import { Link } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 
-const profileSections: {
-  title: string;
-  icon: keyof typeof Icons.Hugeicons;
-  href: string;
-}[] = [
-  {
-    title: 'Personal Information',
-    icon: 'UserFreeIcons',
-    href: '/app/profile/personal',
-  },
-  {
-    title: 'Delivery Addresses',
-    icon: 'Location01FreeIcons',
-    href: '/app/profile/addresses',
-  },
-  {
-    title: 'Payment Methods',
-    icon: 'Wallet03FreeIcons',
-    href: '/app/profile/payment',
-  },
-  {
-    title: 'Security',
-    icon: 'Shield01FreeIcons',
-    href: '/app/profile/security',
-  },
-];
-
 export default function ProfileScreen() {
   const primary = useCSSVariable('--color-primary') as string;
   const secondary = useCSSVariable('--color-secondary') as string;
@@ -53,6 +26,61 @@ export default function ProfileScreen() {
       console.log('Image selected:', result.assets[0].uri);
     }
   };
+
+  const profileSections: {
+    title: string;
+    icon: React.ReactNode;
+    href: string;
+  }[] = [
+    {
+      title: 'Personal Information',
+      icon: (
+        <Icons.Icon
+          icon={Icons.Hugeicons.UserFreeIcons}
+          size={16}
+          strokeWidth={2}
+          color={secondary}
+        />
+      ),
+      href: '/app/profile/personal',
+    },
+    {
+      title: 'Delivery Addresses',
+      icon: (
+        <Icons.Icon
+          icon={Icons.Hugeicons.Location01FreeIcons}
+          size={16}
+          strokeWidth={2}
+          color={secondary}
+        />
+      ),
+      href: '/app/profile/addresses',
+    },
+    {
+      title: 'Payment Methods',
+      icon: (
+        <Icons.Icon
+          icon={Icons.Hugeicons.Wallet03FreeIcons}
+          size={16}
+          strokeWidth={2}
+          color={secondary}
+        />
+      ),
+      href: '/app/profile/payment',
+    },
+    {
+      title: 'Security',
+      icon: (
+        <Icons.Icon
+          icon={Icons.Hugeicons.Shield01FreeIcons}
+          size={16}
+          strokeWidth={2}
+          color={secondary}
+        />
+      ),
+      href: '/app/profile/security',
+    },
+  ];
 
   return (
     <RootWrapper className="px-4">
@@ -77,7 +105,7 @@ export default function ProfileScreen() {
                 color={primary}
               />
             )}
-            <View className="bg-primary absolute bottom-0 right-0 h-8 w-8 items-center justify-center rounded-full border-2 border-white">
+            <View className="bg-primary absolute right-0 bottom-0 h-8 w-8 items-center justify-center rounded-full border-2 border-white">
               <Icons.Icon
                 icon={Icons.Hugeicons.CameraFreeIcons}
                 size={14}
@@ -90,14 +118,14 @@ export default function ProfileScreen() {
             {user?.name || 'User'}
           </Text>
           <Text className="text-sm text-gray-500">{user?.email}</Text>
-          <View className="mt-3 flex-row items-center gap-1 rounded-full bg-primary/10 px-3 py-1">
+          <View className="bg-primary/10 mt-3 flex-row items-center gap-1 rounded-full px-3 py-1">
             <Icons.Icon
-              icon={Icons.Hugeicons.Verify02FreeIcons}
+              icon={Icons.Hugeicons.Male02FreeIcons}
               size={14}
               strokeWidth={2}
               color={primary}
             />
-            <Text className="text-xs font-medium text-primary capitalize">
+            <Text className="text-primary text-xs font-medium capitalize">
               {user?.role || 'User'}
             </Text>
           </View>
@@ -109,7 +137,7 @@ export default function ProfileScreen() {
         <View className="border-secondary/10 bg-background-secondary flex-1 rounded-2xl border p-4">
           <View className="bg-primary/10 mb-2 h-10 w-10 items-center justify-center rounded-full">
             <Icons.Icon
-              icon={Icons.Hugeicons.Verify02FreeIcons}
+              icon={Icons.Hugeicons.NewReleasesFreeIcons}
               size={20}
               strokeWidth={2}
               color={primary}
@@ -142,32 +170,32 @@ export default function ProfileScreen() {
         <Text className="text-lg font-medium">Profile Settings</Text>
       </View>
 
-      <View className="border-secondary/10 bg-background-secondary mt-3 rounded-2xl border p-4">
-        <View className="space-y-4">
-          {profileSections.map((item) => (
-            <Link key={item.title} href={item.href as any} asChild>
-              <TouchableOpacity className="flex-row items-center gap-3">
-                <View className="bg-secondary/10 h-10 w-10 items-center justify-center rounded-full">
-                  <Icons.Icon
-                    icon={Icons.Hugeicons[item.icon]}
-                    size={20}
-                    strokeWidth={2}
-                    color={secondary}
-                  />
-                </View>
-                <Text className="text-sm font-semibold text-gray-900">
-                  {item.title}
-                </Text>
-                <View className="ml-auto">
-                  <Icons.Icon
-                    icon={Icons.Hugeicons.ArrowRight01FreeIcons}
-                    size={16}
-                    strokeWidth={2}
-                    color={secondary}
-                  />
-                </View>
-              </TouchableOpacity>
-            </Link>
+      <View className="border-secondary/10 bg-background-secondary mt-3 rounded-2xl border p-2">
+        <View>
+          {profileSections.map((item, index) => (
+            <React.Fragment key={item.title}>
+              <Link href={item.href as any} asChild>
+                <TouchableOpacity className="flex-row items-center gap-3">
+                  <View className="bg-secondary/10 h-10 w-10 items-center justify-center rounded-xl">
+                    {item.icon}
+                  </View>
+                  <Text className="text-sm font-semibold text-gray-900">
+                    {item.title}
+                  </Text>
+                  <View className="ml-auto">
+                    <Icons.Icon
+                      icon={Icons.Hugeicons.ArrowRight01FreeIcons}
+                      size={16}
+                      strokeWidth={2}
+                      color={secondary}
+                    />
+                  </View>
+                </TouchableOpacity>
+              </Link>
+              {index < profileSections.length - 1 && (
+                <View className="bg-secondary/10 my-1 h-px w-full rounded-full" />
+              )}
+            </React.Fragment>
           ))}
         </View>
       </View>
