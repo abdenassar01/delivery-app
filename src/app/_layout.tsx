@@ -33,7 +33,7 @@ const secureStorage = {
 export { ErrorBoundary } from 'expo-router';
 
 export const unstable_settings = {
-  initialRouteName: '(app)',
+  initialRouteName: '(tabs)',
 };
 
 SplashScreen.preventAutoHideAsync();
@@ -46,8 +46,8 @@ SplashScreen.setOptions({
 export default function RootLayout() {
   return (
     <Providers>
-      <Stack initialRouteName="(app)" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(app)" />
+      <Stack initialRouteName="(tabs)" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" />
         <Stack.Screen name="onboarding" />
         <Stack.Screen name="(auth)" />
       </Stack>

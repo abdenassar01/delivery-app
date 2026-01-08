@@ -43,7 +43,7 @@ export default function Login() {
           onSuccess: () => {
             formApi.reset();
             toast.success('Login successful');
-            replace('/(app)');
+            replace('/');
           },
           onError: error => {
             toast.error(error.error.message || 'Login failed');
@@ -62,7 +62,7 @@ export default function Login() {
         className="bg-backgroundSecondary mb-3 flex-1 justify-center rounded-2xl">
         <Text className="text-center text-2xl font-bold">Welcome back!</Text>
         <Text className="text-text-secondary mb-8 text-center">
-          Sign in to continue to TDelivery
+          Sign in to continue to AMTA Livraison
         </Text>
 
         <FormContext value={form}>

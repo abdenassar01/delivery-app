@@ -111,7 +111,7 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
         resetPassword: 60 * 60,
       },
     },
-    appName: 'TDelivery',
+    appName: 'AMTA Livraison',
     plugins: [
       convex({ authConfig }),
       expo(),

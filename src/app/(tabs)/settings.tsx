@@ -26,22 +26,13 @@ export default function SettingsScreen() {
           icon: Icons.Hugeicons.UserFreeIcons,
           label: 'Profile',
           subtitle: 'Manage your account',
-          route: '/profile',
-          color: 'bg-indigo-100 text-indigo-600',
+          color: 'bg-primary/10 text-primary',
         },
         {
           icon: Icons.Hugeicons.ShieldFreeIcons,
           label: 'Security',
           subtitle: 'Password & authentication',
-          route: '/security',
-          color: 'bg-green-100 text-green-600',
-        },
-        {
-          icon: Icons.Hugeicons.Wallet03FreeIcons,
-          label: 'Payment',
-          subtitle: 'Payment methods & earnings',
-          route: '/payment',
-          color: 'bg-blue-100 text-blue-600',
+          color: 'bg-secondary/10 text-secondary',
         },
       ],
     },
@@ -52,48 +43,7 @@ export default function SettingsScreen() {
           icon: Icons.Hugeicons.NotificationFreeIcons,
           label: 'Notifications',
           subtitle: 'Push notifications',
-          route: '/notifications',
-          color: 'bg-orange-100 text-orange-600',
-        },
-        {
-          icon: Icons.Hugeicons.Globe02FreeIcons,
-          label: 'Language',
-          subtitle: 'English',
-          route: '/language',
-          color: 'bg-purple-100 text-purple-600',
-        },
-        {
-          icon: Icons.Hugeicons.NavigationFreeIcons,
-          label: 'Location',
-          subtitle: 'Location services',
-          route: '/location',
-          color: 'bg-red-100 text-red-600',
-        },
-      ],
-    },
-    {
-      title: 'Support',
-      items: [
-        {
-          icon: Icons.Hugeicons.CustomerSupportFreeIcons,
-          label: 'Help Center',
-          subtitle: 'FAQs & support',
-          route: '/help',
-          color: 'bg-cyan-100 text-cyan-600',
-        },
-        {
-          icon: Icons.Hugeicons.File01FreeIcons,
-          label: 'Terms of Service',
-          subtitle: 'Legal terms',
-          route: '/terms',
-          color: 'bg-gray-100 text-gray-600',
-        },
-        {
-          icon: Icons.Hugeicons.InformationCircleFreeIcons,
-          label: 'About',
-          subtitle: 'App version 1.0.0',
-          route: '/about',
-          color: 'bg-teal-100 text-teal-600',
+          color: 'bg-primary/10 text-primary',
         },
       ],
     },
@@ -102,7 +52,7 @@ export default function SettingsScreen() {
   const handleSignOut = async () => {
     try {
       await authClient.signOut();
-      router.replace('/(auth)/login');
+      router.replace('/(auth)/login' as any);
     } catch (error) {
       console.error('Sign out error:', error);
     }
@@ -111,9 +61,9 @@ export default function SettingsScreen() {
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
       case 'admin':
-        return 'bg-red-100 text-red-700';
+        return 'bg-error/10 text-error';
       case 'delivery':
-        return 'bg-blue-100 text-blue-700';
+        return 'bg-secondary/10 text-secondary';
       default:
         return 'bg-gray-100 text-gray-700';
     }
@@ -133,11 +83,10 @@ export default function SettingsScreen() {
       <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
         {/* Profile Card */}
         <TouchableOpacity
-          onPress={() => router.push('/profile' as any)}
           className="mx-5 mt-6 rounded-2xl border border-gray-100 bg-white p-4 shadow-md"
           activeOpacity={0.7}>
           <View className="flex-row items-center">
-            <View className="h-18 w-18 items-center justify-center rounded-full bg-gradient-to-br from-indigo-500 to-purple-600">
+            <View className="h-18 w-18 items-center justify-center rounded-full bg-gradient-to-br from-primary to-secondary">
               {userAvatar ? (
                 <Image
                   source={{ uri: userAvatar }}
@@ -169,12 +118,6 @@ export default function SettingsScreen() {
               </View>
               <Text className="text-sm text-gray-500">{userEmail}</Text>
             </View>
-            <Icons.Icon
-              icon={Icons.Hugeicons.ArrowDown01FreeIcons}
-              size={22}
-              strokeWidth={2.5}
-              className="text-gray-400"
-            />
           </View>
         </TouchableOpacity>
 
@@ -189,7 +132,6 @@ export default function SettingsScreen() {
                 {section.items.map((item, itemIndex) => (
                   <TouchableOpacity
                     key={itemIndex}
-                    onPress={() => router.push(item.route as any)}
                     className={`flex-row items-center p-4 ${
                       itemIndex !== section.items.length - 1
                         ? 'border-b border-gray-100'
@@ -211,12 +153,6 @@ export default function SettingsScreen() {
                         {item.subtitle}
                       </Text>
                     </View>
-                    <Icons.Icon
-                      icon={Icons.Hugeicons.ArrowRight01FreeIcons}
-                      size={20}
-                      strokeWidth={2.5}
-                      className="text-gray-400"
-                    />
                   </TouchableOpacity>
                 ))}
               </View>
@@ -228,7 +164,7 @@ export default function SettingsScreen() {
         <View className="mx-5 mt-8 mb-8">
           <TouchableOpacity
             onPress={handleSignOut}
-            className="flex-row items-center justify-center rounded-2xl bg-red-500 p-4 shadow-md">
+            className="flex-row items-center justify-center rounded-2xl bg-error p-4 shadow-md">
             <Icons.Icon
               icon={Icons.Hugeicons.Logout01FreeIcons}
               size={22}
@@ -241,8 +177,7 @@ export default function SettingsScreen() {
 
         {/* Footer */}
         <View className="mb-8 items-center">
-          <Text className="text-xs text-gray-400">TDelivery v1.0.0</Text>
-          <Text className="mt-1 text-xs text-gray-400">Made with ❤️</Text>
+          <Text className="text-xs text-gray-400">AMTA Livraison v1.0.0</Text>
         </View>
       </ScrollView>
     </View>

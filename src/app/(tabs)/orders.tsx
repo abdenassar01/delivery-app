@@ -10,6 +10,9 @@ import { Text } from '@/components';
 import * as Icons from '@/icons';
 import { cn } from '@/lib';
 import { HeaderWithGoBack } from '@/components/common/layout-helper/header';
+import { useQuery } from 'convex/react';
+import { api } from 'convex/_generated/api';
+import { formatDistanceToNow } from 'date-fns';
 
 type OrderStatus = 'all' | 'pending' | 'in-transit' | 'delivered';
 
@@ -17,6 +20,8 @@ export default function OrdersScreen() {
   const [selectedFilter, setSelectedFilter] = useState<OrderStatus>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
+
+  const user = useQuery(api.users.getCurrentUser);
 
   const filters: { key: OrderStatus; label: string; icon: any }[] = [
     { key: 'all', label: 'All', icon: Icons.Hugeicons.SquareFreeIcons },
@@ -33,57 +38,26 @@ export default function OrdersScreen() {
     },
   ];
 
-  const orders = [
-    {
-      id: 'ORD-1234',
-      customer: 'Alice Johnson',
-      address: '123 Main St, City',
-      items: 3,
-      amount: '$45.00',
-      status: 'in-transit' as const,
-      time: '2 hours ago',
-      distance: '2.3 km',
-    },
-    {
-      id: 'ORD-1233',
-      customer: 'Bob Smith',
-      address: '456 Oak Ave, Town',
-      items: 1,
-      amount: '$12.50',
-      status: 'pending' as const,
-      time: '4 hours ago',
-      distance: '1.5 km',
-    },
-    {
-      id: 'ORD-1232',
-      customer: 'Carol White',
-      address: '789 Pine Rd, Village',
-      items: 5,
-      amount: '$78.25',
-      status: 'delivered' as const,
-      time: '1 day ago',
-      distance: '3.8 km',
-    },
-    {
-      id: 'ORD-1231',
-      customer: 'David Brown',
-      address: '321 Elm St, Metro',
-      items: 2,
-      amount: '$34.00',
-      status: 'in-transit' as const,
-      time: '1 day ago',
-      distance: '4.2 km',
-    },
-  ];
+  // Get orders based on user role
+  const allOrders =
+    user?.role === 'delivery'
+      ? useQuery(api.orders.getCourierOrders, {
+          courierId: user._id,
+          limit: 50,
+        })
+      : useQuery(api.orders.getUserOrders, {
+          userId: user?._id,
+          limit: 50,
+        });
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
-        return 'bg-orange-100 text-orange-700 border-orange-200';
+        return 'bg-primary/10 text-primary border-primary/20';
       case 'in-transit':
-        return 'bg-blue-100 text-blue-700 border-blue-200';
+        return 'bg-secondary/10 text-secondary border-secondary/20';
       case 'delivered':
-        return 'bg-green-100 text-green-700 border-green-200';
+        return 'bg-success/10 text-success border-success/20';
       default:
         return 'bg-gray-100 text-gray-700 border-gray-200';
     }
@@ -102,14 +76,14 @@ export default function OrdersScreen() {
     }
   };
 
-  const filteredOrders = orders.filter(order => {
+  const filteredOrders = (allOrders || []).filter(order => {
     const matchesFilter =
       selectedFilter === 'all' || order.status === selectedFilter;
     const matchesSearch =
       searchQuery === '' ||
-      order.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.customer.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.address.toLowerCase().includes(searchQuery.toLowerCase());
+      order.orderNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.item.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.deliveryAddress.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
@@ -133,12 +107,12 @@ export default function OrdersScreen() {
               {filteredOrders.length === 1 ? 'order' : 'orders'} found
             </Text>
           </View>
-          <TouchableOpacity className="h-10 w-10 items-center justify-center rounded-full bg-indigo-50">
+          <TouchableOpacity className="h-10 w-10 items-center justify-center rounded-full bg-primary/10">
             <Icons.Icon
               icon={Icons.Hugeicons.FilterEditFreeIcons}
               size={20}
               strokeWidth={2}
-              className="text-indigo-600"
+              className="text-primary"
             />
           </TouchableOpacity>
         </View>
@@ -184,7 +158,7 @@ export default function OrdersScreen() {
                 className={cn(
                   'flex-row items-center rounded-full border-2 px-4 py-2',
                   selectedFilter === filter.key
-                    ? 'border-indigo-600 bg-indigo-600'
+                    ? 'border-primary bg-primary'
                     : 'border-gray-200 bg-white',
                 )}>
                 <Icons.Icon
@@ -221,7 +195,7 @@ export default function OrdersScreen() {
           <RefreshControl
             refreshing={refreshing}
             onRefresh={onRefresh}
-            tintColor="#6366f1"
+            tintColor="#da910e"
           />
         }>
         {filteredOrders.length === 0 ? (
@@ -246,9 +220,8 @@ export default function OrdersScreen() {
         ) : (
           filteredOrders.map(order => (
             <TouchableOpacity
-              key={order.id}
-              className="mb-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm"
-              activeOpacity={0.7}>
+              key={order._id}
+              className="mb-4 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
               {/* Order Header */}
               <View className="mb-3 flex-row items-center justify-between">
                 <View className="flex-row items-center gap-2">
@@ -256,10 +229,10 @@ export default function OrdersScreen() {
                     className={cn(
                       'h-8 w-8 items-center justify-center rounded-full',
                       order.status === 'pending'
-                        ? 'bg-orange-50'
+                        ? 'bg-primary/10'
                         : order.status === 'in-transit'
-                          ? 'bg-blue-50'
-                          : 'bg-green-50',
+                          ? 'bg-secondary/10'
+                          : 'bg-success/10',
                     )}>
                     <Icons.Icon
                       icon={getStatusIcon(order.status)}
@@ -267,14 +240,16 @@ export default function OrdersScreen() {
                       strokeWidth={2.5}
                       className={
                         order.status === 'pending'
-                          ? 'text-orange-600'
+                          ? 'text-primary'
                           : order.status === 'in-transit'
-                            ? 'text-blue-600'
-                            : 'text-green-600'
+                            ? 'text-secondary'
+                            : 'text-success'
                       }
                     />
                   </View>
-                  <Text className="font-bold text-gray-900">{order.id}</Text>
+                  <Text className="font-bold text-gray-900">
+                    {order.orderNumber}
+                  </Text>
                 </View>
                 <View
                   className={cn(
@@ -282,23 +257,23 @@ export default function OrdersScreen() {
                     getStatusColor(order.status),
                   )}>
                   <Text className="text-xs font-bold capitalize">
-                    {order.status.replace('-', ' ')}
+                    {order.status}
                   </Text>
                 </View>
               </View>
 
-              {/* Customer Info */}
+              {/* Item Info */}
               <View className="mb-3 flex-row items-center gap-2">
                 <View className="h-8 w-8 items-center justify-center rounded-full bg-gray-100">
                   <Icons.Icon
-                    icon={Icons.Hugeicons.UserFreeIcons}
+                    icon={Icons.Hugeicons.PackageFreeIcons}
                     size={16}
                     strokeWidth={2}
                     className="text-gray-500"
                   />
                 </View>
                 <Text className="flex-1 font-medium text-gray-800">
-                  {order.customer}
+                  {order.item}
                 </Text>
               </View>
 
@@ -311,7 +286,7 @@ export default function OrdersScreen() {
                   className="text-gray-400"
                 />
                 <Text className="flex-1 text-sm text-gray-600">
-                  {order.address}
+                  {order.pickupAddress} → {order.deliveryAddress}
                 </Text>
               </View>
 
@@ -320,35 +295,24 @@ export default function OrdersScreen() {
                 <View className="flex-row items-center gap-3">
                   <View className="flex-row items-center gap-1.5">
                     <Icons.Icon
-                      icon={Icons.Hugeicons.PackageFreeIcons}
-                      size={16}
-                      strokeWidth={2}
-                      className="text-gray-400"
-                    />
-                    <Text className="text-sm text-gray-500">
-                      {order.items} items
-                    </Text>
-                  </View>
-                  <View className="flex-row items-center gap-1.5">
-                    <Icons.Icon
                       icon={Icons.Hugeicons.Route01FreeIcons}
                       size={16}
                       strokeWidth={2}
                       className="text-gray-400"
                     />
                     <Text className="text-sm text-gray-500">
-                      {order.distance}
+                      {order.distance ? `${order.distance} km` : 'N/A'}
                     </Text>
                   </View>
                 </View>
-                <Text className="text-xl font-bold text-indigo-600">
-                  {order.amount}
+                <Text className="text-xl font-bold text-secondary">
+                  ${order.totalAmount}
                 </Text>
               </View>
 
               {/* Action Buttons */}
               <View className="mt-4 flex-row gap-2">
-                <TouchableOpacity className="flex-1 flex-row items-center justify-center rounded-xl bg-indigo-600 px-4 py-3">
+                <TouchableOpacity className="flex-1 flex-row items-center justify-center rounded-xl bg-primary px-4 py-3">
                   <Icons.Icon
                     icon={Icons.Hugeicons.EyeFreeIcons}
                     size={18}
@@ -360,14 +324,14 @@ export default function OrdersScreen() {
                   </Text>
                 </TouchableOpacity>
                 {order.status !== 'delivered' && (
-                  <TouchableOpacity className="flex-row items-center justify-center rounded-xl border-2 border-indigo-200 px-4 py-3">
+                  <TouchableOpacity className="flex-row items-center justify-center rounded-xl border-2 border-primary/20 px-4 py-3">
                     <Icons.Icon
                       icon={Icons.Hugeicons.NavigationFreeIcons}
                       size={18}
                       strokeWidth={2}
-                      className="mr-2 text-indigo-600"
+                      className="mr-2 text-primary"
                     />
-                    <Text className="text-center text-sm font-bold text-indigo-600">
+                    <Text className="text-center text-sm font-bold text-primary">
                       Navigate
                     </Text>
                   </TouchableOpacity>
