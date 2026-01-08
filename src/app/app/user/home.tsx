@@ -27,7 +27,8 @@ export function UserHomeScreen({ user }: UserHomeScreenProps) {
   const router = useRouter();
   const { height } = useWindowDimensions();
   const [refreshKey, setRefreshKey] = useState(0);
-
+  const secondary = useCSSVariable('--color-secondary') as string;
+  const primary = useCSSVariable('--color-primary') as string;
   const myOrders = useQuery(api.orders.getUserOrders, {
     userId: user?._id,
     limit: 5,
@@ -51,7 +52,7 @@ export function UserHomeScreen({ user }: UserHomeScreenProps) {
                 icon={Icons.Hugeicons.RotateLeftFreeIcons}
                 size={20}
                 strokeWidth={2}
-                className="text-primary"
+                color={primary}
               />
             </View>
             <Text className="mt-2 text-sm font-semibold text-gray-900">
@@ -67,7 +68,7 @@ export function UserHomeScreen({ user }: UserHomeScreenProps) {
                 icon={Icons.Hugeicons.UserFreeIcons}
                 size={20}
                 strokeWidth={2}
-                className="text-secondary"
+                color={primary}
               />
             </View>
             <Text className="mt-2 text-sm font-semibold text-gray-900">
@@ -94,7 +95,7 @@ export function UserHomeScreen({ user }: UserHomeScreenProps) {
                   icon={Icons.Hugeicons.ArrowRight01FreeIcons}
                   size={14}
                   strokeWidth={2}
-                  className="text-secondary ml-1"
+                  color={secondary}
                 />
               </TouchableOpacity>
             </View>
@@ -105,7 +106,7 @@ export function UserHomeScreen({ user }: UserHomeScreenProps) {
                   icon={Icons.Hugeicons.ShoppingBagFreeIcons}
                   size={40}
                   strokeWidth={1.5}
-                  className="text-gray-300"
+                  color={secondary}
                 />
                 <Text className="mt-3 text-center font-semibold text-gray-900">
                   No orders yet

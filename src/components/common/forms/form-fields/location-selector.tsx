@@ -3,12 +3,17 @@
 import React, { useRef, useState } from 'react';
 import { useField } from '@tanstack/react-form';
 import { useFormContext } from '../form-context';
-import { TextInput, TouchableOpacity, View, Text, ScrollView } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
-import { cn } from '@/lib';
+import { TextInput, TouchableOpacity, View, Text } from 'react-native';
+import { cn, useLocation } from '@/lib';
 import { useCSSVariable } from 'uniwind';
 import { Modal, useModal } from '../../modal';
-import MapView, { PROVIDER_GOOGLE, type Region, Marker } from 'react-native-maps';
+import MapView, {
+  PROVIDER_GOOGLE,
+  type Region,
+  Marker,
+} from 'react-native-maps';
+import * as Icons from '@/icons';
+import { ScrollView } from 'react-native-gesture-handler';
 
 type LocationValue = {
   address: string;
@@ -36,6 +41,10 @@ export function FieldLocationSelector({
   const mapRef = useRef<MapView>(null);
 
   const { ref, present, dismiss } = useModal();
+
+  const {
+    location: { latitude, longitude },
+  } = useLocation();
 
   const field = useField({
     form,
@@ -65,6 +74,24 @@ export function FieldLocationSelector({
     dismiss();
   };
 
+  const goToMyLocation = () => {
+    if (latitude && longitude && mapRef.current) {
+      const region = {
+        latitude,
+        longitude,
+        latitudeDelta: 0.01,
+        longitudeDelta: 0.01,
+      };
+      mapRef.current.animateToRegion(region, 500);
+      setCurrentRegion(region);
+      field.handleChange({
+        address: `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`,
+        latitude,
+        longitude,
+      });
+    }
+  };
+
   const handleClear = () => {
     field.handleChange(undefined);
   };
@@ -84,17 +111,17 @@ export function FieldLocationSelector({
         onPress={present}
         disabled={disabled}
         className={cn(
-          'bg-background-secondary border-primary/10 flex-row items-center rounded-xl border p-3',
+          'bg-background-secondary border-primary/10 flex-row items-center rounded-xl border px-1.5',
           hasError && 'border-red-500',
           disabled && 'opacity-50',
           className,
         )}
         activeOpacity={0.7}>
-        <MaterialIcons
-          name="location-on"
+        <Icons.Icon
+          icon={Icons.Hugeicons.Location01FreeIcons}
           size={20}
-          color={hasError ? '#ef4444' : primary}
-          style={{ marginRight: 8 }}
+          strokeWidth={2}
+          color={primary}
         />
         <TextInput
           className="flex-1 text-sm text-gray-900"
@@ -106,10 +133,20 @@ export function FieldLocationSelector({
         />
         {displayValue ? (
           <TouchableOpacity onPress={handleClear} hitSlop={10}>
-            <MaterialIcons name="cancel" size={20} color={primary} />
+            <Icons.Icon
+              icon={Icons.Hugeicons.CancelCircleFreeIcons}
+              size={20}
+              strokeWidth={1.5}
+              color={primary}
+            />
           </TouchableOpacity>
         ) : (
-          <MaterialIcons name="arrow-drop-down" size={24} color={primary} />
+          <Icons.Icon
+            icon={Icons.Hugeicons.ArrowRight01FreeIcons}
+            size={16}
+            strokeWidth={2}
+            color={primary}
+          />
         )}
       </TouchableOpacity>
 
@@ -121,21 +158,30 @@ export function FieldLocationSelector({
         </Text>
       )}
 
-      <Modal ref={ref} snapPoints={['70%']}>
-        <View className="p-4">
-          <View className="mb-4 flex-row items-center justify-between">
-            <Text className="text-lg font-bold text-gray-900">
-              Select Location
-            </Text>
-            <TouchableOpacity onPress={dismiss}>
-              <MaterialIcons name="close" size={24} color="#6b7280" />
+      <Modal ref={ref} snapPoints={['60%']} detached>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          nestedScrollEnabled
+          className="p-4">
+          <View className="mb-2 flex-row items-center justify-between">
+            <Text className="text-primary text-sm">Select Location</Text>
+            <TouchableOpacity
+              onPress={dismiss}
+              className="bg-primary/10 border-primary flex-row items-center gap-2 rounded-xl border p-1.5 px-3">
+              <Text className="text-primary text-sm">Save</Text>
+              <Icons.Icon
+                icon={Icons.Hugeicons.LocationCheck01Icon}
+                size={18}
+                strokeWidth={1.5}
+                color={primary}
+              />
             </TouchableOpacity>
           </View>
 
-          <View className="relative mb-4 overflow-hidden rounded-xl">
+          <View className="relative mb-4 h-[350px] overflow-hidden rounded-xl">
             <MapView
               ref={mapRef}
-              style={{ width: '100%', height: 350 }}
+              style={{ width: '100%', height: '100%' }}
               provider={PROVIDER_GOOGLE}
               initialRegion={currentRegion}
               onRegionChangeComplete={onRegionChangeComplete}
@@ -147,21 +193,50 @@ export function FieldLocationSelector({
                 }}
               />
             </MapView>
-
-            {/* Center Pin */}
             <View
-              className="absolute left-1/2 top-1/2 z-10 items-center justify-center"
-              style={{ marginLeft: -18, marginTop: -36 }}>
-              <MaterialIcons name="location-on" size={36} color={primary} />
-              <View
-                className="absolute -bottom-1 h-5 w-5 rounded-full bg-black opacity-20"
-                style={{ transform: [{ scaleX: 1.2 }, { scaleY: 0.4 }] }}
+              className="absolute top-1/2 left-1/2 z-10 items-center justify-center"
+              style={{
+                marginLeft: -18,
+                marginTop: -36,
+              }}>
+              <Icons.Icon
+                icon={Icons.Hugeicons.Location01FreeIcons}
+                size={36}
+                strokeWidth={2}
+                color={primary}
               />
+              <View
+                className="absolute -bottom-1 size-5 rounded-full bg-black opacity-20"
+                style={{
+                  transform: [{ scaleX: 1.2 }, { scaleY: 0.4 }],
+                }}
+              />
+            </View>
+            <View className="absolute bottom-3 w-full flex-row justify-between px-2">
+              <TouchableOpacity
+                className="bg-primary rounded-lg px-6 py-3 shadow"
+                onPress={handleConfirm}>
+                <Text className="text-base font-bold text-white">
+                  Confirm
+                </Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                className="size-12 items-center justify-center rounded-full bg-white shadow"
+                onPress={goToMyLocation}>
+                <Icons.Icon
+                  icon={Icons.Hugeicons.Location02FreeIcons}
+                  size={24}
+                  strokeWidth={1.5}
+                  color="#333"
+                />
+              </TouchableOpacity>
             </View>
           </View>
 
           <View className="rounded-xl border border-gray-200 bg-white p-3">
-            <Text className="mb-1 text-xs text-gray-500">Selected Location</Text>
+            <Text className="mb-1 text-xs text-gray-500">
+              Selected Location
+            </Text>
             <Text className="text-sm font-medium text-gray-900">
               {currentRegion.latitude.toFixed(6)},{' '}
               {currentRegion.longitude.toFixed(6)}
@@ -170,12 +245,12 @@ export function FieldLocationSelector({
 
           <TouchableOpacity
             onPress={handleConfirm}
-            className="mt-4 rounded-xl bg-primary px-4 py-3">
+            className="bg-primary mt-4 rounded-xl px-4 py-3">
             <Text className="text-center text-sm font-bold text-white">
               Confirm Location
             </Text>
           </TouchableOpacity>
-        </View>
+        </ScrollView>
       </Modal>
     </View>
   );

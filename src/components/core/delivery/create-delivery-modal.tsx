@@ -5,8 +5,16 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { useMutation } from 'convex/react';
 import { api } from 'convex/_generated/api';
 import type { Id } from 'convex/_generated/dataModel';
+import * as Icons from '@/icons';
 
-import { FieldLocationSelector, FormContext, Text, Modal, useModal } from '@/components';
+import {
+  FieldLocationSelector,
+  FormContext,
+  Text,
+  Modal,
+  useModal,
+  FieldInput,
+} from '@/components';
 import { useCSSVariable } from 'uniwind';
 
 type LocationValue = {
@@ -74,25 +82,28 @@ export function CreateDeliveryModal({
     <>
       <TouchableOpacity
         onPress={present}
-        className="bg-primary absolute right-4 bottom-0 rounded-xl px-4 py-3 shadow-lg">
+        className="bg-primary/10 border-primary absolute right-4 bottom-2 rounded-2xl border px-4 py-2">
         <View className="flex-row items-center justify-center">
-          <MaterialIcons name="add-circle" size={20} color="white" />
-          <Text className="ml-2 text-sm font-bold text-white">
+          <MaterialIcons name="add-circle" size={20} color={primary} />
+          <Text className="text-primary ml-2 text-sm font-medium">
             New Delivery
           </Text>
         </View>
       </TouchableOpacity>
 
-      <Modal ref={ref} snapPoints={['80%']}>
+      <Modal ref={ref} snapPoints={['50%']} detached>
         <View className="p-4">
-          <View className="mb-4 flex-row items-center justify-between">
-            <Text className="text-xl font-bold text-gray-900">
-              Request Delivery
-            </Text>
-            <TouchableOpacity onPress={dismiss}>
-              <MaterialIcons name="close" size={24} color="#6b7280" />
-            </TouchableOpacity>
-          </View>
+          <Text className="mb-2 text-base font-medium">Request Delivery</Text>
+          <TouchableOpacity
+            onPress={dismiss}
+            className="bg-primary/10 absolute top-4 right-4 rounded-full p-1.5">
+            <Icons.Icon
+              icon={Icons.Hugeicons.CancelCircleFreeIcons}
+              size={18}
+              strokeWidth={1.5}
+              color={primary}
+            />
+          </TouchableOpacity>
 
           <ScrollView showsVerticalScrollIndicator={false}>
             <FormContext value={form}>
@@ -100,50 +111,15 @@ export function CreateDeliveryModal({
                 selector={state => [state.isSubmitting, state.canSubmit]}
                 children={([isSubmitting, canSubmit]) => (
                   <View className="gap-4">
-                    {/* What to Deliver */}
-                    <form.Field
+                    <FieldInput
                       name="item"
-                      validators={{
-                        onChange: ({ value }) =>
-                          !value ? 'Item description is required' : undefined,
-                      }}
-                      children={field => (
-                        <View>
-                          <Text className="mb-1 text-sm font-medium text-gray-700">
-                            What to Deliver
-                          </Text>
-                          <View className="flex-row items-center rounded-xl border border-gray-200 bg-gray-50 px-3 py-2">
-                            <MaterialIcons
-                              name="inventory-2"
-                              size={18}
-                              color="#9ca3af"
-                              style={{ marginRight: 8 }}
-                            />
-                            <TextInput
-                              className="flex-1 text-sm text-gray-900"
-                              placeholder="Describe your item/package"
-                              placeholderTextColor="#9ca3af"
-                              value={field.state.value}
-                              onBlur={field.handleBlur}
-                              onChangeText={text => field.handleChange(text)}
-                            />
-                          </View>
-                          {field.state.meta.errors.length > 0 && (
-                            <Text className="mt-0.5 text-xs text-red-500">
-                              {field.state.meta.errors[0]?.toString()}
-                            </Text>
-                          )}
-                        </View>
-                      )}
+                      label="Item to Deliver"
+                      placeholder="e.g., Documents, Package, Food"
                     />
 
                     {/* Pickup Location */}
                     <form.Field
                       name="pickupLocation"
-                      validators={{
-                        onChange: ({ value }) =>
-                          !value ? 'Pickup location is required' : undefined,
-                      }}
                       children={field => (
                         <FieldLocationSelector
                           name="pickupLocation"
@@ -192,7 +168,11 @@ export function CreateDeliveryModal({
                           </>
                         ) : (
                           <>
-                            <MaterialIcons name="check-circle" size={20} color="white" />
+                            <MaterialIcons
+                              name="check-circle"
+                              size={20}
+                              color="white"
+                            />
                             <Text className="ml-2 text-sm font-bold text-white">
                               Submit Request
                             </Text>

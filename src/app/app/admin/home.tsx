@@ -7,6 +7,7 @@ import { useQuery } from 'convex/react';
 import { formatDistanceToNow } from 'date-fns';
 import { api } from 'convex/_generated/api';
 import type { Doc } from 'convex/_generated/dataModel';
+import { useCSSVariable } from 'uniwind';
 
 interface AdminHomeScreenProps {
   user: Doc<'users'> | null | undefined;
@@ -16,13 +17,13 @@ export function AdminHomeScreen({ user }: AdminHomeScreenProps) {
   const router = useRouter();
   const recentOrders = useQuery(api.orders.getRecentOrders, { limit: 10 });
   const stats = useQuery(api.stats.getAdminStats);
-
+  const secondary = useCSSVariable('--color-secondary') as string;
   return (
     <RootWrapper className="px-4">
       {/* Header */}
       <View className="mb-4 flex-row items-center justify-between">
         <View>
-          <Text className="text-sm font-medium capitalize text-gray-500">
+          <Text className="text-sm font-medium text-gray-500 capitalize">
             Welcome back,
           </Text>
           <Text className="text-2xl font-bold text-gray-900">
@@ -129,9 +130,9 @@ export function AdminHomeScreen({ user }: AdminHomeScreenProps) {
               </Text>
               <Icons.Icon
                 icon={Icons.Hugeicons.ArrowRight01FreeIcons}
-                size={14}
+                size={16}
                 strokeWidth={2}
-                className="text-secondary ml-1"
+                color={secondary}
               />
             </TouchableOpacity>
           </View>
