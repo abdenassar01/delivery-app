@@ -3,11 +3,11 @@
 import React, { useRef, useState } from 'react';
 import { useField } from '@tanstack/react-form';
 import { useFormContext } from '../form-context';
-import { TextInput, TouchableOpacity, View, Text } from 'react-native';
+import { TextInput, TouchableOpacity, View, Text, ScrollView } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { cn } from '@/lib';
 import { useCSSVariable } from 'uniwind';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import { Modal, useModal } from '../../modal';
 import MapView, { PROVIDER_GOOGLE, type Region, Marker } from 'react-native-maps';
 
 type LocationValue = {
@@ -33,8 +33,9 @@ export function FieldLocationSelector({
 }: FieldLocationSelectorProps) {
   const form = useFormContext();
   const primary = useCSSVariable('--color-primary') as string;
-  const bottomSheetRef = useRef<BottomSheet>(null);
   const mapRef = useRef<MapView>(null);
+
+  const { ref, present, dismiss } = useModal();
 
   const field = useField({
     form,
@@ -54,16 +55,6 @@ export function FieldLocationSelector({
     setCurrentRegion(region);
   };
 
-  const handlePresent = () => {
-    if (!disabled) {
-      bottomSheetRef.current?.expand();
-    }
-  };
-
-  const handleDismiss = () => {
-    bottomSheetRef.current?.close();
-  };
-
   const handleConfirm = () => {
     const locationValue: LocationValue = {
       address: `${currentRegion.latitude.toFixed(6)}, ${currentRegion.longitude.toFixed(6)}`,
@@ -71,7 +62,7 @@ export function FieldLocationSelector({
       longitude: currentRegion.longitude,
     };
     field.handleChange(locationValue);
-    handleDismiss();
+    dismiss();
   };
 
   const handleClear = () => {
@@ -90,7 +81,7 @@ export function FieldLocationSelector({
       )}
 
       <TouchableOpacity
-        onPress={handlePresent}
+        onPress={present}
         disabled={disabled}
         className={cn(
           'bg-background-secondary border-primary/10 flex-row items-center rounded-xl border p-3',
@@ -130,69 +121,62 @@ export function FieldLocationSelector({
         </Text>
       )}
 
-      <BottomSheet
-        ref={bottomSheetRef}
-        snapPoints={['60%']}
-        enablePanDownToClose
-        backgroundStyle={{ backgroundColor: '#f9fafb' }}
-        handleIndicatorStyle={{ backgroundColor: '#9ca3af' }}>
-        <BottomSheetView className="flex-1">
-          <View className="p-4">
-            <View className="mb-4 flex-row items-center justify-between">
-              <Text className="text-lg font-bold text-gray-900">
-                Select Location
-              </Text>
-              <TouchableOpacity onPress={handleDismiss}>
-                <MaterialIcons name="close" size={24} color="#6b7280" />
-              </TouchableOpacity>
-            </View>
-
-            <View className="relative mb-4 overflow-hidden rounded-xl">
-              <MapView
-                ref={mapRef}
-                style={{ width: '100%', height: 350 }}
-                provider={PROVIDER_GOOGLE}
-                initialRegion={currentRegion}
-                onRegionChangeComplete={onRegionChangeComplete}
-                className="rounded-xl">
-                <Marker
-                  coordinate={{
-                    latitude: currentRegion.latitude,
-                    longitude: currentRegion.longitude,
-                  }}
-                />
-              </MapView>
-
-              {/* Center Pin */}
-              <View
-                className="absolute left-1/2 top-1/2 z-10 items-center justify-center"
-                style={{ marginLeft: -18, marginTop: -36 }}>
-                <MaterialIcons name="location-on" size={36} color={primary} />
-                <View
-                  className="absolute -bottom-1 h-5 w-5 rounded-full bg-black opacity-20"
-                  style={{ transform: [{ scaleX: 1.2 }, { scaleY: 0.4 }] }}
-                />
-              </View>
-            </View>
-
-            <View className="rounded-xl border border-gray-200 bg-white p-3">
-              <Text className="mb-1 text-xs text-gray-500">Selected Location</Text>
-              <Text className="text-sm font-medium text-gray-900">
-                {currentRegion.latitude.toFixed(6)},{' '}
-                {currentRegion.longitude.toFixed(6)}
-              </Text>
-            </View>
-
-            <TouchableOpacity
-              onPress={handleConfirm}
-              className="mt-4 rounded-xl bg-primary px-4 py-3">
-              <Text className="text-center text-sm font-bold text-white">
-                Confirm Location
-              </Text>
+      <Modal ref={ref} snapPoints={['70%']}>
+        <View className="p-4">
+          <View className="mb-4 flex-row items-center justify-between">
+            <Text className="text-lg font-bold text-gray-900">
+              Select Location
+            </Text>
+            <TouchableOpacity onPress={dismiss}>
+              <MaterialIcons name="close" size={24} color="#6b7280" />
             </TouchableOpacity>
           </View>
-        </BottomSheetView>
-      </BottomSheet>
+
+          <View className="relative mb-4 overflow-hidden rounded-xl">
+            <MapView
+              ref={mapRef}
+              style={{ width: '100%', height: 350 }}
+              provider={PROVIDER_GOOGLE}
+              initialRegion={currentRegion}
+              onRegionChangeComplete={onRegionChangeComplete}
+              className="rounded-xl">
+              <Marker
+                coordinate={{
+                  latitude: currentRegion.latitude,
+                  longitude: currentRegion.longitude,
+                }}
+              />
+            </MapView>
+
+            {/* Center Pin */}
+            <View
+              className="absolute left-1/2 top-1/2 z-10 items-center justify-center"
+              style={{ marginLeft: -18, marginTop: -36 }}>
+              <MaterialIcons name="location-on" size={36} color={primary} />
+              <View
+                className="absolute -bottom-1 h-5 w-5 rounded-full bg-black opacity-20"
+                style={{ transform: [{ scaleX: 1.2 }, { scaleY: 0.4 }] }}
+              />
+            </View>
+          </View>
+
+          <View className="rounded-xl border border-gray-200 bg-white p-3">
+            <Text className="mb-1 text-xs text-gray-500">Selected Location</Text>
+            <Text className="text-sm font-medium text-gray-900">
+              {currentRegion.latitude.toFixed(6)},{' '}
+              {currentRegion.longitude.toFixed(6)}
+            </Text>
+          </View>
+
+          <TouchableOpacity
+            onPress={handleConfirm}
+            className="mt-4 rounded-xl bg-primary px-4 py-3">
+            <Text className="text-center text-sm font-bold text-white">
+              Confirm Location
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 }

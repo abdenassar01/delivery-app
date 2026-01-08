@@ -9,3 +9,6 @@ export {
   ActivityIndicator,
 } from 'react-native';
 export * from './utils';
+export * from './modal';
+export * from './sonner';
+export * from './tabs';
