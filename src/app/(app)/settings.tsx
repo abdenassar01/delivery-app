@@ -7,6 +7,7 @@ import { authClient } from '@/lib/auth-client';
 import { useQuery } from 'convex/react';
 import { cn } from '@/lib';
 import { api } from 'convex/_generated/api';
+import { HeaderWithGoBack } from '@/components/common/layout-helper/header';
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -121,7 +122,10 @@ export default function SettingsScreen() {
   return (
     <View className="flex-1 bg-gray-50">
       {/* Header */}
-      <View className="bg-white px-5 pt-12 pb-4 shadow-sm">
+      <View className="bg-white px-5 pt-4 pb-4 shadow-sm">
+        <View className="mb-4">
+          <HeaderWithGoBack />
+        </View>
         <Text className="text-2xl font-bold text-gray-900">Settings</Text>
         <Text className="text-sm text-gray-500">Manage your preferences</Text>
       </View>

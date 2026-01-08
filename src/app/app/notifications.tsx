@@ -5,12 +5,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { Text } from '@/components';
+import { RootWrapper, Text } from '@/components';
 import * as Icons from '@/icons';
 import { cn } from '@/lib';
 import { useQuery, useMutation } from 'convex/react';
 import { formatDistanceToNow } from 'date-fns';
 import { api } from 'convex/_generated/api';
+import { HeaderWithGoBack } from '@/components/common/layout-helper/header';
+import { Id } from 'convex/_generated/dataModel';
 
 export default function NotificationsScreen() {
   const [refreshing, setRefreshing] = useState(false);
@@ -78,7 +80,7 @@ export default function NotificationsScreen() {
     }
   };
 
-  const handleMarkAsRead = async (notificationId: string) => {
+  const handleMarkAsRead = async (notificationId: Id<'notifications'>) => {
     try {
       await markAsRead({ notificationId });
     } catch (error) {
@@ -94,7 +96,7 @@ export default function NotificationsScreen() {
     }
   };
 
-  const handleDelete = async (notificationId: string) => {
+  const handleDelete = async (notificationId: Id<'notifications'>) => {
     try {
       await deleteNotification({ notificationId });
     } catch (error) {
@@ -103,29 +105,8 @@ export default function NotificationsScreen() {
   };
 
   return (
-    <View className="flex-1 bg-gray-50">
-      {/* Header */}
-      <View className="bg-gradient-to-r from-orange-500 to-amber-500 px-5 pt-12 pb-6">
-        <View className="flex-row items-center justify-between">
-          <View>
-            <Text className="text-2xl font-bold text-white">Notifications</Text>
-            <Text className="text-sm text-orange-100">
-              {unreadCount !== undefined && unreadCount > 0
-                ? `${unreadCount} unread`
-                : 'All caught up'}
-            </Text>
-          </View>
-          {unreadCount !== undefined && unreadCount > 0 && (
-            <TouchableOpacity
-              onPress={handleMarkAllAsRead}
-              className="flex-row items-center rounded-full bg-white/20 px-3 py-1.5 backdrop-blur-sm">
-              <Text className="text-sm font-semibold text-white">
-                Mark all read
-              </Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      </View>
+    <RootWrapper className="px-4">
+      <HeaderWithGoBack />
 
       {/* Notifications List */}
       <ScrollView
@@ -140,12 +121,12 @@ export default function NotificationsScreen() {
         }>
         {!notifications || notifications.length === 0 ? (
           <View className="mt-20 items-center justify-center">
-            <View className="mb-4 h-20 w-20 items-center justify-center rounded-full bg-orange-100">
+            <View className="mb-4 h-20 w-20 items-center justify-center rounded-full bg-gray-100">
               <Icons.Icon
                 icon={Icons.Hugeicons.Notification01FreeIcons}
                 size={36}
                 strokeWidth={1.5}
-                className="text-orange-400"
+                className="text-gray-400"
               />
             </View>
             <Text className="mb-1 text-center text-lg font-semibold text-gray-900">
@@ -168,13 +149,13 @@ export default function NotificationsScreen() {
                   className={cn(
                     'relative rounded-2xl border bg-white p-4 shadow-sm',
                     !notification.read
-                      ? 'border-orange-200 bg-orange-50/30'
+                      ? 'border-primary/20 bg-primary/5'
                       : 'border-gray-100',
                   )}
                   activeOpacity={0.7}>
                   {/* Unread indicator */}
                   {!notification.read && (
-                    <View className="absolute top-2 right-2 h-2.5 w-2.5 rounded-full bg-orange-500" />
+                    <View className="bg-primary absolute top-2 right-2 h-2.5 w-2.5 rounded-full" />
                   )}
 
                   <View className="flex-row">
@@ -239,8 +220,8 @@ export default function NotificationsScreen() {
                         {!notification.read && (
                           <TouchableOpacity
                             onPress={() => handleMarkAsRead(notification._id)}
-                            className="rounded-full bg-orange-100 px-2.5 py-1">
-                            <Text className="text-xs font-semibold text-orange-700">
+                            className="bg-primary/10 rounded-full px-2.5 py-1">
+                            <Text className="text-primary text-xs font-semibold">
                               Mark as read
                             </Text>
                           </TouchableOpacity>
@@ -254,6 +235,6 @@ export default function NotificationsScreen() {
           </View>
         )}
       </ScrollView>
-    </View>
+    </RootWrapper>
   );
 }

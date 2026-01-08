@@ -9,6 +9,7 @@ import { TextInput } from 'react-native';
 import { Text } from '@/components';
 import * as Icons from '@/icons';
 import { cn } from '@/lib';
+import { HeaderWithGoBack } from '@/components/common/layout-helper/header';
 
 type OrderStatus = 'all' | 'pending' | 'in-transit' | 'delivered';
 
@@ -120,7 +121,10 @@ export default function OrdersScreen() {
   return (
     <View className="flex-1 bg-gray-50">
       {/* Header */}
-      <View className="bg-white px-5 pt-12 pb-4 shadow-sm">
+      <View className="bg-white px-5 pt-4 pb-4 shadow-sm">
+        <View className="mb-4">
+          <HeaderWithGoBack />
+        </View>
         <View className="flex-row items-center justify-between">
           <View>
             <Text className="text-2xl font-bold text-gray-900">Orders</Text>

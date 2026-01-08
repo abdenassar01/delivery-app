@@ -8,6 +8,7 @@ import {
 import { Text } from '@/components';
 import * as Icons from '@/icons';
 import { cn } from '@/lib';
+import { HeaderWithGoBack } from '@/components/common/layout-helper/header';
 
 type TimeFilter = 'all' | 'week' | 'month' | 'year';
 
@@ -121,17 +122,20 @@ export default function HistoryScreen() {
   return (
     <View className="flex-1 bg-gray-50">
       {/* Header */}
-      <View className="bg-gradient-to-r from-green-600 to-emerald-500 px-5 pt-12 pb-8">
-        <Text className="text-2xl font-bold text-white">History</Text>
-        <Text className="text-sm text-green-100">
+      <View className="bg-white px-5 pt-4 pb-6 shadow-sm">
+        <View className="mb-4">
+          <HeaderWithGoBack />
+        </View>
+        <Text className="text-2xl font-bold text-gray-900">History</Text>
+        <Text className="text-sm text-gray-500">
           Your delivery history & earnings
         </Text>
       </View>
 
-      {/* Summary Cards - Overlapping */}
-      <View style={{ marginTop: -24 }} className="px-5">
+      {/* Summary Cards */}
+      <View className="mt-4 px-5">
         <View className="flex-row gap-3">
-          <View className="flex-1 rounded-2xl border border-gray-100 bg-white p-4 shadow-lg">
+          <View className="flex-1 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
             <View className="mb-2 flex-row items-center justify-between">
               <View className="h-10 w-10 items-center justify-center rounded-full bg-green-100">
                 <Icons.Icon
@@ -159,7 +163,7 @@ export default function HistoryScreen() {
             </Text>
           </View>
 
-          <View className="flex-1 rounded-2xl border border-gray-100 bg-white p-4 shadow-lg">
+          <View className="flex-1 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
             <View className="mb-2 flex-row items-center justify-between">
               <View className="h-10 w-10 items-center justify-center rounded-full bg-indigo-100">
                 <Icons.Icon
