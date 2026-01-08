@@ -63,7 +63,7 @@ export default function ProfileScreen() {
   const profileSections: {
     title: string;
     icon: React.ReactNode;
-    href: string;
+    href: any;
   }[] = [
     {
       title: 'Personal Information',

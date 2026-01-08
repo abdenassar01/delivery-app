@@ -37,47 +37,47 @@ export default function NotificationsScreen() {
     switch (type) {
       case 'order_assigned':
         return {
-          icon: Icons.Hugeicons.ShoppingBagFreeIcons,
+          icon: <Icons.Icon icon={Icons.Hugeicons.TruckFreeIcons} />,
           color: 'bg-primary/10 text-primary',
         };
       case 'order_completed':
         return {
-          icon: Icons.Hugeicons.CheckmarkBadgeFreeIcons,
+          icon: <Icons.Icon icon={Icons.Hugeicons.CheckmarkBadgeFreeIcons} />,
           color: 'bg-success/10 text-success',
         };
       case 'order_cancelled':
         return {
-          icon: Icons.Hugeicons.Cancel01FreeIcons,
+          icon: <Icons.Icon icon={Icons.Hugeicons.Cancel01FreeIcons} />,
           color: 'bg-error/10 text-error',
         };
       case 'payment_received':
         return {
-          icon: Icons.Hugeicons.DollarCircleFreeIcons,
+          icon: <Icons.Icon icon={Icons.Hugeicons.DollarCircleFreeIcons} />,
           color: 'bg-secondary/10 text-secondary',
         };
       case 'courier_accepted':
         return {
-          icon: Icons.Hugeicons.UserCheckFreeIcons,
+          icon: <Icons.Icon icon={Icons.Hugeicons.UserCheckFreeIcons} />,
           color: 'bg-primary/10 text-primary',
         };
       case 'courier_rejected':
         return {
-          icon: Icons.Hugeicons.UserBlockFreeIcons,
+          icon: <Icons.Icon icon={Icons.Hugeicons.UserBlockFreeIcons} />,
           color: 'bg-error/10 text-error',
         };
       case 'profile_verified':
         return {
-          icon: Icons.Hugeicons.Verify02FreeIcons,
+          icon: <Icons.Icon icon={Icons.Hugeicons.Shield01FreeIcons} />,
           color: 'bg-success/10 text-success',
         };
       case 'profile_rejected':
         return {
-          icon: Icons.Hugeicons.Shield01FreeIcons,
+          icon: <Icons.Icon icon={Icons.Hugeicons.Shield01FreeIcons} />,
           color: 'bg-error/10 text-error',
         };
       default:
         return {
-          icon: Icons.Hugeicons.Notification01FreeIcons,
+          icon: <Icons.Icon icon={Icons.Hugeicons.Notification01FreeIcons} />,
           color: 'bg-gray-100 text-gray-600',
         };
     }
@@ -114,7 +114,7 @@ export default function NotificationsScreen() {
       <View className="mt-3">
         <View className="flex-row items-center justify-between">
           <Text className="text-lg font-medium">Notifications</Text>
-          {unreadCount && unreadCount > 0 ? (
+          {unreadCount && unreadCount.length > 0 ? (
             <TouchableOpacity
               onPress={handleMarkAllAsRead}
               className="bg-primary/10 rounded-full px-3 py-1">
@@ -180,11 +180,7 @@ export default function NotificationsScreen() {
                         'mr-3 h-12 w-12 shrink-0 items-center justify-center rounded-full',
                         iconInfo.color,
                       )}>
-                      <Icons.Icon
-                        icon={iconInfo.icon}
-                        size={24}
-                        strokeWidth={2}
-                      />
+                      {iconInfo.icon}
                     </View>
 
                     <View className="flex-1">
@@ -235,7 +231,7 @@ export default function NotificationsScreen() {
                           )}
                           <TouchableOpacity
                             onPress={() => handleDelete(notification._id)}
-                            className="bg-gray-100 h-8 w-8 items-center justify-center rounded-full">
+                            className="h-8 w-8 items-center justify-center rounded-full bg-gray-100">
                             <Icons.Icon
                               icon={Icons.Hugeicons.Delete02FreeIcons}
                               size={16}
