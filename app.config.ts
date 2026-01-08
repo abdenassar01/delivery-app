@@ -39,6 +39,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     },
     package: Env.PACKAGE,
     permissions: [],
+    config: {
+      googleMaps: {
+        apiKey: Env.MAP_API_KEY,
+      },
+    },
   },
   web: {
     favicon: './assets/favicon.png',
@@ -82,6 +87,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         ],
       },
     ],
+
     [
       'expo-splash-screen',
       {

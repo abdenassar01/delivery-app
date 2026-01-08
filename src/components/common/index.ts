@@ -8,3 +8,4 @@ export {
   Platform,
   ActivityIndicator,
 } from 'react-native';
+export * from './utils';

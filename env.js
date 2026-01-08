@@ -55,14 +55,12 @@ const client = z.object({
   BUNDLE_ID: z.string(),
   PACKAGE: z.string(),
   VERSION: z.string(),
-  EXPO_PUBLIC_CONVEX_URL: z.string(),
 });
 
 const buildTime = z.object({
   EXPO_ACCOUNT_OWNER: z.string(),
   EAS_PROJECT_ID: z.string(),
-  CONVEX_DEPLOYMENT: z.string(),
-  CONVEX_SITE_URL: z.string(),
+  MAP_API_KEY: z.string(),
 });
 
 /**
@@ -75,7 +73,6 @@ const _clientEnv = {
   BUNDLE_ID: BUNDLE_ID,
   PACKAGE: PACKAGE,
   VERSION: packageJSON.version,
-  EXPO_PUBLIC_CONVEX_URL: process.env.CONVEX_SITE_URL,
 };
 
 /**
@@ -84,8 +81,7 @@ const _clientEnv = {
 const _buildTimeEnv = {
   EXPO_ACCOUNT_OWNER,
   EAS_PROJECT_ID,
-  CONVEX_DEPLOYMENT: process.env.CONVEX_DEPLOYMENT,
-  CONVEX_SITE_URL: process.env.CONVEX_SITE_URL,
+  MAP_API_KEY: process.env.MAP_API_KEY,
 };
 
 /**

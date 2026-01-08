@@ -40,9 +40,11 @@ export default function Login() {
         email: value.email,
         password: value.password,
         fetchOptions: {
-          onSuccess: () => {
+          onSuccess: async () => {
             formApi.reset();
             toast.success('Login successful');
+            // Wait for auth state to propagate before redirecting
+            await new Promise(resolve => setTimeout(resolve, 500));
             replace('/');
           },
           onError: error => {
