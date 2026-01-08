@@ -1,41 +1,40 @@
 import { TouchableOpacity, View } from 'react-native';
 import React from 'react';
-
-import { MaterialIcons } from '@expo/vector-icons';
+import * as Icons from '@/icons';
 import { useTranslation } from 'react-i18next';
 import { Link, useRouter } from 'expo-router';
-import { Button, Header, Map, RootWrapper, Text } from '@/components';
+import { Button, Header, RootWrapper, Text } from '@/components';
 import { useCSSVariable } from 'uniwind';
 import { authClient } from '@/lib/auth-client';
 
 const tabs: {
   title: string;
-  icon: React.ComponentProps<typeof MaterialIcons>['name'];
+  icon: keyof typeof Icons.Hugeicons;
   href: string;
 }[] = [
   {
     title: 'Profile',
-    icon: 'person-pin',
+    icon: 'UserFreeIcons',
     href: '/app/profile',
   },
   {
     title: 'Notifications',
-    icon: 'circle-notifications',
+    icon: 'NotificationFreeIcons',
     href: '/app/notifications',
   },
   {
     title: 'Chats',
-    icon: 'chat',
+    icon: 'ChatMultipleFreeIcons',
     href: '/inbox',
   },
   {
     title: 'Feedback',
-    icon: 'feedback',
+    icon: 'ThumbUpFreeIcons',
     href: '/app/feedback',
   },
   {
     title: 'Contact Us',
-    icon: 'message',
+    icon: 'SendMessageFreeIcons',
     href: '/app/contact',
   },
 ];
@@ -43,40 +42,65 @@ const tabs: {
 export default function Settings() {
   const { t } = useTranslation();
   const primary = useCSSVariable('--color-primary') as string;
+  const secondary = useCSSVariable('--color-secondary') as string;
   const { replace } = useRouter();
+
   return (
     <RootWrapper className="px-4">
       <Header />
-      {/* <ConfigurationPanel /> */}
-      <View className="border-primary/30 bg-primary/10 my-3 rounded-xl border p-2">
-        <Map
-          items={tabs}
-          render={(item, index) => (
-            <>
-              <Link href={item.href as any} asChild>
-                <TouchableOpacity className="flex-row items-center gap-1 py-1">
-                  <MaterialIcons name={item.icon} size={24} color={primary} />
-                  <Text className="text-primary text-base font-medium">
-                    {t(item.title)}
-                  </Text>
-                </TouchableOpacity>
-              </Link>
-              {index !== tabs.length - 1 && (
-                <View className="bg-primary/30 h-[0.5px] w-[90%] self-end rounded-full" />
-              )}
-            </>
-          )}
-        />
+
+      <View className="mt-3">
+        <Text className="text-lg font-medium">Settings</Text>
       </View>
-      <View className="">
-        <Button
+
+      {/* Settings Items */}
+      <View className="border-secondary/10 bg-background-secondary mt-3 rounded-2xl border p-4">
+        <View className="space-y-4">
+          {tabs.map((item) => (
+            <Link key={item.title} href={item.href as any} asChild>
+              <TouchableOpacity className="flex-row items-center gap-3">
+                <View className="bg-secondary/10 h-10 w-10 items-center justify-center rounded-full">
+                  <Icons.Icon
+                    icon={Icons.Hugeicons[item.icon]}
+                    size={20}
+                    strokeWidth={2}
+                    color={secondary}
+                  />
+                </View>
+                <Text className="text-sm font-semibold text-gray-900">
+                  {t(item.title)}
+                </Text>
+                <View className="ml-auto">
+                  <Icons.Icon
+                    icon={Icons.Hugeicons.ArrowRight01FreeIcons}
+                    size={16}
+                    strokeWidth={2}
+                    color={secondary}
+                  />
+                </View>
+              </TouchableOpacity>
+            </Link>
+          ))}
+        </View>
+      </View>
+
+      {/* Logout Button */}
+      <View className="mt-6">
+        <TouchableOpacity
           onPress={() =>
             authClient.signOut().then(() => {
               replace('/(auth)/login');
             })
           }
-          label="Log out"
-        />
+          className="border-error/20 bg-error/10 flex-row items-center justify-center gap-2 rounded-2xl border p-4">
+          <Icons.Icon
+            icon={Icons.Hugeicons.SignOutFreeIcons}
+            size={20}
+            strokeWidth={2}
+            color="#cc0202"
+          />
+          <Text className="text-error text-base font-semibold">Log out</Text>
+        </TouchableOpacity>
       </View>
     </RootWrapper>
   );

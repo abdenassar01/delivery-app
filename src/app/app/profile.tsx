@@ -1,44 +1,43 @@
 import { TouchableOpacity, View, Image } from 'react-native';
 import React from 'react';
-import { MaterialIcons } from '@expo/vector-icons';
+import * as Icons from '@/icons';
 import { useQuery } from 'convex/react';
 import { api } from 'convex/_generated/api';
-import { Header, Map, RootWrapper, Text } from '@/components';
+import { Header, RootWrapper, Text } from '@/components';
 import { useCSSVariable } from 'uniwind';
-import { useRouter } from 'expo-router';
 import { Link } from 'expo-router';
 import * as ImagePicker from 'expo-image-picker';
 
 const profileSections: {
   title: string;
-  icon: React.ComponentProps<typeof MaterialIcons>['name'];
+  icon: keyof typeof Icons.Hugeicons;
   href: string;
 }[] = [
   {
     title: 'Personal Information',
-    icon: 'person',
+    icon: 'UserFreeIcons',
     href: '/app/profile/personal',
   },
   {
     title: 'Delivery Addresses',
-    icon: 'location-on',
+    icon: 'Location01FreeIcons',
     href: '/app/profile/addresses',
   },
   {
     title: 'Payment Methods',
-    icon: 'payment',
+    icon: 'Wallet03FreeIcons',
     href: '/app/profile/payment',
   },
   {
     title: 'Security',
-    icon: 'lock',
+    icon: 'Shield01FreeIcons',
     href: '/app/profile/security',
   },
 ];
 
 export default function ProfileScreen() {
   const primary = useCSSVariable('--color-primary') as string;
-  const { push } = useRouter();
+  const secondary = useCSSVariable('--color-secondary') as string;
   const user = useQuery(api.users.getCurrentUser);
 
   const handleImageUpload = async () => {
@@ -60,29 +59,44 @@ export default function ProfileScreen() {
       <Header />
 
       {/* Profile Card */}
-      <View className="border-primary/30 bg-primary/10 my-3 rounded-xl border p-4">
+      <View className="border-secondary/10 bg-background-secondary mt-3 rounded-2xl border p-6">
         <View className="items-center">
           <TouchableOpacity
             onPress={handleImageUpload}
-            className="bg-primary/20 relative mb-3 h-24 w-24 items-center justify-center rounded-full">
+            className="bg-primary/10 relative mb-4 h-24 w-24 items-center justify-center rounded-full">
             {user?.avatarUrl ? (
               <Image
                 source={{ uri: user.avatarUrl }}
                 className="h-full w-full rounded-full"
               />
             ) : (
-              <MaterialIcons name="person" size={48} color={primary} />
+              <Icons.Icon
+                icon={Icons.Hugeicons.UserFreeIcons}
+                size={40}
+                strokeWidth={1.5}
+                color={primary}
+              />
             )}
-            <View className="bg-primary absolute bottom-0 right-0 h-7 w-7 items-center justify-center rounded-full border-2 border-white">
-              <MaterialIcons name="camera-alt" size={14} color="white" />
+            <View className="bg-primary absolute bottom-0 right-0 h-8 w-8 items-center justify-center rounded-full border-2 border-white">
+              <Icons.Icon
+                icon={Icons.Hugeicons.CameraFreeIcons}
+                size={14}
+                strokeWidth={2}
+                color="white"
+              />
             </View>
           </TouchableOpacity>
           <Text className="text-lg font-bold text-gray-900">
             {user?.name || 'User'}
           </Text>
           <Text className="text-sm text-gray-500">{user?.email}</Text>
-          <View className="mt-2 flex-row items-center gap-1 rounded-full bg-primary/20 px-3 py-1">
-            <MaterialIcons name="verified" size={14} color={primary} />
+          <View className="mt-3 flex-row items-center gap-1 rounded-full bg-primary/10 px-3 py-1">
+            <Icons.Icon
+              icon={Icons.Hugeicons.Verify02FreeIcons}
+              size={14}
+              strokeWidth={2}
+              color={primary}
+            />
             <Text className="text-xs font-medium text-primary capitalize">
               {user?.role || 'User'}
             </Text>
@@ -91,44 +105,71 @@ export default function ProfileScreen() {
       </View>
 
       {/* Stats */}
-      <View className="my-3 flex-row gap-3">
-        <View className="flex-1 rounded-xl border border-gray-200 bg-white p-3">
-          <Text className="text-center text-2xl font-bold text-primary">
+      <View className="mt-3 flex-row gap-3">
+        <View className="border-secondary/10 bg-background-secondary flex-1 rounded-2xl border p-4">
+          <View className="bg-primary/10 mb-2 h-10 w-10 items-center justify-center rounded-full">
+            <Icons.Icon
+              icon={Icons.Hugeicons.Verify02FreeIcons}
+              size={20}
+              strokeWidth={2}
+              color={primary}
+            />
+          </View>
+          <Text className="text-lg font-bold text-gray-900">
             {user?.isVerified ? 'Verified' : '-'}
           </Text>
-          <Text className="text-center text-xs text-gray-500">Status</Text>
+          <Text className="text-xs text-gray-500">Status</Text>
         </View>
-        <View className="flex-1 rounded-xl border border-gray-200 bg-white p-3">
-          <Text className="text-center text-2xl font-bold text-primary">
+
+        <View className="border-secondary/10 bg-background-secondary flex-1 rounded-2xl border p-4">
+          <View className="bg-secondary/10 mb-2 h-10 w-10 items-center justify-center rounded-full">
+            <Icons.Icon
+              icon={Icons.Hugeicons.DollarCircleFreeIcons}
+              size={20}
+              strokeWidth={2}
+              color={secondary}
+            />
+          </View>
+          <Text className="text-lg font-bold text-gray-900">
             ${user?.balance || '0'}
           </Text>
-          <Text className="text-center text-xs text-gray-500">Balance</Text>
+          <Text className="text-xs text-gray-500">Balance</Text>
         </View>
       </View>
 
       {/* Profile Sections */}
-      <View className="border-primary/30 bg-primary/10 my-3 rounded-xl border p-2">
-        <Map
-          items={profileSections}
-          render={(item, index) => (
-            <>
-              <Link href={item.href as any} asChild>
-                <TouchableOpacity className="flex-row items-center justify-between py-2">
-                  <View className="flex-row items-center gap-2">
-                    <MaterialIcons name={item.icon} size={24} color={primary} />
-                    <Text className="text-primary text-base font-medium">
-                      {item.title}
-                    </Text>
-                  </View>
-                  <MaterialIcons name="chevron-right" size={20} color={primary} />
-                </TouchableOpacity>
-              </Link>
-              {index !== profileSections.length - 1 && (
-                <View className="bg-primary/30 h-[0.5px] w-[90%] self-end rounded-full" />
-              )}
-            </>
-          )}
-        />
+      <View className="mt-3">
+        <Text className="text-lg font-medium">Profile Settings</Text>
+      </View>
+
+      <View className="border-secondary/10 bg-background-secondary mt-3 rounded-2xl border p-4">
+        <View className="space-y-4">
+          {profileSections.map((item) => (
+            <Link key={item.title} href={item.href as any} asChild>
+              <TouchableOpacity className="flex-row items-center gap-3">
+                <View className="bg-secondary/10 h-10 w-10 items-center justify-center rounded-full">
+                  <Icons.Icon
+                    icon={Icons.Hugeicons[item.icon]}
+                    size={20}
+                    strokeWidth={2}
+                    color={secondary}
+                  />
+                </View>
+                <Text className="text-sm font-semibold text-gray-900">
+                  {item.title}
+                </Text>
+                <View className="ml-auto">
+                  <Icons.Icon
+                    icon={Icons.Hugeicons.ArrowRight01FreeIcons}
+                    size={16}
+                    strokeWidth={2}
+                    color={secondary}
+                  />
+                </View>
+              </TouchableOpacity>
+            </Link>
+          ))}
+        </View>
       </View>
     </RootWrapper>
   );

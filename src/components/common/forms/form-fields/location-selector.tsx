@@ -166,7 +166,7 @@ export function FieldLocationSelector({
           <View className="mb-2 flex-row items-center justify-between">
             <Text className="text-primary text-sm">Select Location</Text>
             <TouchableOpacity
-              onPress={dismiss}
+              onPress={handleConfirm}
               className="bg-primary/10 border-primary flex-row items-center gap-2 rounded-xl border p-1.5 px-3">
               <Text className="text-primary text-sm">Save</Text>
               <Icons.Icon
@@ -186,12 +186,12 @@ export function FieldLocationSelector({
               initialRegion={currentRegion}
               onRegionChangeComplete={onRegionChangeComplete}
               className="rounded-xl">
-              <Marker
+              {/* <Marker
                 coordinate={{
                   latitude: currentRegion.latitude,
                   longitude: currentRegion.longitude,
                 }}
-              />
+              /> */}
             </MapView>
             <View
               className="absolute top-1/2 left-1/2 z-10 items-center justify-center"
@@ -200,8 +200,8 @@ export function FieldLocationSelector({
                 marginTop: -36,
               }}>
               <Icons.Icon
-                icon={Icons.Hugeicons.Location01FreeIcons}
-                size={36}
+                icon={Icons.Hugeicons.PinLocation02FreeIcons}
+                size={32}
                 strokeWidth={2}
                 color={primary}
               />
@@ -214,26 +214,19 @@ export function FieldLocationSelector({
             </View>
             <View className="absolute bottom-3 w-full flex-row justify-between px-2">
               <TouchableOpacity
-                className="bg-primary rounded-lg px-6 py-3 shadow"
-                onPress={handleConfirm}>
-                <Text className="text-base font-bold text-white">
-                  Confirm
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                className="size-12 items-center justify-center rounded-full bg-white shadow"
+                className="bg-primary/10 border-primary size-8 items-center justify-center rounded-full border"
                 onPress={goToMyLocation}>
                 <Icons.Icon
-                  icon={Icons.Hugeicons.Location02FreeIcons}
+                  icon={Icons.Hugeicons.Location03FreeIcons}
                   size={24}
                   strokeWidth={1.5}
-                  color="#333"
+                  color={primary}
                 />
               </TouchableOpacity>
             </View>
           </View>
 
-          <View className="rounded-xl border border-gray-200 bg-white p-3">
+          <View className="border-secondary/10 bg-background-secondary rounded-xl border p-2">
             <Text className="mb-1 text-xs text-gray-500">
               Selected Location
             </Text>
@@ -242,14 +235,6 @@ export function FieldLocationSelector({
               {currentRegion.longitude.toFixed(6)}
             </Text>
           </View>
-
-          <TouchableOpacity
-            onPress={handleConfirm}
-            className="bg-primary mt-4 rounded-xl px-4 py-3">
-            <Text className="text-center text-sm font-bold text-white">
-              Confirm Location
-            </Text>
-          </TouchableOpacity>
         </ScrollView>
       </Modal>
     </View>
