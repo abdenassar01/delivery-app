@@ -165,7 +165,7 @@ export default function OrdersScreen() {
                     </Text>
                   </View>
                   <Text className="text-secondary text-base font-bold">
-                    ${order.totalAmount}
+                    {order.totalAmount} DH
                   </Text>
                 </View>
               </TouchableOpacity>

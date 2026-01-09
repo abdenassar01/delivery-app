@@ -28,6 +28,7 @@ export const createOrder = mutation({
         longitude: v.number(),
       }),
     ),
+    totalAmount: v.optional(v.number()),
   },
   handler: async (ctx, args) => {
     const user = await getAuthenticatedUser(ctx);
@@ -36,9 +37,9 @@ export const createOrder = mutation({
       throw new Error('Unauthenticated');
     }
 
-    // Calculate pricing (simple logic for now)
-    const deliveryFee = 5.0; // Base fee
-    const totalAmount = deliveryFee;
+    // Use provided price or calculate default pricing
+    const totalAmount = args.totalAmount ?? 5.0; // Default to $5 if not provided
+    const deliveryFee = totalAmount;
 
     const orderId = await ctx.db.insert('orders', {
       orderNumber: generateOrderNumber(),

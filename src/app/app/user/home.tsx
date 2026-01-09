@@ -155,7 +155,7 @@ export function UserHomeScreen({ user }: UserHomeScreenProps) {
                       </Text>
                     </View>
                     <Text className="text-secondary text-base font-bold">
-                      ${order.totalAmount}
+                      {order.totalAmount} DH
                     </Text>
                   </View>
                 </TouchableOpacity>

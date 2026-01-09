@@ -79,7 +79,7 @@ export default function HistoryScreen() {
           </View>
           <Text className="text-xs font-medium text-gray-500">EARNINGS</Text>
           <Text className="text-lg font-bold text-gray-900">
-            ${totalEarnings}
+            {totalEarnings} DH
           </Text>
         </View>
 

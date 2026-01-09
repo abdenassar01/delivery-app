@@ -13,7 +13,20 @@ type FieldInputProps = {
   placeholder?: string;
   password?: boolean;
   className?: string;
-  keyboardType?: 'email-address' | 'phone-pad' | 'default';
+  keyboardType?:
+    | 'default'
+    | 'numeric'
+    | 'email-address'
+    | 'ascii-capable'
+    | 'numbers-and-punctuation'
+    | 'url'
+    | 'number-pad'
+    | 'phone-pad'
+    | 'name-phone-pad'
+    | 'decimal-pad'
+    | 'twitter'
+    | 'web-search'
+    | 'visible-password';
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   disabled?: boolean;
   textarea?: boolean;

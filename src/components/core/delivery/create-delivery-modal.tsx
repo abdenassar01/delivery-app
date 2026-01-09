@@ -36,6 +36,7 @@ export function CreateDeliveryModal({
     defaultValues: {
       item: '',
       phone: '',
+      price: '0',
       pickupLocation: {
         address: '',
         latitude: 0,
@@ -51,6 +52,7 @@ export function CreateDeliveryModal({
       onChange: z.object({
         item: z.string().min(1, 'Item is required'),
         phone: z.string().min(1, 'Please enter a valid phone number'),
+        price: z.string(),
         pickupLocation: z.object({
           address: z.string(),
           latitude: z.number(),
@@ -83,6 +85,7 @@ export function CreateDeliveryModal({
             latitude: value.deliveryLocation?.latitude || 0,
             longitude: value.deliveryLocation?.longitude || 0,
           },
+          totalAmount: value.price ? parseFloat(value.price) : undefined,
         });
         form.reset();
         dismiss();
@@ -136,6 +139,13 @@ export function CreateDeliveryModal({
                       label="Phone Number"
                       placeholder="Enter phone number"
                       keyboardType="phone-pad"
+                      autoCapitalize="none"
+                    />
+                    <FieldInput
+                      name="price"
+                      label="Price (Optional)"
+                      placeholder="Enter price in USD"
+                      keyboardType="numeric"
                       autoCapitalize="none"
                     />
                     <form.Field
