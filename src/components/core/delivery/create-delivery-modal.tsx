@@ -100,7 +100,7 @@ export function CreateDeliveryModal({
     <>
       <TouchableOpacity
         onPress={present}
-        className="bg-primary/10 border-primary absolute right-4 bottom-4 rounded-2xl border px-4 py-2">
+        className="bg-primary/10 border-primary absolute right-4 bottom-3 rounded-2xl border px-4 py-2">
         <View className="flex-row items-center justify-center">
           <MaterialIcons name="add-circle" size={20} color={primary} />
           <Text className="text-primary ml-2 text-sm font-medium">

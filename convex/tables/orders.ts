@@ -42,6 +42,9 @@ export const orders = defineTable({
   deliveryFee: v.number(),
   distance: v.optional(v.number()), // in km
 
+  // Rating
+  rating: v.optional(v.number()), // User's rating for the courier (0-5)
+
   // Timestamps are automatic via _creationTime
   // Optional delivery timestamp
   deliveredAt: v.optional(v.number()),

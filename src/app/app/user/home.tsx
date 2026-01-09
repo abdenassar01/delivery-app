@@ -82,7 +82,7 @@ export function UserHomeScreen({ user }: UserHomeScreenProps) {
           showsVerticalScrollIndicator={false}
           key={refreshKey}>
           <View className="">
-            <View className="flex-row items-center justify-between">
+            <View className="mb-2 flex-row items-center justify-between">
               <Text className="text-lg font-medium">My Orders</Text>
               <TouchableOpacity
                 onPress={() => router.push('/orders' as any)}
@@ -100,7 +100,7 @@ export function UserHomeScreen({ user }: UserHomeScreenProps) {
             </View>
 
             {!myOrders || myOrders.length === 0 ? (
-              <View className="border-secondary/10 bg-background-secondary mt-2 items-center justify-center rounded-2xl border p-8">
+              <View className="border-secondary/10 bg-background-secondary items-center justify-center rounded-2xl border p-8">
                 <Icons.Icon
                   icon={Icons.Hugeicons.ShoppingBagFreeIcons}
                   size={40}

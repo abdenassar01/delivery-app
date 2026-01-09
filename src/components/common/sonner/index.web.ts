@@ -1,1 +1,1 @@
-export * from '@/components/ui/common/sonner';
+export * from 'sonner';

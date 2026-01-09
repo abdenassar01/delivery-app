@@ -11,6 +11,9 @@ export const users = defineTable({
   userId: v.string(),
   isVerified: v.boolean(),
   isEnabled: v.boolean(),
+  // Courier rating fields
+  rating: v.optional(v.number()), // Average rating (0-5)
+  ratingCount: v.optional(v.number()), // Number of ratings received
 })
   .index('by_userId', ['userId'])
   .searchIndex('search_name', {

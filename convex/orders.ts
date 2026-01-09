@@ -303,3 +303,68 @@ export const cancelOrder = mutation({
     return { success: true };
   },
 });
+
+// Mark order as delivered and rate the courier (for users)
+export const markDeliveredAndRate = mutation({
+  args: {
+    orderId: v.id('orders'),
+    rating: v.number(), // Rating from 1 to 5
+  },
+  handler: async (ctx, args) => {
+    const user = await getAuthenticatedUser(ctx);
+
+    if (!user) {
+      throw new Error('Unauthenticated');
+    }
+
+    // Validate rating
+    if (args.rating < 1 || args.rating > 5) {
+      throw new Error('Rating must be between 1 and 5');
+    }
+
+    const order = await ctx.db.get(args.orderId);
+
+    if (!order) {
+      throw new Error('Order not found');
+    }
+
+    // Only the order owner can mark as delivered and rate
+    if (order.userId !== user._id) {
+      throw new Error('Not authorized to rate this order');
+    }
+
+    // Order must be in transit
+    if (order.status !== 'in-transit') {
+      throw new Error('Order must be in transit to be marked as delivered');
+    }
+
+    // Update order status and rating
+    await ctx.db.patch(args.orderId, {
+      status: 'delivered',
+      rating: args.rating,
+      deliveredAt: Date.now(),
+    });
+
+    // Update courier's average rating
+    if (order.courierId) {
+      const courier = await ctx.db.get(order.courierId);
+
+      if (courier) {
+        const currentRating = courier.rating || 0;
+        const currentCount = courier.ratingCount || 0;
+
+        // Calculate new average
+        const newRatingCount = currentCount + 1;
+        const newRating =
+          (currentRating * currentCount + args.rating) / newRatingCount;
+
+        await ctx.db.patch(order.courierId, {
+          rating: newRating,
+          ratingCount: newRatingCount,
+        });
+      }
+    }
+
+    return { success: true };
+  },
+});

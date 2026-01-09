@@ -3,7 +3,7 @@ import React from 'react';
 import * as Icons from '@/icons';
 import { useQuery } from 'convex/react';
 import { api } from 'convex/_generated/api';
-import { Header, RootWrapper, Text } from '@/components';
+import { Header, RootWrapper, Text, RatingModal } from '@/components';
 import { useCSSVariable } from 'uniwind';
 import { formatDistanceToNow } from 'date-fns';
 import { cn } from '@/lib';
@@ -109,11 +109,11 @@ export default function OrdersScreen() {
           </View>
         ) : (
           <View className="mt-2">
-            {filteredOrders.map((order, index) => (
-              <TouchableOpacity
+            {filteredOrders.map(order => (
+              <View
                 key={order._id}
                 className="border-secondary/10 mb-2 rounded-2xl border bg-white p-3">
-                <View className="flex-row items-center justify-between">
+                <View className="flex-row items-start justify-between">
                   <View className="flex-1">
                     <View className="flex-row items-center gap-2">
                       <Text className="text-sm font-bold text-gray-900">
@@ -163,12 +163,39 @@ export default function OrdersScreen() {
                         addSuffix: true,
                       })}
                     </Text>
+
+                    {/* Show rating if already delivered */}
+                    {order.status === 'delivered' && order.rating && (
+                      <View className="mt-2 flex-row items-center gap-1">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Icons.Icon
+                            key={i}
+                            icon={Icons.Hugeicons.StarFreeIcons}
+                            size={14}
+                            strokeWidth={0}
+                            fill={i < order.rating! ? primary : '#d1d5db'}
+                            color={i < order.rating! ? primary : '#d1d5db'}
+                          />
+                        ))}
+                        <Text className="ml-1 text-xs text-gray-600">
+                          ({order.rating}/5)
+                        </Text>
+                      </View>
+                    )}
                   </View>
-                  <Text className="text-secondary text-base font-bold">
-                    {order.totalAmount} DH
-                  </Text>
+                  <View className="items-end gap-2">
+                    <Text className="text-secondary text-base font-bold">
+                      {order.totalAmount} DH
+                    </Text>
+
+                    {/* Show rating button for in-transit orders (user only) */}
+                    {user?.role !== 'delivery' &&
+                      order.status === 'in-transit' && (
+                        <RatingModal orderId={order._id} />
+                      )}
+                  </View>
                 </View>
-              </TouchableOpacity>
+              </View>
             ))}
           </View>
         )}
