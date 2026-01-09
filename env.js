@@ -10,14 +10,12 @@ require('dotenv').config({
   path: envPath,
 });
 
-// You should not change the following variables with your details
-
 const BUNDLE_ID = 'dev.compiledideas.deliver';
 const PACKAGE = 'dev.compiledideas.deliver';
-const NAME = 'tdelivery';
+const NAME = 'samt-delivery';
 const EXPO_ACCOUNT_OWNER = 'compiledideas';
-const EAS_PROJECT_ID = 'YOUR_EAS_PROJECT_ID_HERE';
-const SCHEME = 'tdelivery';
+const EAS_PROJECT_ID = '4d4e50e5-4d84-4c6d-a0ca-d081c94a9565';
+const SCHEME = 'samt-delivery';
 
 /**
  * We declare a function withEnvSuffix that will add a suffix to the variable name based on the APP_ENV

@@ -4,6 +4,7 @@ import { v } from 'convex/values';
 export const notifications = defineTable({
   userId: v.id('users'),
   type: v.union(
+    v.literal('order_created'),
     v.literal('order_assigned'),
     v.literal('order_completed'),
     v.literal('order_cancelled'),
@@ -20,8 +21,8 @@ export const notifications = defineTable({
   actionUrl: v.optional(v.string()),
   metadata: v.optional(
     v.object({
-      orderId: v.optional(v.id('delivery')),
-      courierId: v.optional(v.id('couriers')),
+      orderId: v.optional(v.id('orders')),
+      courierId: v.optional(v.id('users')),
       amount: v.optional(v.number()),
     }),
   ),

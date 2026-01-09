@@ -2,6 +2,24 @@ import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
 import { getAuthenticatedUser } from './helpers/auth';
 
+async function createNotification(
+  ctx: any,
+  userId: any,
+  type: any,
+  title: string,
+  message: string,
+  metadata?: any,
+) {
+  await ctx.db.insert('notifications', {
+    userId,
+    type,
+    title,
+    message,
+    read: false,
+    metadata,
+  });
+}
+
 // Generate a unique order number
 function generateOrderNumber(): string {
   const timestamp = Date.now().toString(36);
@@ -54,6 +72,34 @@ export const createOrder = mutation({
       deliveryFee,
     });
 
+    const couriers = await ctx.db
+      .query('users')
+      .withIndex('by_role', q => q.eq('role', 'delivery'))
+      .collect();
+
+    for (const courier of couriers) {
+      if (courier.isEnabled) {
+        await createNotification(
+          ctx,
+          courier._id,
+          'order_created',
+          'New Delivery Order Available',
+          `A new order for ${args.item} is available for delivery.`,
+          { orderId },
+        );
+      }
+    }
+
+    // Notify user that order was created
+    await createNotification(
+      ctx,
+      args.userId,
+      'order_created',
+      'Order Created Successfully',
+      `Your order for ${args.item} has been created and is waiting for a courier.`,
+      { orderId },
+    );
+
     return orderId;
   },
 });
@@ -91,11 +137,33 @@ export const acceptOrder = mutation({
       acceptedAt: Date.now(),
     });
 
+    await createNotification(
+      ctx,
+      order.userId,
+      'courier_accepted',
+      'Courier Assigned',
+      `A courier has accepted your order for ${order.item}.`,
+      { orderId: order._id, courierId: args.courierId },
+    );
+
+    const allNotifications = await ctx.db
+      .query('notifications')
+      .withIndex('by_type', q => q.eq('type', 'order_created'))
+      .collect();
+
+    for (const notification of allNotifications) {
+      if (
+        notification.metadata?.orderId === args.orderId &&
+        notification.userId !== args.courierId
+      ) {
+        await ctx.db.delete(notification._id);
+      }
+    }
+
     return { success: true };
   },
 });
 
-// Update order status
 export const updateOrderStatus = mutation({
   args: {
     orderId: v.id('orders'),
@@ -153,10 +221,7 @@ export const getRecentOrders = query({
     limit: v.number(),
   },
   handler: async (ctx, args) => {
-    const orders = await ctx.db
-      .query('orders')
-      .order('desc')
-      .take(args.limit);
+    const orders = await ctx.db.query('orders').order('desc').take(args.limit);
 
     return orders;
   },
@@ -211,9 +276,7 @@ export const getCourierOrders = query({
 
     const orders = await ctx.db
       .query('orders')
-      .withIndex('by_courierId', q =>
-        q.eq('courierId', args.courierId),
-      )
+      .withIndex('by_courierId', q => q.eq('courierId', args.courierId))
       .order('desc')
       .take(args.limit);
 
@@ -300,6 +363,27 @@ export const cancelOrder = mutation({
       status: 'cancelled',
     });
 
+    // Notify courier if order was assigned
+    if (order.courierId) {
+      await createNotification(
+        ctx,
+        order.courierId,
+        'order_cancelled',
+        'Order Cancelled',
+        `The order for ${order.item} has been cancelled by the user.`,
+        { orderId: order._id },
+      );
+    }
+
+    // Remove pending notifications for this order
+    const allNotifications = await ctx.db.query('notifications').collect();
+
+    for (const notification of allNotifications) {
+      if (notification.metadata?.orderId === args.orderId) {
+        await ctx.db.delete(notification._id);
+      }
+    }
+
     return { success: true };
   },
 });
@@ -362,8 +446,27 @@ export const markDeliveredAndRate = mutation({
           rating: newRating,
           ratingCount: newRatingCount,
         });
+
+        // Notify courier about delivery completion and rating
+        await createNotification(
+          ctx,
+          order.courierId,
+          'order_completed',
+          'Delivery Completed',
+          `Great job! The delivery for ${order.item} has been completed. You received a ${args.rating}/5 rating.`,
+          { orderId: order._id, amount: args.rating },
+        );
       }
     }
+
+    await createNotification(
+      ctx,
+      order.userId,
+      'order_completed',
+      'Delivery Completed',
+      `Your order for ${order.item} has been delivered successfully!`,
+      { orderId: order._id },
+    );
 
     return { success: true };
   },
