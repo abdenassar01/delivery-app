@@ -3,7 +3,13 @@
 import React, { useRef, useState } from 'react';
 import { useField } from '@tanstack/react-form';
 import { useFormContext } from '../form-context';
-import { TextInput, TouchableOpacity, View, Text } from 'react-native';
+import {
+  TextInput,
+  TouchableOpacity,
+  View,
+  Text,
+  ScrollView,
+} from 'react-native';
 import { cn, useLocation } from '@/lib';
 import { useCSSVariable } from 'uniwind';
 import { Modal, useModal } from '../../modal';
@@ -13,7 +19,6 @@ import MapView, {
   Marker,
 } from 'react-native-maps';
 import * as Icons from '@/icons';
-import { ScrollView } from 'react-native-gesture-handler';
 
 type LocationValue = {
   address: string;
@@ -58,6 +63,9 @@ export function FieldLocationSelector({
     longitudeDelta: 0.01,
   });
 
+  const [addressInput, setAddressInput] = useState('');
+  const [useMap, setUseMap] = useState(false);
+
   const value = field.state.value as LocationValue | undefined;
 
   const onRegionChangeComplete = (region: Region) => {
@@ -66,11 +74,16 @@ export function FieldLocationSelector({
 
   const handleConfirm = () => {
     const locationValue: LocationValue = {
-      address: `${currentRegion.latitude.toFixed(6)}, ${currentRegion.longitude.toFixed(6)}`,
-      latitude: currentRegion.latitude,
-      longitude: currentRegion.longitude,
+      address: useMap
+        ? `${currentRegion.latitude.toFixed(6)}, ${currentRegion.longitude.toFixed(6)}`
+        : addressInput,
+      latitude: useMap ? currentRegion.latitude : 0,
+      longitude: useMap ? currentRegion.longitude : 0,
     };
     field.handleChange(locationValue);
+    // Reset state
+    setAddressInput('');
+    setUseMap(false);
     dismiss();
   };
 
@@ -84,16 +97,13 @@ export function FieldLocationSelector({
       };
       mapRef.current.animateToRegion(region, 500);
       setCurrentRegion(region);
-      field.handleChange({
-        address: `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`,
-        latitude,
-        longitude,
-      });
     }
   };
 
   const handleClear = () => {
     field.handleChange(undefined);
+    setAddressInput('');
+    setUseMap(false);
   };
 
   const displayValue = value?.address || '';
@@ -158,13 +168,15 @@ export function FieldLocationSelector({
         </Text>
       )}
 
-      <Modal ref={ref} snapPoints={['60%']} detached>
+      <Modal ref={ref} snapPoints={['70%', '80%']} detached>
         <ScrollView
           showsVerticalScrollIndicator={false}
           nestedScrollEnabled
           className="p-4">
-          <View className="mb-2 flex-row items-center justify-between">
-            <Text className="text-primary text-sm">Select Location</Text>
+          <View className="mb-4 flex-row items-center justify-between">
+            <Text className="text-primary text-lg font-semibold">
+              Select Location
+            </Text>
             <TouchableOpacity
               onPress={handleConfirm}
               className="bg-primary/10 border-primary flex-row items-center gap-2 rounded-xl border p-1.5 px-3">
@@ -178,61 +190,134 @@ export function FieldLocationSelector({
             </TouchableOpacity>
           </View>
 
-          <View className="relative mb-4 h-[350px] overflow-hidden rounded-xl">
-            <MapView
-              ref={mapRef}
-              style={{ width: '100%', height: '100%' }}
-              provider={PROVIDER_GOOGLE}
-              initialRegion={currentRegion}
-              onRegionChangeComplete={onRegionChangeComplete}
-              className="rounded-xl">
-              {/* <Marker
-                coordinate={{
-                  latitude: currentRegion.latitude,
-                  longitude: currentRegion.longitude,
-                }}
-              /> */}
-            </MapView>
-            <View
-              className="absolute top-1/2 left-1/2 z-10 items-center justify-center"
-              style={{
-                marginLeft: -18,
-                marginTop: -36,
-              }}>
+          {/* Address Input */}
+          <View className="mb-3">
+            <Text className="mb-2 text-sm font-medium text-gray-700">
+              Enter Address
+            </Text>
+            <TextInput
+              className="border-primary/10 bg-background-secondary rounded-xl border p-3 text-sm text-gray-900"
+              value={addressInput}
+              onChangeText={setAddressInput}
+              placeholder="e.g., 123 Main Street, City, Country"
+              placeholderTextColor="#9ca3af"
+              autoCapitalize="words"
+              onFocus={() => setUseMap(false)}
+            />
+          </View>
+
+          {/* Divider */}
+          <View className="mb-3 flex-row items-center gap-2">
+            <View className="bg-secondary/10 h-px flex-1" />
+            <Text className="text-secondary text-xs font-medium uppercase">
+              Or select on map
+            </Text>
+            <View className="bg-secondary/10 h-px flex-1" />
+          </View>
+
+          {/* Toggle Map Button */}
+          <TouchableOpacity
+            onPress={() => setUseMap(!useMap)}
+            className={cn(
+              'mb-3 flex-row items-center justify-center rounded-xl border p-3',
+              useMap
+                ? 'border-primary bg-primary/10'
+                : 'border-secondary/10 bg-background-secondary',
+            )}>
+            <Icons.Icon
+              icon={Icons.Hugeicons.MapPinFreeIcons}
+              size={18}
+              strokeWidth={2}
+              color={useMap ? primary : '#9ca3af'}
+            />
+            <Text
+              className={cn(
+                'ml-2 text-sm font-medium',
+                useMap ? 'text-primary' : 'text-gray-500',
+              )}>
+              {useMap ? 'Map Enabled' : 'Enable Map Selection'}
+            </Text>
+          </TouchableOpacity>
+
+          {/* Map View */}
+          {useMap && (
+            <View className="relative mb-4 h-64 overflow-hidden rounded-xl">
+              <MapView
+                ref={mapRef}
+                style={{ width: '100%', height: '100%' }}
+                provider={PROVIDER_GOOGLE}
+                initialRegion={currentRegion}
+                onRegionChangeComplete={onRegionChangeComplete}
+                className="rounded-xl">
+                <Marker
+                  coordinate={{
+                    latitude: currentRegion.latitude,
+                    longitude: currentRegion.longitude,
+                  }}
+                />
+              </MapView>
+              <View
+                className="absolute top-1/2 left-1/2 z-10 items-center justify-center"
+                style={{
+                  marginLeft: -18,
+                  marginTop: -36,
+                }}>
+                <Icons.Icon
+                  icon={Icons.Hugeicons.PinLocation02FreeIcons}
+                  size={32}
+                  strokeWidth={2}
+                  color={primary}
+                />
+                <View
+                  className="absolute -bottom-1 size-5 rounded-full bg-black opacity-20"
+                  style={{
+                    transform: [{ scaleX: 1.2 }, { scaleY: 0.4 }],
+                  }}
+                />
+              </View>
+              <View className="absolute bottom-3 w-full flex-row justify-between px-2">
+                <TouchableOpacity
+                  className="bg-background-secondary size-8 items-center justify-center rounded-full"
+                  onPress={goToMyLocation}>
+                  <Icons.Icon
+                    icon={Icons.Hugeicons.Location03FreeIcons}
+                    size={24}
+                    strokeWidth={1.5}
+                    color={primary}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+
+          {/* Selected Coordinates Info (when map is enabled) */}
+          {useMap && (
+            <View className="border-secondary/10 bg-background-secondary rounded-xl border p-3">
+              <Text className="mb-1 text-xs text-gray-500">
+                Selected Coordinates
+              </Text>
+              <Text className="text-sm font-medium text-gray-900">
+                {currentRegion.latitude.toFixed(6)},{' '}
+                {currentRegion.longitude.toFixed(6)}
+              </Text>
+            </View>
+          )}
+
+          {/* Helper Text */}
+          <View className="bg-primary/5 mt-4 rounded-xl p-3">
+            <View className="mb-1 flex-row items-center gap-2">
               <Icons.Icon
-                icon={Icons.Hugeicons.PinLocation02FreeIcons}
-                size={32}
+                icon={Icons.Hugeicons.InformationCircleFreeIcons}
+                size={16}
                 strokeWidth={2}
                 color={primary}
               />
-              <View
-                className="absolute -bottom-1 size-5 rounded-full bg-black opacity-20"
-                style={{
-                  transform: [{ scaleX: 1.2 }, { scaleY: 0.4 }],
-                }}
-              />
+              <Text className="text-primary text-sm font-semibold">Tip</Text>
             </View>
-            <View className="absolute bottom-3 w-full flex-row justify-between px-2">
-              <TouchableOpacity
-                className="bg-background-secondary size-8 items-center justify-center rounded-full"
-                onPress={goToMyLocation}>
-                <Icons.Icon
-                  icon={Icons.Hugeicons.Location03FreeIcons}
-                  size={24}
-                  strokeWidth={1.5}
-                  color={primary}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          <View className="border-secondary/10 bg-background-secondary rounded-xl border p-2">
-            <Text className="mb-1 text-xs text-gray-500">
-              Selected Location
-            </Text>
-            <Text className="text-sm font-medium text-gray-900">
-              {currentRegion.latitude.toFixed(6)},{' '}
-              {currentRegion.longitude.toFixed(6)}
+            <Text className="text-xs leading-relaxed text-gray-600">
+              {useMap
+                ? 'Drag the map to position the pin. The coordinates will be saved as your location.'
+                : 'Type your address above or enable map selection to pick a location on the map.'}
             </Text>
           </View>
         </ScrollView>

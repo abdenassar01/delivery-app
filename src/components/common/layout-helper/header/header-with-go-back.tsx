@@ -23,7 +23,7 @@ export function HeaderWithGoBack() {
           color={primary}
         />
       </TouchableOpacity>
-      <Text className="text-primary font-medium">Tanger Delivery</Text>
+      <Text className="text-primary font-medium">SAMT Livraison</Text>
     </View>
   );
 }

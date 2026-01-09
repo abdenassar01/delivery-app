@@ -35,7 +35,7 @@ export function CreateDeliveryModal({
   const form = useForm({
     defaultValues: {
       item: '',
-      phoneNumber: '',
+      phone: '',
       pickupLocation: {
         address: '',
         latitude: 0,
@@ -50,7 +50,7 @@ export function CreateDeliveryModal({
     validators: {
       onChange: z.object({
         item: z.string().min(1, 'Item is required'),
-        phoneNumber: z.string().min(1, 'Please enter a valid phone number'),
+        phone: z.string().min(1, 'Please enter a valid phone number'),
         pickupLocation: z.object({
           address: z.string(),
           latitude: z.number(),
@@ -135,9 +135,17 @@ export function CreateDeliveryModal({
                       name="phone"
                       label="Phone Number"
                       placeholder="Enter phone number"
+                      keyboardType="phone-pad"
+                      autoCapitalize="none"
                     />
                     <form.Field
                       name="pickupLocation"
+                      validators={{
+                        onChange: ({ value }) =>
+                          !value || !value.address
+                            ? 'Pickup location is required'
+                            : undefined,
+                      }}
                       children={field => (
                         <FieldLocationSelector
                           name="pickupLocation"
@@ -151,7 +159,9 @@ export function CreateDeliveryModal({
                       name="deliveryLocation"
                       validators={{
                         onChange: ({ value }) =>
-                          !value ? 'Delivery location is required' : undefined,
+                          !value || !value.address
+                            ? 'Delivery location is required'
+                            : undefined,
                       }}
                       children={field => (
                         <FieldLocationSelector

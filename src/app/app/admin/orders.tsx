@@ -1,10 +1,5 @@
 import React, { useState } from 'react';
-import {
-  RefreshControl,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { RootWrapper, Text } from '@/components';
 import * as Icons from '@/icons';
 import { cn } from '@/lib';
@@ -17,10 +12,13 @@ type OrderStatus = 'all' | 'pending' | 'in-transit' | 'delivered' | 'cancelled';
 
 export default function AdminOrdersScreen() {
   const [selectedFilter, setSelectedFilter] = useState<OrderStatus>('all');
-  const [refreshing, setRefreshing] = useState(false);
 
   const filters: { key: OrderStatus; label: string; icon: any }[] = [
-    { key: 'all', label: 'All', icon: Icons.Hugeicons.SquareFreeIcons },
+    {
+      key: 'all',
+      label: 'All',
+      icon: Icons.Hugeicons.DeliveryTruck01FreeIcons,
+    },
     { key: 'pending', label: 'Pending', icon: Icons.Hugeicons.Time01FreeIcons },
     {
       key: 'in-transit',
@@ -44,11 +42,6 @@ export default function AdminOrdersScreen() {
     status: selectedFilter === 'all' ? undefined : selectedFilter,
   });
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    setTimeout(() => setRefreshing(false), 1000);
-  };
-
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
@@ -65,31 +58,21 @@ export default function AdminOrdersScreen() {
   };
 
   return (
-    <View className="flex-1 bg-gray-50">
-      {/* Header */}
-      <View className="bg-white px-5 pt-4 pb-4 shadow-sm">
-        <View className="mb-4">
-          <HeaderWithGoBack />
-        </View>
-        <Text className="text-2xl font-bold text-gray-900">All Orders</Text>
-        <Text className="text-sm text-gray-500">
-          {allOrders?.length || 0} orders total
-        </Text>
-      </View>
+    <RootWrapper className="px-4">
+      <HeaderWithGoBack />
 
-      {/* Filter Tabs */}
-      <View className="border-b border-gray-100 bg-white px-5 py-3">
+      <View className="pt-3">
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View className="flex-row gap-2">
+          <View className="flex-row gap-1">
             {filters.map(filter => (
               <TouchableOpacity
                 key={filter.key}
                 onPress={() => setSelectedFilter(filter.key)}
                 className={cn(
-                  'flex-row items-center rounded-full border-2 px-4 py-2',
+                  'flex-row items-center gap-2 rounded-xl border p-2 px-4 py-1.5',
                   selectedFilter === filter.key
-                    ? 'border-primary bg-primary'
-                    : 'border-gray-200 bg-white',
+                    ? 'border-secondary bg-secondary'
+                    : 'border-secondary/10 bg-background-secondary',
                 )}>
                 <Icons.Icon
                   icon={filter.icon}
@@ -104,7 +87,7 @@ export default function AdminOrdersScreen() {
                 />
                 <Text
                   className={cn(
-                    'text-sm font-bold',
+                    'text-sm font-medium',
                     selectedFilter === filter.key
                       ? 'text-white'
                       : 'text-gray-700',
@@ -118,16 +101,7 @@ export default function AdminOrdersScreen() {
       </View>
 
       {/* Orders List */}
-      <ScrollView
-        className="flex-1 px-5 pt-4"
-        showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-            tintColor="#da910e"
-          />
-        }>
+      <ScrollView className="pt-3" showsVerticalScrollIndicator={false}>
         {!allOrders || allOrders.length === 0 ? (
           <View className="mt-20 items-center justify-center">
             <View className="mb-4 h-20 w-20 items-center justify-center rounded-full bg-gray-100">
@@ -214,7 +188,7 @@ export default function AdminOrdersScreen() {
                     className="text-gray-500"
                   />
                 </View>
-                <Text className="flex-1 text-sm font-medium text-gray-700">
+                <Text className="text-sm font-medium text-gray-700">
                   {order.item}
                 </Text>
               </View>
@@ -227,7 +201,7 @@ export default function AdminOrdersScreen() {
                   strokeWidth={2}
                   className="text-gray-400"
                 />
-                <Text className="flex-1 text-sm text-gray-600">
+                <Text className="text-sm text-gray-600">
                   {order.pickupAddress}
                 </Text>
                 <Icons.Icon
@@ -248,7 +222,7 @@ export default function AdminOrdersScreen() {
                     addSuffix: true,
                   })}
                 </Text>
-                <Text className="text-xl font-bold text-secondary">
+                <Text className="text-secondary text-xl font-bold">
                   ${order.totalAmount}
                 </Text>
               </View>
@@ -257,6 +231,6 @@ export default function AdminOrdersScreen() {
         )}
         <View className="h-24" />
       </ScrollView>
-    </View>
+    </RootWrapper>
   );
 }

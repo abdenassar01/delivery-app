@@ -22,7 +22,6 @@ export function AdminHomeScreen({ user }: AdminHomeScreenProps) {
 
   return (
     <RootWrapper className="px-4">
-      {/* Header */}
       <View className="mt-3 mb-4">
         <Text className="text-sm font-medium text-gray-500">Welcome back,</Text>
         <Text className="text-2xl font-bold text-gray-900">
@@ -31,7 +30,6 @@ export function AdminHomeScreen({ user }: AdminHomeScreenProps) {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Stats Cards */}
         <View className="mb-4 flex-row gap-3">
           <View className="border-secondary/10 bg-background-secondary flex-1 rounded-2xl border p-4">
             <View className="bg-secondary/10 mb-2 h-10 w-10 items-center justify-center rounded-full">
@@ -102,12 +100,11 @@ export function AdminHomeScreen({ user }: AdminHomeScreenProps) {
           </View>
         </View>
 
-        {/* Recent Orders */}
         <View className="mb-4">
           <View className="flex-row items-center justify-between">
             <Text className="text-lg font-medium">Recent Orders</Text>
             <TouchableOpacity
-              onPress={() => router.push('/admin/orders' as any)}
+              onPress={() => router.push('/app/admin/orders')}
               className="flex-row items-center">
               <Text className="text-secondary text-sm font-medium">
                 View all
@@ -205,7 +202,7 @@ export function AdminHomeScreen({ user }: AdminHomeScreenProps) {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => router.push('/admin/orders' as any)}
+              onPress={() => router.push('/app/admin/orders' as any)}
               className="border-secondary/10 bg-background-secondary flex-1 rounded-2xl border p-4">
               <View className="bg-secondary/10 h-10 w-10 items-center justify-center rounded-full">
                 <Icons.Icon

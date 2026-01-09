@@ -28,7 +28,6 @@ export function UserHomeScreen({ user }: UserHomeScreenProps) {
   const { height } = useWindowDimensions();
   const [refreshKey, setRefreshKey] = useState(0);
   const secondary = useCSSVariable('--color-secondary') as string;
-  const primary = useCSSVariable('--color-primary') as string;
   const myOrders = useQuery(api.orders.getUserOrders, {
     userId: user?._id,
     limit: 5,
@@ -45,7 +44,7 @@ export function UserHomeScreen({ user }: UserHomeScreenProps) {
         <Text className="text-lg font-medium">Quick Actions</Text>
         <View className="mt-2 flex-row gap-2">
           <TouchableOpacity
-            onPress={() => router.push('/app/history' as any)}
+            onPress={() => router.push('/history' as any)}
             className="border-secondary/10 bg-background-secondary flex-1 rounded-2xl border p-4">
             <View className="bg-secondary/10 h-10 w-10 items-center justify-center rounded-xl">
               <Icons.Icon
@@ -77,7 +76,7 @@ export function UserHomeScreen({ user }: UserHomeScreenProps) {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{ height: height - 350 }} className="mt-3 px-4">
+      <View style={{ height: height - 400 }} className="mt-3 px-4">
         <ScrollView
           contentContainerClassName=""
           showsVerticalScrollIndicator={false}
@@ -86,7 +85,7 @@ export function UserHomeScreen({ user }: UserHomeScreenProps) {
             <View className="flex-row items-center justify-between">
               <Text className="text-lg font-medium">My Orders</Text>
               <TouchableOpacity
-                onPress={() => router.push('/app/orders' as any)}
+                onPress={() => router.push('/orders' as any)}
                 className="flex-row items-center">
                 <Text className="text-secondary text-sm font-medium">
                   View all

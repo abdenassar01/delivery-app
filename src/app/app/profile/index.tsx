@@ -11,12 +11,12 @@ import * as Icons from '@/icons';
 import { useMutation, useQuery } from 'convex/react';
 import { api } from 'convex/_generated/api';
 import {
-  Header,
   RootWrapper,
   Text,
   FieldInput,
   FormContext,
   Button,
+  HeaderWithGoBack,
 } from '@/components';
 import { useCSSVariable } from 'uniwind';
 import * as ImagePicker from 'expo-image-picker';
@@ -44,7 +44,7 @@ export default function ProfileScreen() {
     validators: {
       onSubmit: z.object({
         name: z.string().min(1, 'Name is required'),
-        email: z.string().min(1, 'Email is required').email('Invalid email'),
+        email: z.email('Invalid email'),
         phone: z.string(),
       }),
     },
@@ -119,7 +119,7 @@ export default function ProfileScreen() {
 
   return (
     <RootWrapper className="px-4">
-      <Header />
+      <HeaderWithGoBack />
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
@@ -319,7 +319,7 @@ export default function ProfileScreen() {
               </Link>
               <View className="bg-secondary/10 my-1 h-px w-full rounded-full" />
 
-              <Link href="/app/profile/payment" asChild>
+              <Link href="/app/profile/wallet" asChild>
                 <TouchableOpacity className="flex-row items-center gap-3">
                   <View className="bg-secondary/10 h-10 w-10 items-center justify-center rounded-xl">
                     <Icons.Icon

@@ -13,12 +13,12 @@ export function HomeTopSection() {
   const primary = useCSSVariable('--color-primary');
 
   return (
-    <View className="bg-primary/10 rounded-b-2xl px-4 pt-12 pb-6">
-      <View className="flex-row items-center justify-between">
+    <View className="bg-primary/10 rounded-b-2xl px-4 pt-12 pb-3">
+      <View className="flex-row items-start justify-between">
         <View className="flex-row gap-2">
           <Image
             source={{ uri: user?.avatarUrl || '' }}
-            className="h-12 w-12 rounded-xl"
+            className="h-24 w-24 rounded-xl"
           />
           <View>
             <Text className="text-primary text-sm font-medium capitalize">
@@ -36,6 +36,19 @@ export function HomeTopSection() {
             strokeWidth={1.5}
             color={primary}
           />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => push('/app/profile/wallet')}
+          className="bg-primary/20 absolute right-0 bottom-0 flex-row items-center gap-1 rounded-xl px-3 py-1.5">
+          <Icons.Icon
+            icon={Icons.Hugeicons.WalletAdd01FreeIcons}
+            size={18}
+            strokeWidth={1.5}
+            color={primary}
+          />
+          <Text className="text-primary text-xs font-semibold">
+            {user?.balance || 0} DH
+          </Text>
         </TouchableOpacity>
       </View>
     </View>

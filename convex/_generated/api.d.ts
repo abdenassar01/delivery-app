@@ -10,6 +10,7 @@
 
 import type * as ResendOTPPasswordReset from "../ResendOTPPasswordReset.js";
 import type * as auth from "../auth.js";
+import type * as contact from "../contact.js";
 import type * as couriers from "../couriers.js";
 import type * as delivery from "../delivery.js";
 import type * as helpers_auth from "../helpers/auth.js";
@@ -18,6 +19,7 @@ import type * as http from "../http.js";
 import type * as notifications from "../notifications.js";
 import type * as orders from "../orders.js";
 import type * as stats from "../stats.js";
+import type * as tables_contact from "../tables/contact.js";
 import type * as tables_delivery from "../tables/delivery.js";
 import type * as tables_index from "../tables/index.js";
 import type * as tables_notifications from "../tables/notifications.js";
@@ -34,6 +36,7 @@ import type {
 declare const fullApi: ApiFromModules<{
   ResendOTPPasswordReset: typeof ResendOTPPasswordReset;
   auth: typeof auth;
+  contact: typeof contact;
   couriers: typeof couriers;
   delivery: typeof delivery;
   "helpers/auth": typeof helpers_auth;
@@ -42,6 +45,7 @@ declare const fullApi: ApiFromModules<{
   notifications: typeof notifications;
   orders: typeof orders;
   stats: typeof stats;
+  "tables/contact": typeof tables_contact;
   "tables/delivery": typeof tables_delivery;
   "tables/index": typeof tables_index;
   "tables/notifications": typeof tables_notifications;
