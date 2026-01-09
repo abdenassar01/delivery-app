@@ -9,7 +9,7 @@ import { StyleSheet } from 'react-native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import * as SecureStore from 'expo-secure-store';
-import { Toaster } from '../lib/taost/sonner';
+import { Toaster } from '../lib/toast/sonner';
 import { SafeAreaListener } from 'react-native-safe-area-context';
 import { Uniwind } from 'uniwind';
 import { ConvexBetterAuthProvider } from '@convex-dev/better-auth/react';

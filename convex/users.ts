@@ -1,6 +1,7 @@
 import { v } from 'convex/values';
 import { mutation, query } from './_generated/server';
 import { getAuthenticatedUser } from './helpers/auth';
+import { authComponent, createAuth } from './auth';
 
 // Generate upload URL for file storage
 export const generateUploadUrl = mutation({
@@ -59,6 +60,25 @@ export const getAllUsers = query({
   },
 });
 
+export const updateMyPassword = mutation({
+  args: {
+    currentPassword: v.string(),
+    newPassword: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const { auth, headers } = await authComponent.getAuth(createAuth, ctx);
+    await auth.api.changePassword({
+      body: {
+        newPassword: args.newPassword,
+        currentPassword: args.currentPassword,
+      },
+      headers,
+    });
+
+    return { success: true };
+  },
+});
+
 export const getCurrentUser = query({
   args: {},
   handler: async ctx => {
@@ -90,5 +110,33 @@ export const getUserByEmail = query({
     const user = users.find(u => u.email === args.email);
 
     return user || null;
+  },
+});
+
+export const update = mutation({
+  args: {
+    name: v.optional(v.string()),
+    email: v.optional(v.string()),
+    phone: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const user = await getAuthenticatedUser(ctx);
+
+    if (!user) {
+      throw new Error('Unauthenticated');
+    }
+
+    const updateData: Record<string, any> = {};
+    if (args.name !== undefined) updateData.name = args.name;
+    if (args.email !== undefined) updateData.email = args.email;
+    if (args.phone !== undefined) updateData.phone = args.phone;
+
+    if (Object.keys(updateData).length === 0) {
+      throw new Error('No fields to update');
+    }
+
+    await ctx.db.patch(user._id, updateData);
+
+    return { success: true };
   },
 });

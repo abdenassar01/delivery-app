@@ -11,7 +11,7 @@ export default function SecurityScreen() {
   const primary = useCSSVariable('--color-primary') as string;
   const secondary = useCSSVariable('--color-secondary') as string;
   const user = useQuery(api.users.getCurrentUser);
-  const updatePassword = useMutation(api.users.updatePassword);
+  const updatePassword = useMutation(api.users.updateMyPassword);
 
   const [formData, setFormData] = React.useState({
     currentPassword: '',
@@ -27,11 +27,14 @@ export default function SecurityScreen() {
 
     try {
       await updatePassword({
-        userId: user?._id,
         currentPassword: formData.currentPassword,
         newPassword: formData.newPassword,
       });
-      setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });
+      setFormData({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      });
       alert('Password updated successfully');
     } catch (error) {
       console.error('Failed to update password:', error);
@@ -59,7 +62,7 @@ export default function SecurityScreen() {
       description: 'Use Face ID or fingerprint to unlock your account',
       icon: (
         <Icons.Icon
-          icon={Icons.Hugeicons.FingerprintFreeIcons}
+          icon={Icons.Hugeicons.FingerPrintCheckFreeIcons}
           size={16}
           strokeWidth={2}
           color={secondary}
@@ -73,7 +76,7 @@ export default function SecurityScreen() {
       description: 'Get notified when someone logs into your account',
       icon: (
         <Icons.Icon
-          icon={Icons.Hugeicons.BellFreeIcons}
+          icon={Icons.Hugeicons.Notification01FreeIcons}
           size={16}
           strokeWidth={2}
           color={secondary}
@@ -134,9 +137,9 @@ export default function SecurityScreen() {
                     />
                   </View>
                   <TextInput
-                    className="text-sm flex-1 text-gray-900"
+                    className="flex-1 text-sm text-gray-900"
                     value={formData[field.key]}
-                    onChangeText={(text) =>
+                    onChangeText={text =>
                       setFormData({ ...formData, [field.key]: text })
                     }
                     placeholder={field.placeholder}
@@ -159,7 +162,7 @@ export default function SecurityScreen() {
           onPress={handleUpdatePassword}
           className="bg-primary flex-row items-center justify-center gap-2 rounded-2xl p-4 py-3">
           <Icons.Icon
-            icon={Icons.Hugeicons.Save01FreeIcons}
+            icon={Icons.Hugeicons.Bookmark02FreeIcons}
             size={20}
             strokeWidth={2}
             color="white"
@@ -195,15 +198,11 @@ export default function SecurityScreen() {
                 </View>
                 <View
                   className={`rounded-full px-2 py-1 ${
-                    option.enabled
-                      ? 'bg-success/10'
-                      : 'bg-gray-100'
+                    option.enabled ? 'bg-success/10' : 'bg-gray-100'
                   }`}>
                   <Text
                     className={`text-xs font-semibold ${
-                      option.enabled
-                        ? 'text-success'
-                        : 'text-gray-500'
+                      option.enabled ? 'text-success' : 'text-gray-500'
                     }`}>
                     {option.action}
                   </Text>
@@ -219,7 +218,7 @@ export default function SecurityScreen() {
 
       {/* Danger Zone */}
       <View className="mt-6">
-        <Text className="text-sm font-medium text-error">Danger Zone</Text>
+        <Text className="text-error text-sm font-medium">Danger Zone</Text>
       </View>
 
       <View className="border-error/20 bg-error/5 mt-2 rounded-2xl border p-4">

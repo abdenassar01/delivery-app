@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, TouchableOpacity, View, TextInput } from 'react-native';
+import { ScrollView, TouchableOpacity, View } from 'react-native';
 import { useForm } from '@tanstack/react-form';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useMutation } from 'convex/react';
@@ -18,7 +18,6 @@ import {
 import { useCSSVariable } from 'uniwind';
 import { cn } from '@/lib';
 import z from 'zod';
-import { phoneNumber } from 'better-auth/plugins';
 
 type CreateDeliveryModalProps = {
   userId?: Id<'users'>;

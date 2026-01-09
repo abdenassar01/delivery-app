@@ -6,6 +6,7 @@ import { api } from 'convex/_generated/api';
 import { Header, RootWrapper, Text } from '@/components';
 import { useCSSVariable } from 'uniwind';
 import { formatDistanceToNow } from 'date-fns';
+import { cn } from '@/lib';
 
 type OrderStatus = 'all' | 'pending' | 'in-transit' | 'delivered';
 
@@ -17,7 +18,8 @@ const filters: { key: OrderStatus; label: string }[] = [
 ];
 
 export default function OrdersScreen() {
-  const [selectedFilter, setSelectedFilter] = React.useState<OrderStatus>('all');
+  const [selectedFilter, setSelectedFilter] =
+    React.useState<OrderStatus>('all');
   const primary = useCSSVariable('--color-primary') as string;
   const secondary = useCSSVariable('--color-secondary') as string;
 
@@ -55,15 +57,17 @@ export default function OrdersScreen() {
     <TouchableOpacity
       key={filter.key}
       onPress={() => setSelectedFilter(filter.key)}
-      className={`rounded-full border-2 px-4 py-2 ${
+      className={cn(
+        'rounded-full border px-4 py-1',
         selectedFilter === filter.key
           ? 'border-primary bg-primary'
-          : 'border-gray-200 bg-white'
-      }`}>
+          : 'border-secondary/10 bg-background-secondary',
+      )}>
       <Text
-        className={`text-sm font-bold ${
-          selectedFilter === filter.key ? 'text-white' : 'text-gray-700'
-        }`}>
+        className={cn(
+          'text-sm font-medium',
+          selectedFilter === filter.key ? 'text-white' : 'text-gray-700',
+        )}>
         {filter.label}
       </Text>
     </TouchableOpacity>
@@ -75,7 +79,7 @@ export default function OrdersScreen() {
 
       {/* Filters */}
       <View className="mt-3">
-        <View className="flex-row flex-wrap gap-2">
+        <View className="flex-row flex-wrap gap-1">
           {filters.map(renderFilter)}
         </View>
       </View>
@@ -125,7 +129,7 @@ export default function OrdersScreen() {
                     </View>
                     <View className="mt-1 flex-row items-center gap-1">
                       <Icons.Icon
-                        icon={Icons.Hugeicons.BoxFreeIcons}
+                        icon={Icons.Hugeicons.Package01FreeIcons}
                         size={14}
                         strokeWidth={2}
                         color="#6b7280"

@@ -98,9 +98,9 @@ export default function PersonalInformationScreen() {
                     {field.icon}
                   </View>
                   <TextInput
-                    className="text-sm flex-1 text-gray-900"
+                    className="flex-1 text-sm text-gray-900"
                     value={formData[field.key]}
-                    onChangeText={(text) =>
+                    onChangeText={text =>
                       setFormData({ ...formData, [field.key]: text })
                     }
                     placeholder={field.placeholder}
@@ -128,7 +128,9 @@ export default function PersonalInformationScreen() {
             strokeWidth={2}
             color="white"
           />
-          <Text className="text-base font-semibold text-white">Save Changes</Text>
+          <Text className="text-base font-semibold text-white">
+            Save Changes
+          </Text>
         </TouchableOpacity>
       </View>
     </RootWrapper>
