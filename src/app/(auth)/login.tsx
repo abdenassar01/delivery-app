@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   RootWrapper,
   Text,
@@ -43,9 +43,12 @@ export default function Login() {
           onSuccess: async () => {
             formApi.reset();
             toast.success('Login successful');
-            // Wait for auth state to propagate before redirecting
-            await new Promise(resolve => setTimeout(resolve, 500));
-            replace('/');
+            await new Promise(resolve =>
+              setTimeout(() => {
+                replace('/');
+                resolve(null);
+              }, 500),
+            );
           },
           onError: error => {
             toast.error(error.error.message || 'Login failed');
