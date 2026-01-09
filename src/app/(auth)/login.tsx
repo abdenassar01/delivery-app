@@ -64,7 +64,7 @@ export default function Login() {
         className="bg-backgroundSecondary mb-3 flex-1 justify-center rounded-2xl">
         <Text className="text-center text-2xl font-bold">Welcome back!</Text>
         <Text className="text-text-secondary mb-8 text-center">
-          Sign in to continue to AMTA Livraison
+          Sign in to continue to SAMT Livraison
         </Text>
 
         <FormContext value={form}>

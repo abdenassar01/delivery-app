@@ -115,8 +115,8 @@ export function SignupStepOne({
           )}>
           <Button
             label="Previous"
-            className="bg-primary/10 border-primary w-[49%] border"
-            textClassName="text-primary"
+            className="w-[49%]"
+            variant="secondary"
             onPress={() => setStep(0)}
           />
 

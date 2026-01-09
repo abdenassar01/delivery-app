@@ -24,7 +24,9 @@ import type * as tables_delivery from "../tables/delivery.js";
 import type * as tables_index from "../tables/index.js";
 import type * as tables_notifications from "../tables/notifications.js";
 import type * as tables_orders from "../tables/orders.js";
+import type * as tables_transactions from "../tables/transactions.js";
 import type * as tables_users from "../tables/users.js";
+import type * as transactions from "../transactions.js";
 import type * as users from "../users.js";
 
 import type {
@@ -50,7 +52,9 @@ declare const fullApi: ApiFromModules<{
   "tables/index": typeof tables_index;
   "tables/notifications": typeof tables_notifications;
   "tables/orders": typeof tables_orders;
+  "tables/transactions": typeof tables_transactions;
   "tables/users": typeof tables_users;
+  transactions: typeof transactions;
   users: typeof users;
 }>;
 

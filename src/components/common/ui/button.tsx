@@ -16,14 +16,14 @@ export interface ButtonProps {
 }
 
 const variantStyles = {
-  primary: 'bg-primary',
+  primary: 'bg-primary/10 border border-primary',
   secondary: 'bg-gray-600',
   outline: 'border border-gray-300 bg-white',
   ghost: 'bg-transparent',
 };
 
 const labelVariantStyles = {
-  primary: 'text-white',
+  primary: 'text-primary',
   secondary: 'text-white',
   outline: 'text-gray-900',
   ghost: 'text-gray-900',

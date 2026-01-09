@@ -51,7 +51,7 @@ export function SignupStepZero({
       </View>
       <View
         className={cn(
-          'bg-background border-primary/10 flex-row justify-between rounded-2xl border p-1',
+          'bg-background border-primary/10 flex-row justify-end rounded-2xl border p-1',
         )}>
         <Button
           label="Next"

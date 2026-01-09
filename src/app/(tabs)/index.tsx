@@ -1,25 +1,19 @@
 import React from 'react';
-import { View } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import { useQuery } from 'convex/react';
 import { api } from 'convex/_generated/api';
-import { AdminHomeScreen } from '../app/admin/home';
-import { CourierHomeScreen } from '../app/courier/home';
-import { UserHomeScreen } from '../app/user/home';
+import { HomeScreenByRole, RootWrapper } from '@/components';
 
 export default function HomeScreen() {
   const user = useQuery(api.users.getCurrentUser);
 
-  console.log('Current User:', user);
-
-  // Route to appropriate home screen based on user role
-  if (user?.role === 'admin') {
-    return <AdminHomeScreen user={user} />;
+  if (user === undefined) {
+    return (
+      <RootWrapper className="flex-1 items-center justify-center">
+        <ActivityIndicator size="large" />
+      </RootWrapper>
+    );
   }
 
-  if (user?.role === 'delivery') {
-    return <CourierHomeScreen user={user} />;
-  }
-
-  // Default to user home screen
-  return <UserHomeScreen user={user} />;
+  return <HomeScreenByRole user={user} />;
 }

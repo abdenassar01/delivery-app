@@ -53,9 +53,9 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
     },
     trustedOrigins: [
       siteUrl,
-      'tdelivery://',
-      'tdelivery-prod://',
-      'tdelivery-staging://',
+      'samt-delivery://',
+      'samt-delivery-prod://',
+      'samt-delivery-staging://',
       ...(process.env.NODE_ENV === 'development'
         ? [
             'http://localhost:8081',
@@ -66,7 +66,7 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
             'http://127.0.0.1:19006',
           ]
         : []),
-      'tdelivery://*',
+      'samt-delivery://*',
       ...(process.env.NODE_ENV === 'development'
         ? ['exp://', 'exp://**', 'exp://192.168.*.*:*/**']
         : []),
@@ -111,7 +111,7 @@ export const createAuth = (ctx: GenericCtx<DataModel>) => {
         resetPassword: 60 * 60,
       },
     },
-    appName: 'AMTA Livraison',
+    appName: 'SAMT Livraison',
     plugins: [
       convex({ authConfig }),
       expo(),
