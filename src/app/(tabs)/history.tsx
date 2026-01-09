@@ -181,9 +181,37 @@ export default function HistoryScreen() {
                         addSuffix: true,
                       })}
                     </Text>
+
+                    {/* Show rating if available */}
+                    {order.rating && (
+                      <View className="mt-2">
+                        <View className="flex-row items-center gap-1">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Icons.Icon
+                              key={i}
+                              icon={Icons.Hugeicons.StarFreeIcons}
+                              size={12}
+                              strokeWidth={0}
+                              fill={i < order.rating! ? primary : '#d1d5db'}
+                              color={i < order.rating! ? primary : '#d1d5db'}
+                            />
+                          ))}
+                          <Text className="ml-1 text-xs text-gray-600">
+                            ({order.rating}/5)
+                          </Text>
+                        </View>
+                        {order.reviewMessage && (
+                          <View className="mt-1 rounded-lg bg-gray-50 p-2">
+                            <Text className="text-xs italic text-gray-600">
+                              "{order.reviewMessage}"
+                            </Text>
+                          </View>
+                        )}
+                      </View>
+                    )}
                   </View>
                   <Text className="text-secondary text-base font-bold">
-                    ${order.totalAmount}
+                    {order.totalAmount} DH
                   </Text>
                 </View>
               </TouchableOpacity>

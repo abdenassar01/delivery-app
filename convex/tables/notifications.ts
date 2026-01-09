@@ -14,6 +14,7 @@ export const notifications = defineTable({
     v.literal('profile_verified'),
     v.literal('profile_rejected'),
     v.literal('general'),
+    v.literal('deposit_request'),
   ),
   title: v.string(),
   message: v.string(),
@@ -24,6 +25,7 @@ export const notifications = defineTable({
       orderId: v.optional(v.id('orders')),
       courierId: v.optional(v.id('users')),
       amount: v.optional(v.number()),
+      transactionId: v.optional(v.id('transactions')),
     }),
   ),
 })

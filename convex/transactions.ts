@@ -29,11 +29,30 @@ export const requestDeposit = mutation({
       description: args.description,
     });
 
+    // Notify all admins about the deposit request
+    const admins = await ctx.db
+      .query('users')
+      .withIndex('by_role', q => q.eq('role', 'admin'))
+      .collect();
+
+    for (const admin of admins) {
+      await ctx.db.insert('notifications', {
+        userId: admin._id,
+        type: 'deposit_request',
+        title: 'New Deposit Request',
+        message: `${user.name || user.email} has requested to deposit ${args.amount} DH.`,
+        read: false,
+        metadata: {
+          transactionId,
+          amount: args.amount,
+        },
+      });
+    }
+
     return transactionId;
   },
 });
 
-// Get user's transactions
 export const getUserTransactions = query({
   args: {
     limit: v.optional(v.number()),
@@ -51,7 +70,6 @@ export const getUserTransactions = query({
       .order('desc')
       .take(args.limit ?? 50);
 
-    // Fetch proof URLs for transactions
     const transactionsWithUrls = await Promise.all(
       transactions.map(async transaction => {
         let proofUrl = '';
@@ -66,7 +84,6 @@ export const getUserTransactions = query({
   },
 });
 
-// Get pending transactions (for admin)
 export const getPendingTransactions = query({
   args: {
     limit: v.optional(v.number()),
@@ -88,7 +105,6 @@ export const getPendingTransactions = query({
       .order('desc')
       .take(args.limit ?? 100);
 
-    // Fetch user details and proof URLs
     const transactionsWithDetails = await Promise.all(
       transactions.map(async transaction => {
         const user = await ctx.db.get(transaction.userId);
@@ -109,7 +125,6 @@ export const getPendingTransactions = query({
   },
 });
 
-// Approve deposit (admin)
 export const approveDeposit = mutation({
   args: {
     transactionId: v.id('transactions'),

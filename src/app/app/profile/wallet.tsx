@@ -43,7 +43,7 @@ export default function WalletScreen() {
       case 'rejected':
         return 'text-error bg-error/10 border-error/20';
       default:
-        return 'text-gray-500 bg-gray-100 border-gray-200';
+        return 'text-purple-500 bg-purple-500/10 border-purple-500';
     }
   };
 
@@ -167,7 +167,7 @@ export default function WalletScreen() {
                     <View className="flex-row items-center gap-2">
                       <View
                         className={cn(
-                          'rounded-xl border px-2 py-0.5',
+                          'border-secondary/10 rounded-xl border px-2 py-0.5',
                           getTypeColor(transaction.type),
                         )}>
                         <Text
@@ -238,8 +238,7 @@ export default function WalletScreen() {
                       )}
                     </Text>
                   </View>
-
-                  <View
+                  <Text
                     className={cn(
                       'text-base font-bold',
                       transaction.type === 'deposit' ||
@@ -255,7 +254,7 @@ export default function WalletScreen() {
                       ? '+'
                       : '-'}
                     {transaction.amount.toFixed(2)} DH
-                  </View>
+                  </Text>
                 </View>
               </View>
             ))}

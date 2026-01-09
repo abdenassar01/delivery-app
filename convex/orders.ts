@@ -393,6 +393,7 @@ export const markDeliveredAndRate = mutation({
   args: {
     orderId: v.id('orders'),
     rating: v.number(), // Rating from 1 to 5
+    reviewMessage: v.optional(v.string()), // Optional review message
   },
   handler: async (ctx, args) => {
     const user = await getAuthenticatedUser(ctx);
@@ -426,6 +427,7 @@ export const markDeliveredAndRate = mutation({
     await ctx.db.patch(args.orderId, {
       status: 'delivered',
       rating: args.rating,
+      reviewMessage: args.reviewMessage,
       deliveredAt: Date.now(),
     });
 
@@ -447,13 +449,19 @@ export const markDeliveredAndRate = mutation({
           ratingCount: newRatingCount,
         });
 
+        // Build notification message with optional review
+        let notificationMessage = `Great job! The delivery for ${order.item} has been completed. You received a ${args.rating}/5 rating.`;
+        if (args.reviewMessage && args.reviewMessage.trim()) {
+          notificationMessage += `\n\nReview: "${args.reviewMessage}"`;
+        }
+
         // Notify courier about delivery completion and rating
         await createNotification(
           ctx,
           order.courierId,
           'order_completed',
           'Delivery Completed',
-          `Great job! The delivery for ${order.item} has been completed. You received a ${args.rating}/5 rating.`,
+          notificationMessage,
           { orderId: order._id, amount: args.rating },
         );
       }

@@ -94,9 +94,10 @@ export const getCourierStats = query({
     // Count today's deliveries
     const todayDeliveries = todayCompletedOrders.length;
 
-    // Calculate rating (simple average based on completed deliveries)
-    // This is a placeholder - in a real app, you'd have actual ratings in the order
-    const rating = '4.8'; // Placeholder
+    // Get courier's rating from their profile
+    const courier = await ctx.db.get(args.courierId);
+    const rating = courier?.rating ? courier.rating.toFixed(1) : '0.0';
+    const ratingCount = courier?.ratingCount || 0;
 
     // Get total deliveries
     const totalDeliveries = courierOrders.filter(
@@ -118,6 +119,7 @@ export const getCourierStats = query({
       todayEarnings,
       todayDeliveries,
       rating,
+      ratingCount,
       totalDeliveries,
       totalEarnings,
       activeOrders,

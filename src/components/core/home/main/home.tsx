@@ -85,8 +85,60 @@ export function CourierHomeScreen({ user }: CourierHomeScreenProps) {
                 {stats?.rating || '0.0'}
               </Text>
             </View>
+            <View>
+              <Text className="text-xs text-gray-500">Reviews</Text>
+              <Text className="text-sm font-bold text-gray-900">
+                {stats?.ratingCount || 0}
+              </Text>
+            </View>
           </View>
         </View>
+
+        {/* Reviews Section */}
+        {(myOrders || []).filter(o => o.status === 'delivered' && o.rating).length > 0 && (
+          <View className="mb-4">
+            <View className="flex-row items-center justify-between">
+              <Text className="text-lg font-medium">Recent Reviews</Text>
+            </View>
+            <View className="mt-2">
+              {(myOrders || [])
+                .filter(o => o.status === 'delivered' && o.rating)
+                .slice(0, 3)
+                .map(order => (
+                  <View
+                    key={order._id}
+                    className="border-secondary/10 mb-2 rounded-2xl border bg-white p-3">
+                    <View className="flex-row items-center justify-between">
+                      <View className="flex-1">
+                        <View className="mb-1 flex-row items-center gap-1">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Icons.Icon
+                              key={i}
+                              icon={Icons.Hugeicons.StarFreeIcons}
+                              size={12}
+                              strokeWidth={0}
+                              fill={i < order.rating! ? primary : '#d1d5db'}
+                              color={i < order.rating! ? primary : '#d1d5db'}
+                            />
+                          ))}
+                          <Text className="ml-1 text-xs text-gray-500">
+                            {formatDistanceToNow(new Date(order._creationTime), {
+                              addSuffix: true,
+                            })}
+                          </Text>
+                        </View>
+                        {order.reviewMessage && (
+                          <Text className="text-sm text-gray-700">
+                            "{order.reviewMessage}"
+                          </Text>
+                        )}
+                      </View>
+                    </View>
+                  </View>
+                ))}
+            </View>
+          </View>
+        )}
 
         <ScrollView showsVerticalScrollIndicator={false}>
           <View className="mb-4">

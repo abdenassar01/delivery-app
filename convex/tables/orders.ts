@@ -44,6 +44,7 @@ export const orders = defineTable({
 
   // Rating
   rating: v.optional(v.number()), // User's rating for the courier (0-5)
+  reviewMessage: v.optional(v.string()), // User's review message for the courier
 
   // Timestamps are automatic via _creationTime
   // Optional delivery timestamp
