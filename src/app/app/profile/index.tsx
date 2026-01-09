@@ -120,15 +120,12 @@ export default function ProfileScreen() {
   return (
     <RootWrapper className="px-4">
       <Header />
-
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={{ flex: 1 }}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0}>
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerClassName="pb-4">
-          {/* Profile Header with Avatar */}
+          contentContainerClassName="pb-32">
           <View className="border-secondary/10 bg-background-secondary mt-3 rounded-2xl border p-6">
             <View className="items-center">
               <TouchableOpacity
@@ -230,7 +227,7 @@ export default function ProfileScreen() {
                 <View className="mt-4 flex-row gap-3">
                   <TouchableOpacity
                     onPress={handleCancel}
-                    className="bg-secondary/20 flex-1 flex-row items-center justify-center gap-2 rounded-2xl p-4 py-3">
+                    className="bg-secondary/20 flex-row items-center justify-center gap-2 rounded-2xl p-4 py-3">
                     <Icons.Icon
                       icon={Icons.Hugeicons.Cancel01FreeIcons}
                       size={20}
@@ -248,7 +245,7 @@ export default function ProfileScreen() {
                         onPress={form.handleSubmit}
                         loading={isSubmitting}
                         disabled={isSubmitting}
-                        className="flex-1"
+                        className=""
                       />
                     )}
                   </form.Subscribe>
@@ -259,7 +256,7 @@ export default function ProfileScreen() {
 
           {/* Stats */}
           <View className="mt-4 flex-row gap-3">
-            <View className="border-secondary/10 bg-background-secondary flex-1 rounded-2xl border p-4">
+            <View className="border-secondary/10 bg-background-secondary rounded-2xl border p-4">
               <View className="bg-primary/10 mb-2 h-10 w-10 items-center justify-center rounded-full">
                 <Icons.Icon
                   icon={Icons.Hugeicons.NewReleasesFreeIcons}

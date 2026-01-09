@@ -91,6 +91,7 @@ export const getCurrentUser = query({
     let avatarUrl = '';
 
     if (user.avatar) {
+      console.log('Fetching avatar URL for storage ID:', user.avatar);
       avatarUrl = (await ctx.storage.getUrl(user.avatar)) || '';
     }
 

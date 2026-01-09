@@ -25,7 +25,7 @@ export default function ContactUs() {
     validators: {
       onSubmit: z.object({
         name: z.string().min(1, 'Name is required'),
-        email: z.string().min(1, 'Email is required').email('Invalid email'),
+        email: z.email('Invalid email'),
         subject: z.string().min(1, 'Subject is required'),
         message: z.string().min(10, 'Message must be at least 10 characters'),
       }),
@@ -44,7 +44,7 @@ export default function ContactUs() {
 
       <KeyboardAvoidingView
         behavior="padding"
-        className="bg-backgroundSecondary flex-1"
+        className="bg-backgroundSecondary"
         keyboardVerticalOffset={100}>
         <ScrollView
           showsVerticalScrollIndicator={false}
@@ -78,65 +78,52 @@ export default function ContactUs() {
                   placeholder="What is this about?"
                   autoCapitalize="sentences"
                 />
-                <View className="flex w-full flex-col">
-                  <Text className="mb-1 text-sm font-medium text-gray-700">
-                    Message
-                  </Text>
-                  <View className="bg-background-secondary border-primary/10 w-full rounded-xl border p-3">
-                    <form.Field
-                      name="message"
-                      children={(field) => (
-                        <TextInput
-                          className="text-sm text-gray-900"
-                          value={field.state.value}
-                          onBlur={field.handleBlur}
-                          placeholder="Tell us more about your inquiry..."
-                          placeholderTextColor="#9ca3af"
-                          onChangeText={field.handleChange}
-                          multiline
-                          numberOfLines={6}
-                          textAlignVertical="top"
-                          style={{ minHeight: 120 }}
-                        />
-                      )}
-                    />
-                  </View>
-                  <form.Field
-                    name="message"
-                    children={(field) => (
-                      <>
-                        {field.state.meta.isTouched &&
-                          field.state.meta.errors.length > 0 && (
-                            <Text className="mt-0.5 text-xs text-red-500">
-                              {field.state.meta.errors
-                                .map((err: any) => err?.message ?? String(err))
-                                .join(', ')}
-                            </Text>
-                          )}
-                      </>
-                    )}
-                  />
-                </View>
+                <FieldInput
+                  label="Message"
+                  name="message"
+                  placeholder="Your message"
+                  textarea={true}
+                  className="h-24"
+                />
               </View>
-
-              <form.Subscribe>
-                {({ isSubmitting }) => (
-                  <Button
-                    label={isSubmitting ? 'Sending...' : 'Send Message'}
-                    onPress={form.handleSubmit}
-                    loading={isSubmitting}
-                    disabled={isSubmitting}
-                    className="mt-4"
-                  />
-                )}
-              </form.Subscribe>
+              <View className="flex w-full flex-col">
+                <form.Field
+                  name="message"
+                  children={field => (
+                    <>
+                      {field.state.meta.isTouched &&
+                        field.state.meta.errors.length > 0 && (
+                          <Text className="mt-0.5 text-xs text-red-500">
+                            {field.state.meta.errors
+                              .map((err: any) => err?.message ?? String(err))
+                              .join(', ')}
+                          </Text>
+                        )}
+                    </>
+                  )}
+                />
+              </View>
             </View>
+
+            <form.Subscribe>
+              {({ isSubmitting }) => (
+                <Button
+                  label={isSubmitting ? 'Sending...' : 'Send Message'}
+                  onPress={form.handleSubmit}
+                  loading={isSubmitting}
+                  disabled={isSubmitting}
+                  className="mt-4"
+                />
+              )}
+            </form.Subscribe>
           </FormContext>
 
           <View className="mt-6">
             <Text className="text-text-secondary text-center text-sm">
               Or reach us directly at{' '}
-              <Text className="text-primary font-medium">support@tanger-deliver.com</Text>
+              <Text className="text-primary font-medium">
+                support@samtdelivery.com
+              </Text>
             </Text>
           </View>
         </ScrollView>

@@ -9,6 +9,8 @@ import { UserHomeScreen } from '../app/user/home';
 export default function HomeScreen() {
   const user = useQuery(api.users.getCurrentUser);
 
+  console.log('Current User:', user);
+
   // Route to appropriate home screen based on user role
   if (user?.role === 'admin') {
     return <AdminHomeScreen user={user} />;

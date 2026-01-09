@@ -1,5 +1,5 @@
 import { TouchableOpacity, View } from 'react-native';
-import React from 'react';
+import React, { Fragment } from 'react';
 import * as Icons from '@/icons';
 import { Link, useRouter } from 'expo-router';
 import { Header, RootWrapper, Text } from '@/components';
@@ -66,8 +66,8 @@ export default function Settings() {
       <View className="border-secondary/10 bg-background-secondary mt-3 rounded-2xl border p-2">
         <View className="">
           {tabs.map((item, index) => (
-            <>
-              <Link key={item.title} href={item.href as any} asChild>
+            <Fragment key={item.title}>
+              <Link href={item.href as any} asChild>
                 <TouchableOpacity className="flex-row items-center gap-3">
                   <View className="bg-secondary/10 h-10 w-10 items-center justify-center rounded-xl">
                     {item.icon}
@@ -88,7 +88,7 @@ export default function Settings() {
               {index < tabs.length - 1 && (
                 <View className="bg-secondary/10 my-1 h-px w-full rounded-full" />
               )}
-            </>
+            </Fragment>
           ))}
         </View>
       </View>

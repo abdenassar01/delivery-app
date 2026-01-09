@@ -16,6 +16,7 @@ type FieldInputProps = {
   keyboardType?: 'email-address' | 'phone-pad' | 'default';
   autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
   disabled?: boolean;
+  textarea?: boolean;
   helperText?: string;
 };
 
@@ -28,6 +29,7 @@ export function FieldInput({
   keyboardType = 'default',
   autoCapitalize = 'sentences',
   disabled = false,
+  textarea = false,
   helperText,
 }: FieldInputProps) {
   const form = useFormContext();
@@ -73,6 +75,8 @@ export function FieldInput({
             field.handleChange(text);
           }}
           secureTextEntry={isPassword}
+          multiline={textarea}
+          numberOfLines={textarea ? 4 : 1}
           editable={!disabled}
           selectionColor="#6366f1"
         />

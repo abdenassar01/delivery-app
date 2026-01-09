@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, TouchableOpacity, View } from 'react-native';
 import { RootWrapper, Text } from '@/components';
 import * as Icons from '@/icons';
 import { useRouter } from 'expo-router';
@@ -10,7 +10,7 @@ import type { Doc, Id } from 'convex/_generated/dataModel';
 import { useCSSVariable } from 'uniwind';
 
 interface CourierHomeScreenProps {
-  user: Doc<'users'> | null | undefined;
+  user: (Doc<'users'> & { avatarUrl: string }) | null | undefined;
 }
 
 export function CourierHomeScreen({ user }: CourierHomeScreenProps) {
@@ -41,15 +41,21 @@ export function CourierHomeScreen({ user }: CourierHomeScreenProps) {
 
   return (
     <RootWrapper className="px-4">
-      {/* Header */}
-      <View className="mt-3 mb-4">
-        <Text className="text-sm font-medium text-gray-500">Courier Dashboard</Text>
-        <Text className="text-2xl font-bold text-gray-900">
-          {user?.name || 'Courier'}
-        </Text>
+      <View className="mt-3 flex-row items-center gap-2">
+        <Image
+          source={{ uri: user.avatarUrl }}
+          className="h-12 w-12 rounded-xl border"
+        />
+        <View className="mb-4">
+          <Text className="text-sm font-medium text-gray-500">
+            Courier Dashboard
+          </Text>
+          <Text className="text-2xl font-bold text-gray-900">
+            {user?.name || 'Courier'}
+          </Text>
+        </View>
       </View>
 
-      {/* Balance Card */}
       <View className="border-secondary/10 bg-background-secondary mb-4 rounded-2xl border p-4">
         <View className="flex-row items-center justify-between">
           <View className="flex-1">
@@ -77,7 +83,9 @@ export function CourierHomeScreen({ user }: CourierHomeScreenProps) {
                 color={primary}
               />
             </View>
-            <Text className="text-xs font-medium text-gray-500">Deliveries</Text>
+            <Text className="text-xs font-medium text-gray-500">
+              Deliveries
+            </Text>
             <Text className="text-2xl font-bold text-gray-900">
               {stats?.todayDeliveries || 0}
             </Text>
@@ -94,12 +102,11 @@ export function CourierHomeScreen({ user }: CourierHomeScreenProps) {
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Available Orders */}
         <View className="mb-4">
           <View className="flex-row items-center justify-between">
             <Text className="text-lg font-medium">Available Orders</Text>
             <TouchableOpacity
-              onPress={() => router.push('/app/orders' as any)}
+              onPress={() => router.push('/orders')}
               className="flex-row items-center">
               <Text className="text-secondary text-sm font-medium">
                 View all
@@ -139,7 +146,7 @@ export function CourierHomeScreen({ user }: CourierHomeScreenProps) {
                       <View className="flex-row items-center gap-2">
                         <View className="bg-primary/10 h-6 w-6 items-center justify-center rounded-full">
                           <Icons.Icon
-                            icon={Icons.Hugeicons.BoxFreeIcons}
+                            icon={Icons.Hugeicons.PackageFreeIcons}
                             size={12}
                             strokeWidth={2}
                             color={primary}
@@ -172,7 +179,7 @@ export function CourierHomeScreen({ user }: CourierHomeScreenProps) {
           <View className="flex-row items-center justify-between">
             <Text className="text-lg font-medium">My Deliveries</Text>
             <TouchableOpacity
-              onPress={() => router.push('/app/history' as any)}
+              onPress={() => router.push('/history' as any)}
               className="flex-row items-center">
               <Text className="text-secondary text-sm font-medium">
                 History
