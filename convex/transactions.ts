@@ -24,6 +24,7 @@ export const requestDeposit = mutation({
       type: 'deposit',
       amount: args.amount,
       status: 'pending',
+      valid: false,
       proofUrl: args.proofUrl,
       description: args.description,
     });

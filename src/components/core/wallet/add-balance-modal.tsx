@@ -1,17 +1,24 @@
 'use client';
 
-import React, { useState } from 'react';
-import { TouchableOpacity, View, Text, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import React from 'react';
+import {
+  TouchableOpacity,
+  View,
+  Text,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+} from 'react-native';
 import { useForm } from '@tanstack/react-form';
 import { useMutation } from 'convex/react';
 import { api } from 'convex/_generated/api';
 import {
   FormContext,
   FieldInput,
-  FieldDocumentUpload,
   Modal,
   useModal,
   Button,
+  DocumentUpload,
 } from '@/components';
 import { useCSSVariable } from 'uniwind';
 import * as Icons from '@/icons';
@@ -63,16 +70,14 @@ export function AddBalanceModal({ onSuccess }: AddBalanceModalProps) {
     <>
       <TouchableOpacity
         onPress={present}
-        className="bg-primary flex-row items-center justify-center gap-2 rounded-2xl p-4 py-3">
+        className="bg-primary/10 border-primary flex-row items-center justify-center gap-2 rounded-xl border p-4 py-2">
         <Icons.Icon
           icon={Icons.Hugeicons.Wallet03FreeIcons}
-          size={20}
+          size={15}
           strokeWidth={2}
-          color="white"
+          color={primary}
         />
-        <Text className="text-base font-semibold text-white">
-          Add Balance
-        </Text>
+        <Text className="text-primary text-sm font-semibold">Add Balance</Text>
       </TouchableOpacity>
 
       <Modal ref={ref} snapPoints={['75%']} detached>
@@ -119,12 +124,11 @@ export function AddBalanceModal({ onSuccess }: AddBalanceModalProps) {
                     autoCapitalize="sentences"
                   />
 
-                  <FieldDocumentUpload
+                  <DocumentUpload
                     label="Proof of Transfer (Image/PDF)"
-                    name="proofUrl"
-                    generateUploadUrl={generateUploadUrl}
-                    accept="image/*,application/pdf"
-                    placeholder="Upload receipt or screenshot"
+                    onUploadComplete={storageId => {
+                      form.setFieldValue('proofUrl', storageId);
+                    }}
                   />
 
                   <View className="bg-primary/5 mt-2 rounded-xl p-3">
@@ -139,11 +143,11 @@ export function AddBalanceModal({ onSuccess }: AddBalanceModalProps) {
                         Important
                       </Text>
                     </View>
-                    <Text className="text-gray-600 text-xs leading-relaxed">
-                      • Upload a clear image or PDF of your bank transfer receipt{'\n'}
-                      • Your deposit will be reviewed by our team{'\n'}
-                      • You will receive a notification once approved{'\n'}
-                      • Processing typically takes 1-2 business days
+                    <Text className="text-xs leading-relaxed text-gray-600">
+                      • Upload a clear image or PDF of your bank transfer
+                      receipt{'\n'}• Your deposit will be reviewed by our team
+                      {'\n'}• You will receive a notification once approved
+                      {'\n'}• Processing typically takes 1-2 business days
                     </Text>
                   </View>
 
@@ -151,7 +155,11 @@ export function AddBalanceModal({ onSuccess }: AddBalanceModalProps) {
                     selector={state => [state.isSubmitting, state.canSubmit]}
                     children={([isSubmitting, canSubmit]) => (
                       <Button
-                        label={isSubmitting ? 'Submitting...' : 'Submit Deposit Request'}
+                        label={
+                          isSubmitting
+                            ? 'Submitting...'
+                            : 'Submit Deposit Request'
+                        }
                         onPress={form.handleSubmit}
                         loading={isSubmitting}
                         disabled={isSubmitting || !canSubmit}

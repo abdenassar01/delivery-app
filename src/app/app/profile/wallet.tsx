@@ -12,7 +12,6 @@ import { useQuery } from 'convex/react';
 import { api } from 'convex/_generated/api';
 import { cn } from '@/lib';
 import { formatDistanceToNow } from 'date-fns';
-import { Image } from 'react-native';
 
 type TransactionType = 'all' | 'deposit' | 'withdrawal' | 'payment' | 'earning';
 
@@ -66,15 +65,15 @@ export default function WalletScreen() {
   const getTypeIcon = (type: string) => {
     switch (type) {
       case 'deposit':
-        return Icons.Hugeicons.ArrowDownCircleFreeIcons;
+        return Icons.Hugeicons.ArrowDown01FreeIcons;
       case 'withdrawal':
-        return Icons.Hugeicons.ArrowUpCircleFreeIcons;
+        return Icons.Hugeicons.ArrowUp01FreeIcons;
       case 'payment':
         return Icons.Hugeicons.CreditCardFreeIcons;
       case 'earning':
         return Icons.Hugeicons.DollarCircleFreeIcons;
       default:
-        return Icons.Hugeicons.ReceiptFreeIcons;
+        return Icons.Hugeicons.ReceiptDollarFreeIcons;
     }
   };
 
@@ -105,12 +104,10 @@ export default function WalletScreen() {
   return (
     <RootWrapper className="px-4">
       <HeaderWithGoBack />
-
-      {/* Balance Card */}
-      <View className="border-secondary/10 bg-background-secondary mt-3 rounded-2xl border p-4">
+      <View className="border-secondary/10 bg-background-secondary mt-3 rounded-2xl border p-3">
         <View className="flex-row items-start justify-between">
           <View className="flex-1">
-            <View className="bg-secondary/10 mb-2 h-10 w-10 items-center justify-center rounded-full">
+            <View className="bg-secondary/10 mb-2 h-12 w-12 items-center justify-center rounded-xl">
               <Icons.Icon
                 icon={Icons.Hugeicons.Wallet03FreeIcons}
                 size={20}
@@ -129,9 +126,8 @@ export default function WalletScreen() {
         </View>
       </View>
 
-      {/* Transaction Filters */}
       <View className="mt-3">
-        <View className="flex-row flex-wrap gap-2">
+        <View className="flex-row flex-wrap gap-1">
           {filters.map(renderFilter)}
         </View>
       </View>
@@ -148,7 +144,7 @@ export default function WalletScreen() {
         {filteredTransactions.length === 0 ? (
           <View className="border-secondary/10 bg-background-secondary mt-2 items-center justify-center rounded-2xl border p-8">
             <Icons.Icon
-              icon={Icons.Hugeicons.ReceiptFreeIcons}
+              icon={Icons.Hugeicons.ReceiptDollarFreeIcons}
               size={40}
               strokeWidth={1.5}
               color={secondary}
@@ -161,9 +157,7 @@ export default function WalletScreen() {
             </Text>
           </View>
         ) : (
-          <ScrollView
-            className="mt-2"
-            showsVerticalScrollIndicator={false}>
+          <ScrollView className="mt-2" showsVerticalScrollIndicator={false}>
             {filteredTransactions.map(transaction => (
               <View
                 key={transaction._id}
@@ -248,14 +242,16 @@ export default function WalletScreen() {
                   <View
                     className={cn(
                       'text-base font-bold',
-                      transaction.type === 'deposit' || transaction.type === 'earning'
+                      transaction.type === 'deposit' ||
+                        transaction.type === 'earning'
                         ? 'text-success'
                         : transaction.type === 'withdrawal' ||
                             transaction.type === 'payment'
                           ? 'text-error'
                           : 'text-gray-900',
                     )}>
-                    {transaction.type === 'deposit' || transaction.type === 'earning'
+                    {transaction.type === 'deposit' ||
+                    transaction.type === 'earning'
                       ? '+'
                       : '-'}
                     {transaction.amount.toFixed(2)} DH
@@ -277,9 +273,11 @@ export default function WalletScreen() {
             strokeWidth={2}
             color={primary}
           />
-          <Text className="text-primary text-sm font-semibold">How it works</Text>
+          <Text className="text-primary text-sm font-semibold">
+            How it works
+          </Text>
         </View>
-        <Text className="text-gray-600 text-xs leading-relaxed">
+        <Text className="text-xs leading-relaxed text-gray-600">
           1. Tap "Add Balance" to deposit funds{'\n'}
           2. Enter the amount and upload your bank transfer receipt{'\n'}
           3. Submit for review{'\n'}

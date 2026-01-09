@@ -18,6 +18,7 @@ export const transactions = defineTable({
   ),
   proofUrl: v.optional(v.id('_storage')), // Image/PDF proof of bank transfer
   description: v.string(),
+  valid: v.boolean(),
   metadata: v.optional(
     v.object({
       orderId: v.optional(v.id('orders')),
